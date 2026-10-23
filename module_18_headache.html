@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 18: Headaches and pain</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.cmp{display:grid;gap:6px}
+.cmprow{background:var(--panel);border-radius:12px;padding:8px 10px}
+.cmprow h4{margin:0 0 6px;font-size:.84rem;color:var(--muted);font-weight:600}
+.cmpcells{display:grid;gap:8px}
+.cmpcells div{font-size:.88rem;border-left:3px solid var(--stem);padding-left:7px}
+.cmpcells b{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.fundus{background:#000;border-radius:14px;padding:8px;display:flex;justify-content:center}
+.fundus svg{max-width:300px}
+
+.slider{width:100%;accent-color:var(--hot);margin:10px 0 2px}
+.gl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.ladder li{margin:8px 0}
+
+.vfwrap{background:var(--panel);border-radius:14px;padding:10px}
+.prog{font-size:.85rem;color:var(--muted);margin:4px 0 0}
+.next{font:inherit;margin-top:10px;padding:9px 14px;border-radius:10px;border:none;background:var(--ink);color:var(--bg);cursor:pointer}
+.brain svg .rg{cursor:pointer}
+.brain svg .rg:focus-visible{outline:none;stroke:var(--inter);stroke-width:3}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.read{display:flex;justify-content:space-around;font-size:.9rem;margin-top:4px}
+.read b{font-family:Charter,Georgia,serif;font-size:1.05rem}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.9rem;margin:6px 0}
+.toggle input{width:20px;height:20px;accent-color:var(--inter)}
+ol.algo li{margin:8px 0}
+
+.nine{background:var(--panel);border-radius:14px;padding:8px}
+.step3{margin:8px 0}
+.step3 p{margin:4px 0;font-weight:600;font-size:.9rem}
+.result{font-family:Charter,Georgia,serif;font-size:1.3rem;font-weight:600;margin:4px 0}
+
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.tl{background:var(--panel);border-radius:14px;padding:10px}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 18 of 22</p>
+  <h1>Headaches and pain</h1>
+  <p class="sub">Migraine, tension-type headache, trigeminal autonomic cephalalgias, dangerous secondary headaches, eye-related pain, and painful cranial nerve disorders. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="red" aria-selected="true">Red flags</button>
+    <button role="tab" data-tab="aura" aria-selected="false">Aura checker</button>
+    <button role="tab" data-tab="tac" aria-selected="false">TAC timeline</button>
+    <button role="tab" data-tab="sec" aria-selected="false">Secondary and eye pain</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and sources</button>
+  </nav>
+
+  <section class="tab on" id="tab-red">
+    <h2>Headache red flags</h2>
+    <p class="sub">Check what's present. Any red flag means looking for a secondary cause.</p>
+    <div class="card check" id="redBox">
+      <label><input type="checkbox" data-u="3"> Thunderclap onset (maximal within about a minute)</label>
+      <label><input type="checkbox" data-u="3"> New neurologic deficit, altered consciousness, or seizure</label>
+      <label><input type="checkbox" data-u="3"> Papilledema or new vision loss</label>
+      <label><input type="checkbox" data-u="3"> Fever, neck stiffness or immunosuppression</label>
+      <label><input type="checkbox" data-u="2"> New headache after age 50 (think GCA; SNNOOP10 uses onset after 65 as a general red flag)</label>
+      <label><input type="checkbox" data-u="2"> Painful Horner syndrome or neck pain after trauma or manipulation</label>
+      <label><input type="checkbox" data-u="2"> Positional headache (worse lying down or upright)</label>
+      <label><input type="checkbox" data-u="2"> Triggered by cough, exertion or Valsalva</label>
+      <label><input type="checkbox" data-u="2"> Pregnancy or postpartum</label>
+      <label><input type="checkbox" data-u="1"> Progressive or changed pattern of a long-standing headache</label>
+      <label><input type="checkbox" data-u="1"> History of cancer</label>
+      <label><input type="checkbox" data-u="2"> Painful eye with autonomic features</label>
+      <label><input type="checkbox" data-u="2"> Onset after head trauma</label>
+      <label><input type="checkbox" data-u="1"> Painkiller overuse or a new drug at onset</label>
+      <label><input type="checkbox" data-u="2"> Red eye with halos, mid-dilated pupil or high IOP</label>
+    </div>
+    <div class="verdict" id="redOut" aria-live="polite">No red flags checked.</div>
+  </section>
+
+  <section class="tab" id="tab-aura">
+    <h2>Is this a typical migraine aura?</h2>
+    <p class="sub">ICHD-3 migraine with aura needs at least two attacks with fully reversible aura and at least three of these six characteristics.</p>
+    <div class="card check" id="auraBox">
+      <label><input type="checkbox"> At least one aura symptom spreads gradually over 5 minutes or more</label>
+      <label><input type="checkbox"> Two or more aura symptoms occur in succession</label>
+      <label><input type="checkbox"> Each aura symptom lasts 5 to 60 minutes</label>
+      <label><input type="checkbox"> At least one aura symptom is unilateral</label>
+      <label><input type="checkbox"> At least one aura symptom is positive (scintillations, zigzags, pins and needles)</label>
+      <label><input type="checkbox"> Headache accompanies or follows the aura within 60 minutes</label>
+    </div>
+    <h3>Atypical features</h3>
+    <div class="card check" id="atyBox">
+      <label><input type="checkbox"> Sudden onset (seconds) rather than spreading</label>
+      <label><input type="checkbox"> Only negative symptoms (vision loss) without positive phenomena</label>
+      <label><input type="checkbox"> First-ever aura after age 50</label>
+      <label><input type="checkbox"> Monocular (in one eye only) when tested by covering each eye</label>
+      <label><input type="checkbox"> Always on the same side</label>
+    </div>
+    <div class="verdict no" id="auraOut" aria-live="polite"></div>
+  </section>
+
+  <section class="tab" id="tab-tac">
+    <h2>Attack duration sorts the primary headaches</h2>
+    <p class="sub">Tap a bar. The scale is logarithmic, from seconds to days.</p>
+    <div class="tl"><svg id="tl" viewBox="0 0 330 230" role="img" aria-label="Headache duration timeline"></svg></div>
+    <div class="card accent" id="tacCard"><p>Tap a bar to compare.</p></div>
+  </section>
+
+  <section class="tab" id="tab-sec">
+    <h2>Secondary headache, eye pain and facial pain</h2>
+    <div class="chips" id="secChips"></div>
+    <div class="card accent" id="secCard"></div>
+  </section>
+
+  <section class="tab" id="tab-cases"><h2>Case vignettes</h2><p class="sub">Work each question before revealing the answer.</p><div id="caseList"></div></section>
+  <section class="tab" id="tab-pearls"><h2>Clinical pearls</h2><div id="pearlList"></div></section>
+  <section class="tab" id="tab-quiz"><h2>Self-quiz</h2><p class="sub">Ten questions. Tap an answer to see the explanation.</p><div id="quizList"></div><p class="score" id="score" aria-live="polite"></p><button class="reveal" id="resetQuiz">Reset quiz</button></section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Differentiate headache etiologies</label>
+      <label><input type="checkbox"> Recognize red flags</label>
+      <label><input type="checkbox"> Coordinate multidisciplinary care</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="src">
+      <li><b>Migraine with aura criteria (at least two attacks; at least three of six aura characteristics); visual aura in over 90% of migraine with aura; secondary mimics include carotid dissection, AVM and seizure:</b> Headache Classification Committee of the International Headache Society. The International Classification of Headache Disorders, 3rd edition. <i>Cephalalgia.</i> 2018;38(1):1-211 (ichd-3.org).</li>
+      <li><b>Cluster headache: strictly unilateral orbital, supraorbital or temporal pain lasting 15 to 180 minutes, from every other day to 8 times a day, with ipsilateral autonomic features or restlessness; paroxysmal hemicrania 2 to 30 minutes:</b> ICHD-3, sections 3.1 and 3.2.</li>
+      <li><b>Red flags (15 items: systemic symptoms, neoplasm, neurologic deficit, sudden onset, older age with onset after 65, pattern change, positional, Valsalva-precipitated, papilledema, progressive or atypical, pregnancy, painful eye with autonomic features, post-traumatic, immune pathology, painkiller overuse or new drug):</b> Do TP, Remmers A, Schytz HW, et al. Red and orange flags for secondary headaches in clinical practice: SNNOOP10 list. <i>Neurology.</i> 2019;92(3):134-144. doi:10.1212/WNL.0000000000006697. The checklist here adapts the list for eye clinics (for example, age 50 for GCA).</li>
+      <li>Durations for SUNCT/SUNA (seconds to minutes) and hemicrania continua are shown schematically; see ICHD-3 for full criteria.</li>
+    </ul></div>
+    <h3>Core reading (from the program curriculum)</h3>
+    <div class="card"><ul class="refs">
+      <li>Vegunta S, ed. Approach to headache and eye pain (video). <i>Neuro-Ophthalmology</i>, Moran CORE, University of Utah.</li>
+      <li>Liu GT, Volpe NJ, Galetta SL. Headache, facial pain, and disorders of facial sensation. In: <i>Neuro-Ophthalmology: Diagnosis and Management.</i> 2nd ed. Saunders Elsevier; 2010: chapter 19.</li>
+      <li>American Academy of Ophthalmology. <i>Basic and Clinical Science Course, Section 5: Neuro-Ophthalmology.</i> AAO; 2025.</li>
+    </ul></div>
+  </section>
+
+  <p class="foot">Teaching tool; not a substitute for clinical judgment. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick,init=0){host.innerHTML="";items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});if(init!==null)host.children[init].click();}
+
+/* ---------- red flags ---------- */
+function red(){
+  const ch=[...document.querySelectorAll("#redBox input")].filter(i=>i.checked), el=document.getElementById("redOut");
+  if(!ch.length){el.textContent="No red flags checked. A primary headache is likely if the history fits, but recheck at follow-up.";el.classList.remove("no");return;}
+  const max=Math.max(...ch.map(i=>+i.dataset.u)); el.classList.add("no");
+  el.textContent = max===3 ? "Emergency: same-day evaluation in the emergency department with appropriate imaging (CT, CTA or MRI with venography) and LP when indicated."
+    : max===2 ? "Urgent: targeted workup within hours to days (for example ESR, CRP and platelets for GCA; vascular imaging for dissection; MRI with venography; IOP check)."
+    : "Prompt evaluation with neuroimaging and a review of the pattern and medications.";
+}
+document.querySelectorAll("#redBox input").forEach(i=>i.addEventListener("change",red));
+
+/* ---------- aura ---------- */
+function aura(){
+  const n=[...document.querySelectorAll("#auraBox input")].filter(i=>i.checked).length;
+  const a=[...document.querySelectorAll("#atyBox input")].filter(i=>i.checked).length;
+  const el=document.getElementById("auraOut");
+  let t=`${n} of 6 characteristics. `;
+  if(n>=3) t+="Fits typical migraine aura (with at least two attacks and no better explanation). ";
+  else t+="Doesn't meet the 3-of-6 threshold; consider other causes. ";
+  if(a>0) t+="Atypical feature present: consider TIA or stroke (sudden, negative, late onset), retinal or ocular causes (monocular), or a structural lesion such as an AVM or seizure focus (always the same side). Investigate before labeling it migraine.";
+  el.textContent=t; el.classList.toggle("no",n<3||a>0);
+}
+document.querySelectorAll("#auraBox input,#atyBox input").forEach(i=>i.addEventListener("change",aura)); aura();
+
+/* ---------- TAC timeline ---------- */
+const lg=s=>Math.log10(s); const X=s=>30+ (lg(s)-0)/(lg(3*86400)-0)*280; // 1 s to 3 days
+const BARS=[
+ {n:"SUNCT/SUNA",a:1,b:600,c:"var(--pupil)",d:"Seconds to a few minutes, many attacks per day, with prominent conjunctival injection and tearing (SUNCT) or other autonomic features (SUNA).",t:"Lamotrigine is often first line; image the posterior fossa and pituitary.",p:"Distinguish from trigeminal neuralgia: SUNCT has prominent autonomic features and is mostly orbital."},
+ {n:"Paroxysmal hemicrania",a:120,b:1800,c:"var(--supra)",d:"Severe unilateral orbital or temporal attacks of 2 to 30 minutes, several times a day, with autonomic features.",t:"Absolute response to indomethacin.",p:"An indomethacin trial is diagnostic."},
+ {n:"Cluster headache",a:900,b:10800,c:"var(--hot)",d:"Strictly unilateral orbital pain of 15 to 180 minutes, every other day to 8 times a day, often at the same time of day, in bouts; ipsilateral tearing, injection, rhinorrhea, ptosis and miosis; restlessness.",t:"Acute: high-flow oxygen, subcutaneous or nasal triptans. Preventive: verapamil (ECG monitoring), short steroid bridge, galcanezumab for episodic cluster.",p:"Partial Horner during attacks is common, but a persistent new Horner deserves imaging."},
+ {n:"Migraine",a:14400,b:259200,c:"var(--inter)",d:"4 to 72 hours, often unilateral and pulsating, with nausea, photophobia and phonophobia; worse with activity; patients lie still.",t:"Acute: NSAIDs, triptans, gepants, lasmiditan. Preventive: beta-blockers, topiramate, amitriptyline, CGRP monoclonal antibodies, gepants.",p:"Migraine patients lie still in the dark; cluster patients pace."},
+ {n:"Hemicrania continua",a:1,b:2,cont:true,c:"var(--infra)",d:"Continuous unilateral headache for over 3 months with exacerbations and autonomic features.",t:"Absolute response to indomethacin.",p:"A side-locked continuous headache: try indomethacin."}
+];
+(function(){
+  const svg=document.getElementById("tl"),NS="http://www.w3.org/2000/svg";
+  let s=`<line x1="30" y1="200" x2="310" y2="200" stroke="var(--stemline)"/>`;
+  [[1,"1 s"],[60,"1 min"],[3600,"1 h"],[86400,"1 day"]].forEach(([v,l])=>{s+=`<line x1="${X(v)}" y1="196" x2="${X(v)}" y2="204" stroke="var(--stemline)"/><text x="${X(v)}" y="218" class="lvl" text-anchor="middle">${l}</text>`;});
+  svg.innerHTML=s;
+  BARS.forEach((b,i)=>{const g=document.createElementNS(NS,"g");g.setAttribute("tabindex","0");g.setAttribute("role","button");g.setAttribute("aria-label",b.n);g.style.cursor="pointer";
+    const y=20+i*36, x1=X(b.a), x2=b.cont?310:X(b.b);
+    g.innerHTML=`<rect x="${x1}" y="${y}" width="${Math.max(6,x2-x1)}" height="16" rx="8" fill="${b.c}" opacity=".85"/>${b.cont?`<text x="300" y="${y+12}" font-size="10" fill="var(--panel)" text-anchor="end">continuous</text>`:""}<text x="${Math.min(x1,200)}" y="${y-3}" class="lbl">${b.n}</text>`;
+    const go=()=>{document.getElementById("tacCard").innerHTML=`<h3 style="margin-top:0">${b.n}</h3><dl><dt>Pattern</dt><dd>${b.d}</dd><dt>Treatment</dt><dd>${b.t}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${b.p}</dd></dl>`;};
+    g.addEventListener("click",go);g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}});svg.appendChild(g);});
+})();
+
+/* ---------- secondary ---------- */
+const SEC=[
+ {n:"Giant cell arteritis",f:"New headache over 50, scalp tenderness, jaw claudication, transient vision loss, diplopia.",w:"ESR, CRP, platelets; steroids before biopsy if vision is threatened (Module 4).",p:"Never let headache in an older adult go without asking about jaw claudication."},
+ {n:"Thunderclap headache",f:"Maximal within a minute: subarachnoid hemorrhage, reversible cerebral vasoconstriction syndrome, dissection, pituitary apoplexy, venous sinus thrombosis.",w:"Emergency CT and CTA; LP if CT is negative and suspicion remains; MRI with venography.",p:"Pituitary apoplexy: thunderclap headache plus vision loss or ophthalmoplegia."},
+ {n:"Carotid or vertebral dissection",f:"Neck, face or head pain with painful Horner syndrome (carotid) or posterior circulation symptoms (vertebral), sometimes after minor neck trauma.",w:"CTA or MRA of head and neck.",p:"Acute painful Horner: dissection until proven otherwise."},
+ {n:"High and low intracranial pressure",f:"High: worse lying down, morning, Valsalva, with pulsatile tinnitus and papilledema. Low: orthostatic, better lying flat, after LP or spontaneous CSF leak.",w:"MRI with venography; LP opening pressure for high pressure; MRI with contrast and spine imaging for low pressure.",p:"Low-pressure headache can cause CN VI palsy and pachymeningeal enhancement."},
+ {n:"Cavernous sinus thrombosis",f:"Headache, fever, bilateral proptosis and chemosis, multiple cranial neuropathies.",w:"MRI or CT venography; blood cultures.",p:"Facial or sinus infection with spreading eye findings is an emergency."},
+ {n:"Post-traumatic headache",f:"Starts within 7 days of head injury; often migraine-like; may persist beyond 3 months.",w:"Image if red flags; screen for convergence insufficiency and medication overuse.",p:"Medication overuse often keeps post-traumatic headache going."},
+ {n:"Acute angle-closure glaucoma",f:"Painful red eye, halos, blurred vision, nausea and vomiting, mid-dilated poorly reactive pupil, high IOP.",w:"IOP, gonioscopy; laser iridotomy after pressure is lowered.",p:"Headache with nausea and a red eye: check the pressure before calling it migraine."},
+ {n:"Ocular inflammation and surface disease",f:"Scleritis (deep boring pain waking the patient), uveitis (photophobia, ciliary flush), dry eye and other surface disorders.",w:"Slit lamp exam; systemic workup for scleritis.",p:"Scleritis pain is severe and tender to touch; episcleritis isn't."},
+ {n:"Refractive error and asthenopia",f:"Brow ache with prolonged near work, relieved by rest.",w:"Cycloplegic refraction, near point of convergence, accommodation.",p:"Rarely the cause of severe or new headache; don't stop the workup at glasses."},
+ {n:"Trochlear headache and trochleitis",f:"Superomedial orbital pain, worse looking up and in, tenderness at the trochlea.",w:"Clinical; imaging if atypical.",p:"Responds to local steroid injection at the trochlea."},
+ {n:"Trigeminal neuralgia and neuropathy",f:"Neuralgia: electric shock-like pain in V2 or V3 (V1 less often), triggered by touch or chewing, seconds long. Neuropathy: constant numbness or pain.",w:"MRI for vascular compression, MS or tumor (especially in young patients or with sensory loss).",p:"Carbamazepine or oxcarbazepine first; facial numbness means look for a structural cause."},
+ {n:"Painful optic neuritis",f:"Pain on eye movement preceding or accompanying vision loss.",w:"MRI with contrast (Module 4).",p:"Pain is present in most typical optic neuritis; painless optic neuropathy in a young adult suggests another cause."},
+ {n:"Recurrent painful ophthalmoplegic neuropathy",f:"Formerly 'ophthalmoplegic migraine': recurrent headache with ocular motor palsy (usually CN III), often in children; MRI may show nerve enhancement.",w:"MRI with contrast; exclude aneurysm and other lesions.",p:"A diagnosis of exclusion, renamed because it isn't truly migraine."},
+ {n:"Tolosa-Hunt syndrome",f:"Painful ophthalmoplegia from granulomatous cavernous sinus or orbital apex inflammation.",w:"MRI with contrast; exclude lymphoma, infection, metastasis and IgG4 disease.",p:"Steroid response doesn't prove Tolosa-Hunt; follow imaging (Module 11)."},
+ {n:"Herpes zoster ophthalmicus",f:"Pain can precede the rash; postherpetic neuralgia afterward.",w:"Antivirals; vaccination prevents zoster (Module 15).",p:"Unexplained V1 pain in an older adult: watch for a rash in the next days."}
+];
+chips(document.getElementById("secChips"),SEC.map(x=>x.n),i=>{const x=SEC[i];document.getElementById("secCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Features</dt><dd>${x.f}</dd><dt>Workup</dt><dd>${x.w}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: Zigzags that march across",stem:"A 24-year-old woman has twice had a shimmering zigzag line start near the center of her vision and spread outward over 20 minutes, followed by a throbbing headache with nausea. Exam is normal.",
+  steps:[
+   {q:"Does this meet criteria for migraine with aura?",a:"Yes: two attacks; gradual spread over 5 minutes or more, lasting 5 to 60 minutes, positive symptoms, and headache following within 60 minutes (at least 3 of 6)."},
+   {q:"How do you tell aura from monocular vision loss?",a:"Ask whether covering each eye changed it; migraine aura is binocular (homonymous) even though patients often describe it in 'one eye'."},
+   {q:"What counseling matters?",a:"Migraine with aura carries a small increased stroke risk, especially with smoking and estrogen-containing contraceptives; discuss with her prescriber."}
+  ]},
+ {t:"Case 2: Pacing at 2 a.m.",stem:"A 36-year-old man wakes nightly at the same time with excruciating right orbital pain for 45 minutes, right eye tearing, nasal congestion and droopy lid. He paces the room. This has happened every night for 3 weeks.",
+  steps:[
+   {q:"Diagnosis?",a:"Episodic cluster headache."},
+   {q:"Acute treatment?",a:"High-flow oxygen through a non-rebreather mask, or subcutaneous sumatriptan."},
+   {q:"When would you image?",a:"Typically MRI once, especially with atypical features, a persistent Horner between attacks, or an abnormal exam, to exclude pituitary and other structural lesions."}
+  ]},
+ {t:"Case 3: Worst headache, then droopy lid",stem:"A 52-year-old woman has sudden severe headache, vomiting and blurred vision. Right ptosis and limited eye movements; known pituitary adenoma on a scan years ago.",
+  steps:[
+   {q:"What's the likely diagnosis?",a:"Pituitary apoplexy."},
+   {q:"Immediate priorities?",a:"Steroid replacement (risk of adrenal crisis), urgent imaging (CT then MRI), endocrinology and neurosurgery; visual fields and acuity."},
+   {q:"Which nerves are at risk?",a:"Chiasm and optic nerves above; CN III, IV, VI and V1 laterally in the cavernous sinus."}
+  ]},
+ {t:"Case 4: Headache and halos",stem:"A 64-year-old woman has a severe left frontal headache with nausea and blurred vision after an evening at the movies. Her left eye is red with a mid-dilated pupil.",
+  steps:[
+   {q:"What must you check first?",a:"Intraocular pressure: this is likely acute angle-closure glaucoma, triggered by dim light."},
+   {q:"Initial treatment?",a:"Topical aqueous suppressants, pilocarpine once pressure starts falling, and oral or IV acetazolamide, followed by laser peripheral iridotomy."},
+   {q:"What about the other eye?",a:"Prophylactic laser iridotomy, since the fellow eye shares the narrow-angle anatomy."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{const d=document.createElement("div");d.className="card";d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map(s=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");caseList.appendChild(d);});
+caseList.addEventListener("click",e=>{if(!e.target.classList.contains("reveal"))return;const a=e.target.nextElementSibling,on=!a.classList.contains("on");a.classList.toggle("on",on);e.target.setAttribute("aria-expanded",String(on));e.target.textContent=on?"Hide answer":"Reveal answer";});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "Ask patients to cover each eye during an aura: migraine aura is binocular even when described as 'one eye'.",
+ "Typical visual aura spreads gradually over 5 minutes or more and lasts 5 to 60 minutes; sudden, purely negative or late-onset auras need a stroke workup.",
+ "An aura that is always on the same side deserves imaging for an AVM or other structural lesion.",
+ "Attack duration sorts the TACs: seconds to minutes (SUNCT/SUNA), 2 to 30 minutes (paroxysmal hemicrania), 15 to 180 minutes (cluster).",
+ "Paroxysmal hemicrania and hemicrania continua respond completely to indomethacin.",
+ "Cluster patients pace; migraine patients lie still.",
+ "New headache after 50: ask about jaw claudication and check ESR and CRP.",
+ "Thunderclap headache with vision loss or ophthalmoplegia: think pituitary apoplexy.",
+ "Headache with a red eye and a mid-dilated pupil: measure the IOP.",
+ "Trigeminal pain with facial numbness or in a young patient deserves MRI."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"ICHD-3 migraine with aura requires at least how many of the six aura characteristics?",o:["1","2","3","6"],a:2,e:"At least 3 of 6, in at least two attacks."},
+ {q:"A cluster headache attack lasts:",o:["Seconds","2 to 30 minutes","15 to 180 minutes","4 to 72 hours"],a:2,e:"Per ICHD-3."},
+ {q:"Which headache responds absolutely to indomethacin?",o:["Cluster","Paroxysmal hemicrania","Migraine","Tension-type"],a:1,e:"Paroxysmal hemicrania and hemicrania continua."},
+ {q:"First-line acute treatment for cluster headache includes:",o:["Opioids","High-flow oxygen","Indomethacin","Acetazolamide"],a:1,e:"High-flow oxygen or subcutaneous sumatriptan."},
+ {q:"A sudden, purely negative visual loss lasting 10 minutes in a 68-year-old with vascular risk factors is best treated as:",o:["Migraine aura","TIA until proven otherwise","Asthenopia","Dry eye"],a:1,e:"Atypical aura features and age suggest ischemia."},
+ {q:"Headache worse lying down with pulsatile tinnitus suggests:",o:["Low pressure","High intracranial pressure","Cluster","Tension-type"],a:1,e:"Check discs and image with venography."},
+ {q:"Formerly 'ophthalmoplegic migraine' is now called:",o:["Tolosa-Hunt syndrome","Recurrent painful ophthalmoplegic neuropathy","Retinal migraine","Cluster variant"],a:1,e:"It isn't truly migraine."},
+ {q:"Trigeminal neuralgia first-line treatment:",o:["Gabapentin only","Carbamazepine or oxcarbazepine","Indomethacin","Triptans"],a:1,e:"Image if numbness or young age."},
+ {q:"Superomedial orbital pain worse on looking up and in with local tenderness suggests:",o:["Optic neuritis","Trochleitis or trochlear headache","Cluster","Sinusitis"],a:1,e:"Responds to local steroid injection."},
+ {q:"Thunderclap headache with ophthalmoplegia in a patient with a known pituitary adenoma suggests:",o:["Migraine","Pituitary apoplexy","Cluster","Tension-type"],a:1,e:"Give steroids and image urgently."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>

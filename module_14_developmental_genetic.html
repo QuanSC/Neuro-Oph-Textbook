@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 14: Developmental and genetic disorders</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.cmp{display:grid;gap:6px}
+.cmprow{background:var(--panel);border-radius:12px;padding:8px 10px}
+.cmprow h4{margin:0 0 6px;font-size:.84rem;color:var(--muted);font-weight:600}
+.cmpcells{display:grid;gap:8px}
+.cmpcells div{font-size:.88rem;border-left:3px solid var(--stem);padding-left:7px}
+.cmpcells b{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.fundus{background:#000;border-radius:14px;padding:8px;display:flex;justify-content:center}
+.fundus svg{max-width:300px}
+
+.slider{width:100%;accent-color:var(--hot);margin:10px 0 2px}
+.gl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.ladder li{margin:8px 0}
+
+.vfwrap{background:var(--panel);border-radius:14px;padding:10px}
+.prog{font-size:.85rem;color:var(--muted);margin:4px 0 0}
+.next{font:inherit;margin-top:10px;padding:9px 14px;border-radius:10px;border:none;background:var(--ink);color:var(--bg);cursor:pointer}
+.brain svg .rg{cursor:pointer}
+.brain svg .rg:focus-visible{outline:none;stroke:var(--inter);stroke-width:3}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.read{display:flex;justify-content:space-around;font-size:.9rem;margin-top:4px}
+.read b{font-family:Charter,Georgia,serif;font-size:1.05rem}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.9rem;margin:6px 0}
+.toggle input{width:20px;height:20px;accent-color:var(--inter)}
+ol.algo li{margin:8px 0}
+
+.nine{background:var(--panel);border-radius:14px;padding:8px}
+.step3{margin:8px 0}
+.step3 p{margin:4px 0;font-weight:600;font-size:.9rem}
+.result{font-family:Charter,Georgia,serif;font-size:1.3rem;font-weight:600;margin:4px 0}
+
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.ped{background:var(--panel);border-radius:14px;padding:10px}
+.pedkey{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.82rem;color:var(--muted);margin-top:4px}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 14 of 22</p>
+  <h1>Developmental and genetic disorders</h1>
+  <p class="sub">Amblyopia, cerebral visual impairment, ROP, hydrocephalus, craniofacial and skull base malformations, neurocutaneous syndromes, mitochondrial disease and dominant optic atrophy. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="nf1" aria-selected="true">NF1 criteria</button>
+    <button role="tab" data-tab="neuro" aria-selected="false">Neurocutaneous</button>
+    <button role="tab" data-tab="ped" aria-selected="false">Inheritance</button>
+    <button role="tab" data-tab="dev" aria-selected="false">Developmental</button>
+    <button role="tab" data-tab="mito" aria-selected="false">Mitochondrial and DOA</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and sources</button>
+  </nav>
+
+  <section class="tab on" id="tab-nf1">
+    <h2>NF1 diagnostic criteria (2021 revision)</h2>
+    <p class="sub">Check each feature present. Without an affected parent, two or more criteria are needed; with an affected parent, one is enough.</p>
+    <label class="toggle" style="display:flex;gap:8px;align-items:center;margin:4px 0 8px"><input type="checkbox" id="parent" style="width:20px;height:20px;accent-color:var(--inter)"> A parent meets NF1 diagnostic criteria</label>
+    <div class="card check" id="nfBox">
+      <label><input type="checkbox"> Six or more café-au-lait macules (over 5 mm before puberty, over 15 mm after)</label>
+      <label><input type="checkbox" data-freck="1"> Freckling in the axillary or inguinal region</label>
+      <label><input type="checkbox"> Two or more neurofibromas of any type, or one plexiform neurofibroma</label>
+      <label><input type="checkbox"> Optic pathway glioma</label>
+      <label><input type="checkbox"> Two or more Lisch nodules on slit lamp, or two or more choroidal abnormalities on OCT or near-infrared imaging</label>
+      <label><input type="checkbox"> Distinctive osseous lesion (sphenoid dysplasia, anterolateral tibial bowing, or long-bone pseudarthrosis)</label>
+      <label><input type="checkbox"> Heterozygous pathogenic NF1 variant (about 50% allele fraction in normal tissue)</label>
+    </div>
+    <div class="verdict no" id="nfVerdict" aria-live="polite">Check the features present.</div>
+    <div class="card accent"><dl><dt>Eye clinic's role</dt><dd>Lisch nodules and choroidal abnormalities are diagnostic criteria, and the eye exam screens for optic pathway glioma. Choroidal abnormalities can appear before Lisch nodules, which helps in young children with café-au-lait spots only.</dd>
+    <dt>Legius syndrome</dt><dd>SPRED1 variants cause café-au-lait spots and freckling without Lisch nodules, neurofibromas or gliomas. With pigmentary findings alone, NF1 is most likely, but genetic testing can distinguish the two.</dd></dl></div>
+  </section>
+
+  <section class="tab" id="tab-neuro">
+    <h2>Neurocutaneous syndromes</h2>
+    <div class="chips" id="ncChips"></div>
+    <div class="card accent" id="ncCard"></div>
+  </section>
+
+  <section class="tab" id="tab-ped">
+    <h2>Inheritance patterns</h2>
+    <p class="sub">Pick a pattern to see a typical three-generation pedigree.</p>
+    <div class="chips" id="pedChips"></div>
+    <div class="ped"><svg id="pedSvg" viewBox="0 0 300 200" role="img" aria-label="Pedigree"></svg>
+      <div class="pedkey"><span>■ ● affected</span><span>□ ○ unaffected</span><span>dot = carrier</span></div></div>
+    <div class="card accent" id="pedCard"></div>
+    <div class="card"><dl><dt>Genetic testing principles</dt><dd>Test when a result changes diagnosis, management, surveillance or family counseling. Choose targeted testing for a known familial variant, a gene panel for a defined phenotype (such as optic atrophy or infantile nystagmus), and exome or genome sequencing for complex presentations. Variants of uncertain significance are not diagnoses. Mitochondrial DNA testing must specify mtDNA; heteroplasmy and tissue differences can produce negative blood results in some mitochondrial disorders. Pair testing with genetic counseling before and after.</dd></dl></div>
+  </section>
+
+  <section class="tab" id="tab-dev">
+    <h2>Developmental abnormalities</h2>
+    <div class="chips" id="devChips"></div>
+    <div class="card accent" id="devCard"></div>
+  </section>
+
+  <section class="tab" id="tab-mito">
+    <h2>Mitochondrial disease and dominant optic atrophy</h2>
+    <div class="chips" id="mtChips"></div>
+    <div class="card accent" id="mtCard"></div>
+  </section>
+
+  <section class="tab" id="tab-cases"><h2>Case vignettes</h2><p class="sub">Work each question before revealing the answer.</p><div id="caseList"></div></section>
+  <section class="tab" id="tab-pearls"><h2>Clinical pearls</h2><div id="pearlList"></div></section>
+  <section class="tab" id="tab-quiz"><h2>Self-quiz</h2><p class="sub">Ten questions. Tap an answer to see the explanation.</p><div id="quizList"></div><p class="score" id="score" aria-live="polite"></p><button class="reveal" id="resetQuiz">Reset quiz</button></section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Recognize phenotypic patterns</label>
+      <label><input type="checkbox"> Interpret genetic testing indications</label>
+      <label><input type="checkbox"> Counsel patients appropriately</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="src">
+      <li><b>NF1 criteria (two or more without an affected parent; Lisch nodules or choroidal abnormalities; pathogenic NF1 variant; Legius syndrome distinction):</b> Legius E, Messiaen L, Wolkenstein P, et al. Revised diagnostic criteria for neurofibromatosis type 1 and Legius syndrome: an international consensus recommendation. <i>Genet Med.</i> 2021;23(8):1506-1513. doi:10.1038/s41436-021-01170-5.</li>
+      <li><b>ROP screening: all infants with birth weight of 1500 g or less or gestational age of 30 weeks or less, plus selected at-risk infants 1500 to 2000 g or over 30 weeks; follow-up 4 to 6 months after NICU discharge for strabismus, amblyopia, refractive error, cataract and glaucoma:</b> Fierson WM; AAP Section on Ophthalmology, AAO, AAPOS, AACO. Screening examination of premature infants for retinopathy of prematurity. <i>Pediatrics.</i> 2018;142(6):e20183061.</li>
+      <li><b>Optic pathway gliomas occur in 15% to 20% of individuals with NF1, mostly children under 7; many stay indolent, others cause vision loss, proptosis or precocious puberty:</b> Listernick R, Ferner RE, Liu GT, Gutmann DH. Optic pathway gliomas in neurofibromatosis-1: controversies and recommendations. <i>Ann Neurol.</i> 2007;61(3):189-198. doi:10.1002/ana.21107.</li>
+      <li><b>Surveillance: annual assessments up to age 10 and at least every 2 years after; children without a known OPG examined by an experienced pediatric ophthalmologist or neuro-ophthalmologist until age 8, then annual visual screening until adulthood; routine screening MRI not indicated in well children:</b> Carton C, Evans DG, Blanco I, et al; ERN GENTURIS NF1 Tumour Management Guideline Group. ERN GENTURIS tumour surveillance guidelines for individuals with neurofibromatosis type 1. <i>EClinicalMedicine.</i> 2023;56:101818. doi:10.1016/j.eclinm.2022.101818.</li>
+      <li>Other content reflects standard teaching in the core texts and curriculum readings.</li>
+    </ul></div>
+    <h3>Core reading (from the program curriculum)</h3>
+    <div class="card"><ul class="refs">
+      <li>Lock JH, Irani NK, Newman NJ. Neuro-ophthalmic manifestations of mitochondrial disorders and their management. <i>Taiwan J Ophthalmol.</i> 2020;11(1):39-52.</li>
+      <li>Kioutchoukova I, Foster D, Thakkar R, et al. Neurocutaneous diseases: diagnosis, management, and treatment. <i>J Clin Med.</i> 2024;13(6):1648.</li>
+      <li>Al Bluwi W, Al Jindan M, Ammar A. Hydrocephalus and its neuro-ophthalmic complications: papilledema. In: Ammar A, ed. <i>Hydrocephalus.</i> Springer; 2017:143-151.</li>
+    </ul></div>
+  </section>
+
+  <p class="foot">Schematic diagrams for teaching. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick,init=0){host.innerHTML="";items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});if(init!==null)host.children[init].click();}
+
+/* ---------- NF1 checker ---------- */
+function nf(){
+  const boxes=[...document.querySelectorAll("#nfBox input")];
+  const cal=boxes[0].checked, fr=boxes[1].checked, n=boxes.filter(b=>b.checked).length;
+  const parent=document.getElementById("parent").checked, el=document.getElementById("nfVerdict");
+  const onlyPig = cal && fr && boxes.slice(2).every(b=>!b.checked);
+  let v, ok=false;
+  if(parent){ if(n>=1){v="Criteria met: a parent meets NF1 criteria and at least one feature is present in the child.";ok=true;} else v="With an affected parent, one feature is needed."; }
+  else { if(n>=2){v="Criteria met: two or more features present."+(onlyPig?" With only café-au-lait macules and freckling, the diagnosis is most likely NF1, but exceptionally it may be another condition such as Legius syndrome; at least one pigmentary finding should be bilateral. Genetic testing can distinguish them.":"");ok=true;} else v=`${n} of 2 needed. Recheck for Lisch nodules or choroidal abnormalities and follow young children over time, since features are age-dependent.`; }
+  el.textContent=v; el.classList.toggle("no",!ok);
+}
+document.querySelectorAll("#nfBox input,#parent").forEach(i=>i.addEventListener("change",nf));
+
+/* ---------- neurocutaneous ---------- */
+const NC=[
+ {n:"Neurofibromatosis type 1",e:"Lisch nodules, choroidal abnormalities, optic pathway glioma (often indolent; chiasmal and tract tumors more often need treatment), plexiform neurofibroma of the lid (S-shaped lid), sphenoid wing dysplasia with pulsatile proptosis, congenital glaucoma.",s:"Café-au-lait macules, freckling, neurofibromas; learning disability; autosomal dominant, about half de novo.",p:"Optic pathway gliomas affect 15% to 20% of people with NF1, mostly before age 7. Examine children without a known OPG yearly until age 8 (experienced examiner), then screen vision yearly into adulthood; MRI is for symptoms or signs, not routine screening. Vision loss and precocious puberty are the main red flags. MEK inhibitors (selumetinib) treat symptomatic plexiform neurofibromas."},
+ {n:"Neurofibromatosis type 2 (NF2-related schwannomatosis)",e:"Juvenile posterior subcapsular cataract, epiretinal membranes, combined hamartomas of the retina and RPE, optic nerve sheath meningiomas, CN palsies from schwannomas.",s:"Bilateral vestibular schwannomas, meningiomas, spinal tumors; autosomal dominant.",p:"A young patient with cataract or epiretinal membrane plus hearing loss: think NF2."},
+ {n:"Tuberous sclerosis complex",e:"Retinal astrocytic hamartomas (flat translucent or mulberry calcified), achromic patches; papilledema from hydrocephalus caused by subependymal giant cell astrocytoma; field loss from vigabatrin used for infantile spasms.",s:"Facial angiofibromas, ash-leaf macules, shagreen patch, seizures, cortical tubers, renal angiomyolipomas, cardiac rhabdomyomas.",p:"Monitor visual fields when vigabatrin is used; mTOR inhibitors (everolimus) treat SEGA."},
+ {n:"Von Hippel-Lindau disease",e:"Retinal hemangioblastomas (peripheral or juxtapapillary) with feeder vessels, exudation and retinal detachment.",s:"Cerebellar and spinal hemangioblastomas, renal cell carcinoma, pheochromocytoma, pancreatic tumors; autosomal dominant (VHL gene).",p:"A retinal hemangioblastoma in a young patient means VHL testing and systemic surveillance. Belzutifan (HIF-2α inhibitor) is now used for VHL-associated tumors."},
+ {n:"Sturge-Weber syndrome",e:"Ipsilateral glaucoma (especially with upper lid involvement), diffuse choroidal hemangioma ('tomato catsup' fundus), homonymous hemianopia from occipital involvement.",s:"Facial port-wine birthmark in the V1 distribution, leptomeningeal angioma, seizures, hemiparesis; somatic GNAQ mutation (not inherited).",p:"Every infant with a V1 port-wine stain needs IOP checks and lifelong glaucoma surveillance."},
+ {n:"Ataxia telangiectasia",e:"Oculomotor apraxia (head thrusts), conjunctival telangiectasia (often after age 3), nystagmus, saccadic pursuit.",s:"Progressive cerebellar ataxia, immunodeficiency, cancer risk, radiation sensitivity; autosomal recessive (ATM).",p:"Minimize ionizing radiation (prefer MRI to CT) in these patients."}
+];
+chips(document.getElementById("ncChips"),NC.map(x=>x.n),i=>{const x=NC[i];document.getElementById("ncCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Eye and visual findings</dt><dd>${x.e}</dd><dt>Systemic features</dt><dd>${x.s}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- pedigrees ---------- */
+const PEOPLE=[
+ {id:"I1",x:120,y:30,s:"m"},{id:"I2",x:180,y:30,s:"f"},
+ {id:"II1",x:40,y:100,s:"m"},{id:"II2",x:110,y:100,s:"f"},{id:"II2s",x:155,y:100,s:"m"},{id:"II3",x:220,y:100,s:"m"},{id:"II3s",x:265,y:100,s:"f"},
+ {id:"III1",x:115,y:170,s:"m"},{id:"III2",x:150,y:170,s:"f"},{id:"III3",x:225,y:170,s:"f"},{id:"III4",x:260,y:170,s:"m"}
+];
+const PATS={
+ "Autosomal dominant":{aff:["I1","II1","II2","III1"],car:[],ex:"Dominant optic atrophy (OPA1), NF1, NF2, tuberous sclerosis, von Hippel-Lindau.",t:"Affected individuals in every generation, both sexes affected, male-to-male transmission possible; each child of an affected parent has a 50% chance. Variable expressivity and incomplete penetrance can make it skip."},
+ "Mitochondrial (maternal)":{aff:["II1","III1"],car:["I2","II2","II3","III2"],ex:"Leber hereditary optic neuropathy; some mitochondrial myopathies.",t:"Passed only through mothers to all children; fathers never transmit. In LHON, men are affected more often than women, and many carriers never lose vision (incomplete penetrance). Smoking and heavy alcohol use may raise the risk of vision loss."},
+ "Autosomal recessive":{aff:["II1"],car:["I1","I2","II2"],ex:"Ataxia telangiectasia, Wolfram syndrome, many retinal dystrophies.",t:"Unaffected carrier parents; each child has a 25% chance of being affected; often appears in one sibship; consanguinity raises risk."},
+ "X-linked recessive":{aff:["II1","III1"],car:["I2","II2","III2"],ex:"Norrie disease and other X-linked eye disorders.",t:"Mostly males affected through carrier mothers; no male-to-male transmission; all daughters of affected men are carriers."}
+};
+function drawPed(p){
+  const P=PATS[p],L=Object.fromEntries(PEOPLE.map(x=>[x.id,x]));
+  let s=`<line x1="${L.I1.x+10}" y1="30" x2="${L.I2.x-10}" y2="30" stroke="var(--ink)"/>
+  <line x1="150" y1="30" x2="150" y2="65" stroke="var(--ink)"/><line x1="40" y1="65" x2="220" y2="65" stroke="var(--ink)"/>
+  ${["II1","II2","II3"].map(k=>`<line x1="${L[k].x}" y1="65" x2="${L[k].x}" y2="90" stroke="var(--ink)"/>`).join("")}
+  <line x1="${L.II2.x+10}" y1="100" x2="${L.II2s.x-10}" y2="100" stroke="var(--ink)"/><line x1="${L.II3.x+10}" y1="100" x2="${L.II3s.x-10}" y2="100" stroke="var(--ink)"/>
+  <line x1="132" y1="100" x2="132" y2="140" stroke="var(--ink)"/><line x1="115" y1="140" x2="150" y2="140" stroke="var(--ink)"/>
+  <line x1="115" y1="140" x2="115" y2="160" stroke="var(--ink)"/><line x1="150" y1="140" x2="150" y2="160" stroke="var(--ink)"/>
+  <line x1="242" y1="100" x2="242" y2="140" stroke="var(--ink)"/><line x1="225" y1="140" x2="260" y2="140" stroke="var(--ink)"/>
+  <line x1="225" y1="140" x2="225" y2="160" stroke="var(--ink)"/><line x1="260" y1="140" x2="260" y2="160" stroke="var(--ink)"/>`;
+  PEOPLE.forEach(x=>{const a=P.aff.includes(x.id),c=P.car.includes(x.id),f=a?"var(--hot)":"var(--panel)";
+    s+= x.s==="m"?`<rect x="${x.x-10}" y="${x.y-10}" width="20" height="20" fill="${f}" stroke="var(--ink)" stroke-width="1.5"/>`:`<circle cx="${x.x}" cy="${x.y}" r="10" fill="${f}" stroke="var(--ink)" stroke-width="1.5"/>`;
+    if(c&&!a) s+=`<circle cx="${x.x}" cy="${x.y}" r="3.5" fill="var(--ink)"/>`;});
+  s+=`<text x="4" y="34" class="lvl">I</text><text x="4" y="104" class="lvl">II</text><text x="4" y="174" class="lvl">III</text>`;
+  document.getElementById("pedSvg").innerHTML=s;
+  document.getElementById("pedCard").innerHTML=`<h3 style="margin-top:0">${p}</h3><dl><dt>Pattern</dt><dd>${P.t}</dd><dt>Neuro-ophthalmic examples</dt><dd>${P.ex}</dd></dl>`;
+}
+chips(document.getElementById("pedChips"),Object.keys(PATS),i=>drawPed(Object.keys(PATS)[i]));
+
+/* ---------- developmental ---------- */
+const DEV=[
+ {n:"Amblyopia",f:"Reduced best-corrected acuity from abnormal visual experience (strabismus, anisometropia, deprivation) without a structural cause.",w:"Cycloplegic refraction, rule out organic causes (an RAPD or optic nerve abnormality is never explained by amblyopia alone).",p:"Treatment (glasses, patching, atropine penalization, binocular therapies) works best when young; PEDIG trials guide dosing."},
+ {n:"Cerebral palsy and cerebral visual impairment",f:"Visual impairment from damage to retrochiasmal pathways or visual association areas; strabismus, nystagmus, optic atrophy, field loss and visual processing deficits (crowding, motion).",w:"Assess functional vision, fields and visual behavior, not just acuity.",p:"Cerebral visual impairment is a leading cause of childhood visual impairment in developed countries; pupils and fundi may be normal."},
+ {n:"Retinopathy of prematurity",f:"Abnormal retinal vascularization in premature infants; can progress to retinal detachment.",w:"Screen infants of 1500 g or less or 30 weeks or less, plus selected higher-risk infants; follow ICROP staging; treat with laser or anti-VEGF.",p:"Children with ROP need follow-up within 4 to 6 months after NICU discharge for strabismus, amblyopia, refractive error, cataract and glaucoma; anti-VEGF-treated infants need especially close follow-up for late reactivation."},
+ {n:"Congenital hydrocephalus",f:"Setting-sun sign (dorsal midbrain), CN VI palsies, optic atrophy; papilledema is less common in infants because the sutures are open.",w:"Head circumference, fontanelle, imaging; shunt evaluation.",p:"New esotropia, upgaze limitation or lethargy in a shunted child: think shunt failure."},
+ {n:"Craniosynostosis and cranial dysostoses",f:"Crouzon and Apert syndromes: shallow orbits with proptosis and exposure, V-pattern strabismus with apparent inferior oblique overaction, papilledema or optic atrophy from raised intracranial pressure.",w:"Regular fundus exams and OCT; coordinate with craniofacial surgery.",p:"Raised pressure can be silent; optic atrophy may be the first sign."},
+ {n:"Common eye and orbit malformations",f:"Coloboma, microphthalmia, optic nerve hypoplasia (Module 4), morning glory disc, dermoid cysts.",w:"MRI for associated brain anomalies when indicated (septo-optic dysplasia, basal encephalocele).",p:"Bilateral optic nerve hypoplasia: check for pituitary hormone deficiency."},
+ {n:"Chiari malformation",f:"Chiari I: downbeat nystagmus, periodic alternating nystagmus, skew, oscillopsia; occipital headache worse with Valsalva. Chiari II: with myelomeningocele and hydrocephalus.",w:"Sagittal MRI of the craniocervical junction.",p:"Downbeat nystagmus in a young patient: image the craniocervical junction."}
+];
+chips(document.getElementById("devChips"),DEV.map(x=>x.n),i=>{const x=DEV[i];document.getElementById("devCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Features</dt><dd>${x.f}</dd><dt>Workup</dt><dd>${x.w}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- mitochondrial ---------- */
+const MT=[
+ {n:"Leber hereditary optic neuropathy",f:"Painless subacute central loss in one eye then the other within weeks to months, mostly young men; hyperemic disc with peripapillary telangiectasia, no leakage.",w:"mtDNA testing for m.11778G>A, m.3460G>A and m.14484T>C.",p:"m.14484T>C carries the best chance of improvement; counsel maternal relatives; avoid smoking and heavy alcohol; idebenone is approved in the EU (Module 4)."},
+ {n:"CPEO",f:"Slowly progressive symmetric ptosis and ophthalmoplegia, usually without diplopia.",w:"Muscle biopsy (ragged red fibers) or mtDNA deletion testing (often in muscle rather than blood); nuclear genes (POLG, others) in some families.",p:"Look for hearing loss, ataxia, neuropathy and cardiac conduction disease."},
+ {n:"Kearns-Sayre syndrome",f:"CPEO plus pigmentary retinopathy with onset before age 20; heart block, ataxia, high CSF protein, diabetes.",w:"ECG urgently; mtDNA deletion testing.",p:"Pacemakers prevent sudden cardiac death (Module 12)."},
+ {n:"Dominant optic atrophy",f:"Insidious bilateral, symmetric vision loss starting in childhood; temporal (wedge) disc pallor; central or cecocentral scotomas; tritan (blue-yellow) color defect.",w:"OPA1 gene testing; examine parents and siblings, who may be mildly affected and unaware.",p:"Usually slowly progressive; some patients have 'DOA plus' with hearing loss, ataxia or myopathy."}
+];
+chips(document.getElementById("mtChips"),MT.map(x=>x.n),i=>{const x=MT[i];document.getElementById("mtCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Features</dt><dd>${x.f}</dd><dt>Workup</dt><dd>${x.w}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: Spots and a slow eye",stem:"A 4-year-old with NF1 (six café-au-lait spots and axillary freckling) is brought for a routine exam. Acuity 20/40 OD, 20/25 OS, with a subtle right RAPD.",
+  steps:[
+   {q:"What are you worried about?",a:"An optic pathway glioma affecting the right optic nerve."},
+   {q:"Next step?",a:"MRI brain and orbits with contrast; formal fields if the child can cooperate; OCT ganglion cell or RNFL thickness as an objective measure."},
+   {q:"If an OPG is confirmed, when is treatment considered?",a:"With documented visual decline, progression on imaging, or hypothalamic involvement causing precocious puberty. Most NF1 OPGs are indolent; chemotherapy (and increasingly MEK inhibitors) is used rather than radiation in NF1."}
+  ]},
+ {t:"Case 2: A birthmark and a big eye",stem:"A 2-month-old has a port-wine stain over the left forehead and upper lid. The left cornea is larger and hazy.",
+  steps:[
+   {q:"Syndrome?",a:"Sturge-Weber syndrome."},
+   {q:"What's causing the corneal change?",a:"Congenital glaucoma: the corneal enlargement (buphthalmos) and haze reflect raised IOP."},
+   {q:"What else should be arranged?",a:"Exam under anesthesia with IOP measurement, glaucoma surgery as needed, neurology for seizures, and MRI for leptomeningeal angioma."}
+  ]},
+ {t:"Case 3: A red lump in the retina",stem:"A 19-year-old has a peripheral orange-red retinal tumor with a dilated feeder artery and draining vein, plus surrounding exudate. His father had kidney cancer at 40.",
+  steps:[
+   {q:"What's the lesion and the syndrome?",a:"Retinal hemangioblastoma; von Hippel-Lindau disease."},
+   {q:"Next steps?",a:"VHL genetic testing, brain and spine MRI, abdominal imaging and plasma metanephrines; treat the retinal lesion (laser, cryotherapy)."},
+   {q:"What about the family?",a:"Offer genetic testing and surveillance to relatives; autosomal dominant inheritance."}
+  ]},
+ {t:"Case 4: Like father, like son",stem:"A 9-year-old struggles to see the board; acuity 20/60 OU, temporal pallor of both discs, cecocentral scotomas and a blue-yellow color defect. His father reads with difficulty but was never diagnosed.",
+  steps:[
+   {q:"Most likely diagnosis?",a:"Dominant optic atrophy."},
+   {q:"Confirming test?",a:"OPA1 genetic testing; examine the father, who likely has a milder form."},
+   {q:"Counseling?",a:"Autosomal dominant: each child of an affected parent has a 50% chance; variable expressivity; low vision support and school accommodations."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{const d=document.createElement("div");d.className="card";d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map(s=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");caseList.appendChild(d);});
+caseList.addEventListener("click",e=>{if(!e.target.classList.contains("reveal"))return;const a=e.target.nextElementSibling,on=!a.classList.contains("on");a.classList.toggle("on",on);e.target.setAttribute("aria-expanded",String(on));e.target.textContent=on?"Hide answer":"Reveal answer";});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "An RAPD or optic nerve abnormality is never explained by amblyopia alone.",
+ "Lisch nodules or choroidal abnormalities now count as NF1 criteria; choroidal findings on near-infrared imaging can come first.",
+ "Café-au-lait spots and freckling alone are usually NF1 but occasionally Legius syndrome; Lisch nodules, neurofibromas and gliomas point to NF1.",
+ "Most NF1 optic pathway gliomas are indolent; watch acuity, fields and puberty timing.",
+ "A juvenile posterior subcapsular cataract or epiretinal membrane with hearing loss suggests NF2.",
+ "Retinal hemangioblastoma in a young patient means VHL testing and systemic screening.",
+ "V1 port-wine stain: lifelong glaucoma surveillance.",
+ "Ataxia telangiectasia: minimize radiation exposure.",
+ "Painless sequential vision loss in a young man: LHON. Insidious bilateral childhood loss with temporal pallor and a tritan defect: DOA.",
+ "Children treated for ROP, especially with anti-VEGF, need close follow-up after NICU discharge."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"Which ophthalmic finding was added as an NF1 criterion in 2021?",o:["Retinal hemangioblastoma","Choroidal abnormalities on OCT or near-infrared imaging","Optic disc drusen","Myelinated nerve fibers"],a:1,e:"Two or more choroidal abnormalities count as an alternative to two or more Lisch nodules."},
+ {q:"Café-au-lait spots and freckling with no other NF1 features and a SPRED1 variant indicate:",o:["NF1","Legius syndrome","NF2","Tuberous sclerosis"],a:1,e:"Legius syndrome lacks Lisch nodules, neurofibromas and gliomas."},
+ {q:"US ROP screening applies to infants with birth weight of:",o:["2500 g or less","1500 g or less or gestational age of 30 weeks or less","1000 g or less only","Any premature infant"],a:1,e:"Plus selected higher-risk infants up to 2000 g or over 30 weeks."},
+ {q:"Retinal hemangioblastomas are characteristic of:",o:["Sturge-Weber","Von Hippel-Lindau","Tuberous sclerosis","NF1"],a:1,e:"VHL; screen for CNS hemangioblastomas, renal cell carcinoma and pheochromocytoma."},
+ {q:"'Tomato catsup' fundus and ipsilateral glaucoma suggest:",o:["Sturge-Weber","VHL","NF2","Ataxia telangiectasia"],a:0,e:"Diffuse choroidal hemangioma in Sturge-Weber syndrome."},
+ {q:"Oculomotor apraxia with conjunctival telangiectasia suggests:",o:["NF1","Ataxia telangiectasia","Tuberous sclerosis","Chiari II"],a:1,e:"Autosomal recessive ATM disorder with radiation sensitivity."},
+ {q:"Which inheritance pattern never shows father-to-child transmission?",o:["Autosomal dominant","Mitochondrial","Autosomal recessive","None"],a:1,e:"Mitochondrial DNA is inherited from the mother."},
+ {q:"A tritan color defect with temporal disc pallor and a similarly affected parent suggests:",o:["LHON","Dominant optic atrophy","Toxic optic neuropathy","Glaucoma"],a:1,e:"OPA1-related dominant optic atrophy."},
+ {q:"Papilledema is less common in hydrocephalic infants because:",o:["Their optic nerves are immature","Open sutures and fontanelles let the skull expand","They have lower pressure","Their discs are larger"],a:1,e:"The skull can expand until the sutures close."},
+ {q:"Downbeat nystagmus in a young adult should prompt imaging of the:",o:["Orbits","Craniocervical junction","Sella","Occipital lobe"],a:1,e:"Chiari I malformation is a classic cause."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 7: Anisocoria</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.cmp{display:grid;gap:6px}
+.cmprow{background:var(--panel);border-radius:12px;padding:8px 10px}
+.cmprow h4{margin:0 0 6px;font-size:.84rem;color:var(--muted);font-weight:600}
+.cmpcells{display:grid;gap:8px}
+.cmpcells div{font-size:.88rem;border-left:3px solid var(--stem);padding-left:7px}
+.cmpcells b{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.fundus{background:#000;border-radius:14px;padding:8px;display:flex;justify-content:center}
+.fundus svg{max-width:300px}
+
+.slider{width:100%;accent-color:var(--hot);margin:10px 0 2px}
+.gl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.ladder li{margin:8px 0}
+
+.vfwrap{background:var(--panel);border-radius:14px;padding:10px}
+.prog{font-size:.85rem;color:var(--muted);margin:4px 0 0}
+.next{font:inherit;margin-top:10px;padding:9px 14px;border-radius:10px;border:none;background:var(--ink);color:var(--bg);cursor:pointer}
+.brain svg .rg{cursor:pointer}
+.brain svg .rg:focus-visible{outline:none;stroke:var(--inter);stroke-width:3}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.read{display:flex;justify-content:space-around;font-size:.9rem;margin-top:4px}
+.read b{font-family:Charter,Georgia,serif;font-size:1.05rem}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.9rem;margin:6px 0}
+.toggle input{width:20px;height:20px;accent-color:var(--inter)}
+ol.algo li{margin:8px 0}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 7 of 22</p>
+  <h1>Anisocoria</h1>
+  <p class="sub">Physiologic, pharmacologic, Horner syndrome, third nerve palsy, tonic pupil and light-near dissociation. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="sim" aria-selected="true">Pupil lab</button>
+    <button role="tab" data-tab="algo" aria-selected="false">Algorithm</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and sources</button>
+  </nav>
+
+  <section class="tab on" id="tab-sim">
+    <h2>Pupil lab</h2>
+    <p class="sub">Choose a patient, change the lighting, then put in drops. The abnormal eye is always the patient's right (on your left). Turn on mystery mode to hide the diagnosis.</p>
+    <label class="toggle"><input type="checkbox" id="mystery"> Mystery mode</label>
+    <h3>Patient</h3>
+    <div class="chips" id="pt"></div>
+    <h3>Lighting</h3>
+    <div class="chips" id="lite"></div>
+    <h3>Drops (both eyes, read after 30 to 60 minutes)</h3>
+    <div class="chips" id="drop"></div>
+    <div class="sim">
+      <svg id="face" viewBox="0 0 300 120" role="img" aria-label="Patient's eyes"></svg>
+      <div class="read"><span>Right <b id="rR">-</b> mm</span><span>Anisocoria <b id="rA">-</b> mm</span><span>Left <b id="rL">-</b> mm</span></div>
+    </div>
+    <div class="card accent" id="labCard"></div>
+  </section>
+
+  <section class="tab" id="tab-algo">
+    <h2>Step by step</h2>
+    <div class="card"><ol class="algo">
+      <li><b>Look for danger first:</b> ptosis with ophthalmoplegia (CN III), pain, or neurologic symptoms. A pupil-involving CN III palsy needs emergent vascular imaging; an acute painful Horner needs emergent head and neck vascular imaging.</li>
+      <li><b>Measure in bright and dim light.</b> If anisocoria is greater in dim light, the small pupil is abnormal (sympathetic problem or physiologic). If greater in bright light, the large pupil is abnormal (parasympathetic, iris or drug).</li>
+      <li><b>Small pupil abnormal:</b> look for mild ptosis, lower-lid elevation and dilation lag. Confirm Horner with apraclonidine (reversal) or cocaine (post-cocaine anisocoria of 0.8 mm or more). Localize with associated signs and imaging; hydroxyamphetamine separates postganglionic from more proximal lesions.</li>
+      <li><b>Large pupil abnormal:</b> check motility and lids for CN III; slit lamp for sphincter tears, synechiae or sectoral palsy with vermiform movements; test near response.</li>
+      <li><b>Dilute pilocarpine (0.1%)</b> constricts a tonic pupil (denervation supersensitivity). <b>Pilocarpine 1%</b> constricts any pupil except one with pharmacologic blockade or iris damage.</li>
+      <li><b>Both pupils react poorly to light but well to near:</b> light-near dissociation: dorsal midbrain, Argyll Robertson pupils, bilateral tonic pupils, diabetes, or severe bilateral afferent loss.</li>
+    </ol></div>
+    <div class="card accent"><dl class="miss"><dt>Remember</dt><dd>About 19% of normal people show 0.4 mm or more of anisocoria at any given exam (Lam 1987). Physiologic anisocoria stays roughly equal in light and dark, with brisk reactions and no ptosis.</dd></dl></div>
+  </section>
+
+  <section class="tab" id="tab-cases"><h2>Case vignettes</h2><p class="sub">Work each question before revealing the answer.</p><div id="caseList"></div></section>
+  <section class="tab" id="tab-pearls"><h2>Clinical pearls</h2><div id="pearlList"></div></section>
+  <section class="tab" id="tab-quiz"><h2>Self-quiz</h2><p class="sub">Ten questions. Tap an answer to see the explanation.</p><div id="quizList"></div><p class="score" id="score" aria-live="polite"></p><button class="reveal" id="resetQuiz">Reset quiz</button></section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Differentiate physiologic from pathologic anisocoria</label>
+      <label><input type="checkbox"> Perform pharmacologic testing</label>
+      <label><input type="checkbox"> Identify emergent causes</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="src">
+      <li><b>Post-cocaine anisocoria of 0.8 mm gave a mean odds ratio of about 1050:1 for Horner syndrome (lower 95% confidence limit about 37:1); absolute post-cocaine anisocoria predicted better than the change in anisocoria:</b> Kardon RH, Denison CE, Brown CK, Thompson HS. Critical evaluation of the cocaine test in the diagnosis of Horner's syndrome. <i>Arch Ophthalmol.</i> 1990;108(3):384-387. doi:10.1001/archopht.1990.01070050082036.</li>
+      <li><b>About 19% of normal people show anisocoria of 0.4 mm or more at any given exam:</b> Lam BL, Thompson HS, Corbett JJ. The prevalence of simple anisocoria. <i>Am J Ophthalmol.</i> 1987;104(1):69-73.</li>
+      <li><b>Only 36% of patients with acute third nerve palsy received timely arterial imaging:</b> Chung JE, Schroeder RM, Wilson B, Van Stavern GP, Stunkel L. Failure to obtain urgent arterial imaging in acute third nerve palsies. <i>J Neuroophthalmol.</i> 2021. doi:10.1097/WNO.0000000000001337.</li>
+      <li><b>Apraclonidine is contraindicated in young children (use cocaine instead):</b> EyeWiki, Anisocoria (American Academy of Ophthalmology). Accessed 2026.</li>
+      <li>Pupil sizes in the lab are illustrative values, not measurements from patients. Other content reflects standard teaching in the core texts.</li>
+    </ul></div>
+    <h3>Core reading (from the program curriculum)</h3>
+    <div class="card"><ul class="refs">
+      <li>Vegunta S, ed. Anisocoria. <i>Neuro-Ophthalmology</i>, Moran CORE, University of Utah.</li>
+      <li>American Academy of Ophthalmology. <i>Basic and Clinical Science Course, Section 5: Neuro-Ophthalmology.</i> AAO; 2025.</li>
+      <li>Gold D. <i>Neuro-Ophthalmology and Neuro-Otology: A Case-Based Guide for Clinicians and Scientists.</i> Springer Nature; 2022.</li>
+    </ul></div>
+  </section>
+
+  <p class="foot">Simulated pupils for teaching, not a clinical device. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick,init=0){host.innerHTML="";items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});host.children[init].click();}
+
+/* ---------- pupil lab ---------- */
+const LIGHTS=["Bright","Dim","Near target"], LK=["bright","dim","near"];
+const DROPS=["None","Apraclonidine 0.5%","Cocaine 10%","Hydroxyamphetamine 1%","Pilocarpine 0.1%","Pilocarpine 1%"], DK=["none","apra","coc","hyd","p01","p1"];
+const P={
+ "Physiologic":{bright:[3.4,3.0],dim:[6.2,5.7],near:[2.8,2.4],ptosis:0,
+   apra:[[6.0,5.5],"No reversal of anisocoria: not Horner."],coc:[[7.8,7.4],"Both pupils dilate; post-cocaine anisocoria under 0.8 mm argues against Horner."],
+   hyd:[[7.6,7.2],"Both dilate. Hydroxyamphetamine isn't indicated without a confirmed Horner."],p01:[[6.1,5.6],"No supersensitivity."],p1:[[2.0,1.8],"Both constrict normally."],
+   dx:"Physiologic (simple) anisocoria: similar difference in light and dark, brisk reactions, no ptosis."},
+ "Horner, postganglionic":{bright:[3.0,3.5],dim:[4.0,6.0],near:[2.5,2.9],ptosis:1,
+   apra:[[5.8,5.0],"Reversal: the right pupil dilates (denervation supersensitivity) and the left constricts slightly. Confirms Horner."],coc:[[4.2,7.6],"Right pupil barely dilates; post-cocaine anisocoria 3.4 mm. Confirms Horner."],
+   hyd:[[4.2,7.4],"Right pupil fails to dilate: the postganglionic (third-order) neuron is damaged."],p01:[[3.9,5.9],"No supersensitivity to pilocarpine."],p1:[[1.8,1.9],"Both constrict."],
+   dx:"Right postganglionic Horner syndrome: think carotid dissection if acute and painful, cavernous sinus, or cluster headache."},
+ "Horner, preganglionic":{bright:[3.0,3.5],dim:[4.0,6.0],near:[2.5,2.9],ptosis:1,
+   apra:[[5.8,5.0],"Reversal confirms Horner."],coc:[[4.2,7.6],"Poor dilation of the right pupil confirms Horner."],
+   hyd:[[7.0,7.2],"Right pupil dilates: the third-order neuron is intact, so the lesion is first- or second-order."],p01:[[3.9,5.9],"No supersensitivity."],p1:[[1.8,1.9],"Both constrict."],
+   dx:"Right preganglionic Horner syndrome: image the lung apex, neck and chest (Pancoast tumor, trauma, surgery; neuroblastoma in children)."},
+ "Tonic (Adie) pupil":{bright:[6.0,3.2],dim:[6.4,6.0],near:[4.0,2.6],ptosis:0,
+   apra:[[6.4,5.6],"No reversal."],coc:[[7.6,7.6],"Both dilate."],hyd:[[7.6,7.5],"Both dilate."],
+   p01:[[3.4,6.0],"The right pupil constricts to dilute pilocarpine: cholinergic supersensitivity confirms a tonic pupil."],p1:[[1.8,1.8],"Both constrict."],
+   dx:"Right tonic pupil: poor light reaction, slow sustained near constriction (light-near dissociation), sectoral palsy and vermiform movements at the slit lamp."},
+ "Pharmacologic dilation":{bright:[8.0,3.2],dim:[8.2,6.0],near:[8.0,2.6],ptosis:0,
+   apra:[[8.2,5.6],"No change in the dilated pupil."],coc:[[8.4,7.6],"Left dilates; right already maximal."],hyd:[[8.4,7.4],"Uninformative."],
+   p01:[[8.2,6.0],"No response."],p1:[[8.0,2.0],"Right pupil fails to constrict to 1% pilocarpine while the left constricts: pharmacologic blockade (or iris damage)."],
+   dx:"Pharmacologic mydriasis: ask about scopolamine patches, nebulized ipratropium, plants (jimsonweed, angel's trumpet) or a colleague's dilating drops."},
+ "Pupil-involving CN III palsy":{bright:[7.0,3.2],dim:[7.4,6.0],near:[7.0,2.6],ptosis:3,
+   apra:[[7.4,5.6],"No reversal."],coc:[[7.8,7.6],"Uninformative."],hyd:[[7.8,7.4],"Uninformative."],
+   p01:[[7.2,6.0],"Usually no response acutely."],p1:[[2.4,2.0],"Right pupil constricts to 1% pilocarpine, so this is not pharmacologic blockade."],
+   dx:"Right pupil-involving CN III palsy: emergent CTA or MRA for a posterior communicating artery aneurysm. Don't let drop testing delay imaging."},
+ "Argyll Robertson pupils":{bright:[2.0,2.3],dim:[2.6,2.9],near:[1.4,1.7],ptosis:0,irregular:true,
+   apra:[[2.6,2.9],"Little change."],coc:[[2.9,3.2],"Poor dilation."],hyd:[[2.9,3.2],"Poor dilation."],p01:[[2.5,2.8],"Little change."],p1:[[1.2,1.4],"Both constrict."],
+   dx:"Argyll Robertson pupils: small, irregular, poorly reactive to light, brisk to near. Test for neurosyphilis (treponemal serology, then CSF)."}
+};
+const names=Object.keys(P);
+let cur=names[0], lt="dim", dr="none", sz={R:6,L:6}, anim;
+function target(){const p=P[cur]; if(dr!=="none") return p[dr][0]; return p[lt];}
+function eye(cx,mm,ptosis,shift,irr){
+  const r=mm*2.6, lidY=30+ptosis*7;
+  return `<clipPath id="clip${cx}"><ellipse cx="${cx}" cy="60" rx="58" ry="30"/></clipPath><ellipse cx="${cx}" cy="60" rx="58" ry="30" fill="#FBF8F3" stroke="var(--stemline)" stroke-width="1.5"/>
+  <g clip-path="url(#clip${cx})"><g transform="translate(${shift[0]},${shift[1]})"><circle cx="${cx}" cy="60" r="26" fill="#5E7F94"/>
+  ${irr?`<path d="M${cx-r},60 Q${cx-r*.6},${60-r*1.1} ${cx+r*.3},${60-r} Q${cx+r*1.1},${60-r*.2} ${cx+r*.7},${60+r*.8} Q${cx-r*.2},${60+r*1.1} ${cx-r},60 Z" fill="#0A0F14"/>`:`<circle cx="${cx}" cy="60" r="${r.toFixed(1)}" fill="#0A0F14"/>`}</g></g>
+  <path d="M${cx-62},${lidY} Q${cx},${lidY-18} ${cx+62},${lidY} L${cx+62},0 L${cx-62},0 Z" fill="var(--panel)"/>
+  <path d="M${cx-58},${lidY+2} Q${cx},${lidY-14} ${cx+58},${lidY+2}" stroke="#8C6E5A" stroke-width="2.5" fill="none"/>`;
+}
+function draw(){
+  const p=P[cur];
+  const shiftR = cur==="Pupil-involving CN III palsy" ? [-14,10] : [0,0];
+  document.getElementById("face").innerHTML = eye(80,sz.R,p.ptosis,shiftR,p.irregular) + eye(220,sz.L,0,[0,0],p.irregular) +
+    `<text x="80" y="114" class="lvl" text-anchor="middle">Right eye</text><text x="220" y="114" class="lvl" text-anchor="middle">Left eye</text>`;
+  document.getElementById("rR").textContent=sz.R.toFixed(1);
+  document.getElementById("rL").textContent=sz.L.toFixed(1);
+  document.getElementById("rA").textContent=Math.abs(sz.R-sz.L).toFixed(1);
+}
+function animate(){
+  const [tR,tL]=target(), from={...sz}, t0=performance.now(), dur=matchMedia("(prefers-reduced-motion: reduce)").matches?1:650;
+  cancelAnimationFrame(anim);
+  const step=now=>{const k=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-k,3);sz.R=from.R+(tR-from.R)*e;sz.L=from.L+(tL-from.L)*e;draw();if(k<1)anim=requestAnimationFrame(step);};
+  anim=requestAnimationFrame(step); card();
+}
+function card(){
+  const p=P[cur], m=document.getElementById("mystery").checked;
+  const ab=Math.abs(p.bright[0]-p.bright[1]), ad=Math.abs(p.dim[0]-p.dim[1]);
+  let ld = Math.abs(ab-ad)<0.3 ? "Anisocoria is about the same in bright and dim light." :
+           ad>ab ? "Anisocoria is greater in dim light: the smaller pupil fails to dilate." : "Anisocoria is greater in bright light: the larger pupil fails to constrict.";
+  let html=`<dl><dt>Light vs dark</dt><dd>${ld}</dd>`;
+  if(lt==="near"&&dr==="none") html+=`<dt>Near</dt><dd>${(p.bright[0]-p.near[0])>1||p.irregular||cur.startsWith("Tonic")?"Watch for constriction to near that's better than to light (light-near dissociation).":"Near response mirrors the light response."}</dd>`;
+  if(dr!=="none") html+=`<dt>${DROPS[DK.indexOf(dr)]}</dt><dd>${p[dr][1]}</dd>`;
+  html+=`</dl>`;
+  html+= m ? `<button class="reveal" id="showDx">Reveal diagnosis</button><div class="ans" id="dxAns">${p.dx}</div>` : `<dl class="miss"><dt>${cur}</dt><dd>${p.dx}</dd></dl>`;
+  document.getElementById("labCard").innerHTML=html;
+  const b=document.getElementById("showDx"); if(b) b.addEventListener("click",()=>{document.getElementById("dxAns").classList.add("on");b.remove();});
+}
+function renderPatients(){
+  const m=document.getElementById("mystery").checked;
+  if(m){
+    const host=document.getElementById("pt"); host.innerHTML="";
+    const b=document.createElement("button"); b.textContent="New mystery patient"; b.setAttribute("aria-pressed","true");
+    b.addEventListener("click",()=>{cur=names[Math.floor(Math.random()*names.length)];dr="none";document.getElementById("drop").children[0].click();animate();});
+    host.appendChild(b); cur=names[Math.floor(Math.random()*names.length)]; animate();
+  } else chips(document.getElementById("pt"),names,i=>{cur=names[i];animate()});
+}
+chips(document.getElementById("lite"),LIGHTS,i=>{lt=LK[i];animate()},1);
+chips(document.getElementById("drop"),DROPS,i=>{dr=DK[i];animate()});
+renderPatients();
+document.getElementById("mystery").addEventListener("change",renderPatients);
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: Shoulder pain and a droopy lid",stem:"A 64-year-old man who smokes has 3 months of right shoulder and arm pain and a new right ptosis. The right pupil is smaller, more so in dim light.",
+  steps:[
+   {q:"What's the syndrome and the likely level?",a:"Right Horner syndrome, likely preganglionic (second-order) given arm and shoulder pain."},
+   {q:"What lesion do you worry about?",a:"A Pancoast (superior sulcus) lung tumor at the right apex."},
+   {q:"What's the imaging plan?",a:"CT or MRI of the chest and neck covering the lung apex and brachial plexus. Hydroxyamphetamine would dilate the pupil, supporting a preganglionic lesion, but imaging shouldn't wait for it."}
+  ]},
+ {t:"Case 2: One big pupil, young woman",stem:"A 30-year-old woman noticed her left pupil is larger. It reacts poorly to light, constricts slowly but well to near, and stays small for a while after near effort. Knee reflexes are reduced.",
+  steps:[
+   {q:"Diagnosis?",a:"Left tonic (Adie) pupil; with absent or reduced deep tendon reflexes, Holmes-Adie syndrome."},
+   {q:"How do you confirm it?",a:"Dilute pilocarpine (0.1%) in both eyes: the tonic pupil constricts more than the normal pupil because of cholinergic supersensitivity. The slit lamp shows sectoral sphincter palsy and vermiform movements."},
+   {q:"What do you tell her?",a:"It's benign; the pupil often becomes smaller over years, and the other eye can become involved. Reading glasses help if accommodation is affected."}
+  ]},
+ {t:"Case 3: The ICU nurse",stem:"A 35-year-old ICU nurse wakes with a fixed, dilated right pupil (8 mm). Lids and eye movements are normal; no headache.",
+  steps:[
+   {q:"What's most likely?",a:"Pharmacologic mydriasis, for example from touching a scopolamine patch or handling nebulized anticholinergics, then rubbing the eye."},
+   {q:"Which drop test settles it?",a:"Pilocarpine 1%: a pharmacologically blocked pupil won't constrict, while a CN III palsy pupil will."},
+   {q:"Does she need imaging?",a:"Not if lids and motility are normal and the pupil fails to constrict to 1% pilocarpine. An isolated dilated pupil with normal motility and lids is rarely from an aneurysm."}
+  ]},
+ {t:"Case 4: A baby with uneven pupils",stem:"Parents bring their 7-month-old because the right pupil looks smaller and the right lid droops slightly. The right iris is lighter than the left.",
+  steps:[
+   {q:"What does the iris color difference suggest?",a:"Congenital or early-onset Horner syndrome; sympathetic input is needed for iris pigmentation in infancy."},
+   {q:"Which drop should you avoid, and what can you use?",a:"Avoid apraclonidine in young children (risk of systemic side effects such as lethargy). Cocaine can confirm the diagnosis."},
+   {q:"What must be excluded?",a:"Neuroblastoma: physical exam of the neck and abdomen, urine catecholamine metabolites, and imaging of the head, neck and chest, coordinated with pediatrics."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{const d=document.createElement("div");d.className="card";d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map(s=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");caseList.appendChild(d);});
+caseList.addEventListener("click",e=>{if(!e.target.classList.contains("reveal"))return;const a=e.target.nextElementSibling,on=!a.classList.contains("on");a.classList.toggle("on",on);e.target.setAttribute("aria-expanded",String(on));e.target.textContent=on?"Hide answer":"Reveal answer";});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "Always measure pupils in bright and dim light; the direction of change tells you which pupil is abnormal.",
+ "Horner ptosis is mild (1 to 2 mm) with lower-lid elevation; a large ptosis with a big pupil is CN III until proven otherwise.",
+ "Dilation lag (slow dilation of the Horner pupil in the first seconds of darkness) is intermittent; its absence doesn't rule out Horner.",
+ "Apraclonidine reversal confirms Horner but may be falsely negative in the first days, before denervation supersensitivity develops.",
+ "Wait at least 24 to 48 hours after cocaine before hydroxyamphetamine testing.",
+ "Acute painful Horner is carotid dissection until proven otherwise; imaging from the aortic arch to the skull base is needed, and drop testing must not delay it.",
+ "A large pupil that won't constrict to 1% pilocarpine is pharmacologic blockade or iris damage, not CN III.",
+ "Tonic pupils constrict to 0.1% pilocarpine and show sectoral palsy and vermiform movements at the slit lamp.",
+ "Light-near dissociation: dorsal midbrain, Argyll Robertson (neurosyphilis), tonic pupils, diabetes, or severe bilateral afferent loss.",
+ "In children with Horner syndrome, especially acquired, look for neuroblastoma; avoid apraclonidine in young children."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"Anisocoria greater in bright light points to:",o:["The small pupil being abnormal","The large pupil being abnormal","Physiologic anisocoria","Horner syndrome"],a:1,e:"The large pupil fails to constrict: parasympathetic, iris or pharmacologic cause."},
+ {q:"After apraclonidine, the smaller pupil becomes larger than the other. This means:",o:["Physiologic anisocoria","Horner syndrome","Tonic pupil","Pharmacologic miosis"],a:1,e:"Reversal of anisocoria reflects denervation supersensitivity in Horner syndrome."},
+ {q:"In Kardon 1990, a post-cocaine anisocoria of 0.8 mm gave an odds ratio for Horner of about:",o:["10:1","100:1","1050:1","1:1"],a:2,e:"About 1050:1 (lower 95% confidence limit about 37:1)."},
+ {q:"Hydroxyamphetamine fails to dilate the Horner pupil. The lesion is:",o:["First-order","Second-order","Third-order (postganglionic)","Not Horner"],a:2,e:"Hydroxyamphetamine needs intact postganglionic terminals to release norepinephrine."},
+ {q:"The dilated pupil constricts to 0.1% pilocarpine but the normal pupil doesn't. Diagnosis?",o:["Pharmacologic mydriasis","Tonic pupil","Physiologic","Argyll Robertson"],a:1,e:"Cholinergic supersensitivity of the tonic pupil."},
+ {q:"A dilated pupil doesn't constrict to 1% pilocarpine. Most likely:",o:["CN III palsy","Pharmacologic blockade","Tonic pupil","Horner"],a:1,e:"Pilocarpine 1% constricts CN III and tonic pupils; failure means pharmacologic blockade or iris damage."},
+ {q:"Which feature most strongly suggests a CN III cause of a dilated pupil?",o:["Normal motility","Ptosis and limited adduction or elevation","Light-near dissociation only","Heterochromia"],a:1,e:"Ptosis and ophthalmoplegia point to CN III; check urgently for aneurysm."},
+ {q:"Argyll Robertson pupils are associated with:",o:["Diabetes only","Neurosyphilis","Carotid dissection","Migraine"],a:1,e:"Small irregular pupils with light-near dissociation; test for neurosyphilis."},
+ {q:"Heterochromia with a lighter iris on the side of a Horner suggests:",o:["Acute dissection","Congenital or early-childhood onset","Pharmacologic cause","Adie pupil"],a:1,e:"Sympathetic input is needed for iris pigmentation in early life."},
+ {q:"Which drop should be avoided in infants?",o:["Cocaine","Apraclonidine","Pilocarpine 1%","Tropicamide"],a:1,e:"Apraclonidine can cause systemic side effects in young children; cocaine is used instead."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>

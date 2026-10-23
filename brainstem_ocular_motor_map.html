@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Brainstem neighborhoods for eye movements</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:560px;margin:0 auto;padding:18px 14px 40px}
+h1{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;
+  font-weight:600;font-size:1.55rem;line-height:1.2;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 14px;font-size:.92rem}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:10px;font-size:.85rem}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:50%;display:inline-block}
+.modes{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin:6px 0 10px}
+.modes button{font:inherit;font-size:.88rem;padding:9px 8px;border-radius:10px;
+  border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.modes button[aria-pressed="true"]{border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.modes button:focus-visible,.hit:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic;letter-spacing:.02em}
+.st circle.dot{stroke:var(--halo);stroke-width:1.5}
+.st{transition:opacity .25s}
+.st.dim{opacity:.22}
+.st.sel circle.dot{stroke:var(--ink);stroke-width:2.5}
+.hit{fill:transparent;cursor:pointer}
+.path{display:none;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+svg[data-mode="hgaze"] .p-hgaze, svg[data-mode="vgaze"] .p-vgaze,
+svg[data-mode="tilt"] .p-tilt, svg[data-mode="patient"] .p-patient{display:inline}
+.draw{stroke-dasharray:900;stroke-dashoffset:900;animation:draw 1.2s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion: reduce){.draw{animation:none;stroke-dashoffset:0}}
+.panel{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px;
+  border-left:5px solid var(--neighbor)}
+.panel h2{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;
+  font-size:1.15rem;margin:0 0 2px;font-weight:600}
+.tier{font-size:.82rem;color:var(--muted);margin:0 0 8px}
+.panel dl{margin:0}
+.panel dt{font-weight:600;font-size:.85rem;margin-top:8px}
+.panel dd{margin:2px 0 0}
+.panel p{margin:6px 0}
+.foot{color:var(--muted);font-size:.82rem;margin-top:14px}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <h1>Brainstem neighborhoods for eye movements</h1>
+  <p class="sub">Tap any dot to learn what lives there. Tap a pathway to light up its wiring.</p>
+
+  <div class="legend" aria-label="Legend">
+    <span><i style="background:var(--supra)"></i>Supranuclear (bosses)</span>
+    <span><i style="background:var(--inter)"></i>Internuclear (phone line)</span>
+    <span><i style="background:var(--infra)"></i>Nuclear and infranuclear (workers)</span>
+    <span><i style="background:var(--neighbor)"></i>Neighbors</span>
+  </div>
+
+  <div class="modes" role="group" aria-label="Pathways">
+    <button data-mode="hgaze" aria-pressed="false">Look right (horizontal)</button>
+    <button data-mode="vgaze" aria-pressed="false">Look up or down (vertical)</button>
+    <button data-mode="tilt" aria-pressed="false">The tilt wire (skew)</button>
+    <button data-mode="patient" aria-pressed="false">Her patient</button>
+  </div>
+
+  <svg id="map" viewBox="0 0 360 660" role="img" aria-label="Schematic brainstem with ocular motor structures">
+    <defs>
+      <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/>
+      </marker>
+    </defs>
+
+    <!-- Anatomy blocks -->
+    <rect x="60" y="18" width="240" height="56" rx="28" fill="var(--stem)" stroke="var(--stemline)"/>
+    <text x="180" y="34" class="lvl" text-anchor="middle">Cortex</text>
+    <rect x="100" y="98" width="160" height="152" rx="30" fill="var(--stem)" stroke="var(--stemline)"/>
+    <rect x="80" y="262" width="200" height="190" rx="40" fill="var(--stem)" stroke="var(--stemline)"/>
+    <rect x="110" y="464" width="140" height="138" rx="30" fill="var(--stem)" stroke="var(--stemline)"/>
+    <ellipse cx="330" cy="352" rx="24" ry="62" fill="var(--stem)" stroke="var(--stemline)"/>
+    <text x="318" y="430" class="lvl" text-anchor="middle">Cerebellum</text>
+    <line x1="180" y1="98" x2="180" y2="602" stroke="var(--stemline)" stroke-dasharray="3 4"/>
+    <text x="180" y="94" class="lvl" text-anchor="middle">midline</text>
+
+    <text class="lvl" transform="translate(16,175) rotate(-90)" text-anchor="middle">Midbrain: III, IV</text>
+    <text class="lvl" transform="translate(16,357) rotate(-90)" text-anchor="middle">Pons: V to VIII</text>
+    <text class="lvl" transform="translate(16,534) rotate(-90)" text-anchor="middle">Medulla: IX to XII</text>
+
+    <!-- MCP band -->
+    <rect x="276" y="350" width="34" height="22" rx="6" fill="var(--supra)" opacity=".22"/>
+    <!-- MLF columns -->
+    <line x1="162" y1="200" x2="162" y2="384" stroke="var(--inter)" stroke-width="4" opacity=".45"/>
+    <line x1="198" y1="200" x2="198" y2="384" stroke="var(--inter)" stroke-width="4" opacity=".45"/>
+    <!-- CN VII genu around right CN VI nucleus -->
+    <path d="M214,366 A12,12 0 1,1 236,380" fill="none" stroke="var(--neighbor)" stroke-width="2"/>
+    <!-- Static nerve exits on right side -->
+    <path d="M225,198 L300,214" stroke="var(--infra)" stroke-width="2" fill="none" opacity=".7"/>
+    <text x="303" y="218" class="lbl">III</text>
+    <path d="M135,232 C150,252 210,252 300,252" stroke="var(--infra)" stroke-width="2" fill="none" opacity=".7"/>
+    <text x="303" y="256" class="lbl">IV crosses</text>
+    <path d="M225,372 L270,408" stroke="var(--infra)" stroke-width="2" fill="none" opacity=".7"/>
+    <text x="252" y="420" class="lbl">VI</text>
+    <path d="M330,466 L250,440" stroke="var(--neighbor)" stroke-width="2" fill="none" opacity=".7"/>
+
+    <!-- Bottom box -->
+    <rect x="80" y="616" width="200" height="32" rx="10" fill="none" stroke="var(--infra)" stroke-width="1.5"/>
+    <text x="180" y="636" class="lbl" text-anchor="middle">Outside: nerve to NMJ to muscle</text>
+
+    <!-- Pathways -->
+    <g class="path p-hgaze" stroke="var(--hot)">
+      <path class="draw" d="M135,48 C135,95 160,115 172,150 L188,290 C192,312 214,322 222,328" marker-end="url(#arr)"/>
+      <path class="draw" d="M225,334 L225,366" marker-end="url(#arr)"/>
+      <path class="draw" d="M228,376 L268,406" marker-end="url(#arr)"/>
+      <path class="draw" d="M222,374 C200,390 170,390 162,376 L162,204 L141,199" marker-end="url(#arr)"/>
+      <text x="280" y="398" class="lbl" style="fill:var(--hot)">right LR</text>
+      <text x="58" y="190" class="lbl" style="fill:var(--hot)">left MR</text>
+      <text x="156" y="270" class="lbl" text-anchor="end" style="fill:var(--hot)">cut here = INO</text>
+    </g>
+    <g class="path p-vgaze" stroke="var(--hot)">
+      <path class="draw" d="M141,128 L141,192" marker-end="url(#arr)"/>
+      <path class="draw" d="M219,128 L219,192" marker-end="url(#arr)"/>
+      <path class="draw" d="M129,160 L129,226" marker-end="url(#arr)"/>
+      <path class="draw" d="M231,160 L231,226" marker-end="url(#arr)"/>
+      <path class="draw" d="M140,150 C160,110 200,110 220,150"/>
+      <text x="180" y="112" class="lbl" text-anchor="middle" style="fill:var(--hot)">posterior commissure</text>
+    </g>
+    <g class="path p-tilt" stroke="var(--hot)">
+      <path class="draw" d="M34,440 L104,440" marker-end="url(#arr)"/>
+      <path class="draw" d="M110,440 C140,436 176,428 198,414 L198,172 L219,162" marker-end="url(#arr)"/>
+      <path class="draw" d="M225,166 L225,226" marker-end="url(#arr)"/>
+      <g stroke-width="3"><line x1="172" y1="417" x2="188" y2="433"/><line x1="188" y1="417" x2="172" y2="433"/></g>
+      <text x="190" y="452" class="lbl" style="fill:var(--hot)">the cross</text>
+      <text x="208" y="283" class="lbl" style="fill:var(--hot)">Above the cross:</text>
+      <text x="208" y="296" class="lbl" style="fill:var(--hot)">contraversive</text>
+      <text x="300" y="492" class="lbl" text-anchor="middle" style="fill:var(--hot)">Below the cross:</text>
+      <text x="300" y="505" class="lbl" text-anchor="middle" style="fill:var(--hot)">ipsiversive</text>
+    </g>
+    <g class="path p-patient">
+      <ellipse cx="262" cy="410" rx="30" ry="24" fill="var(--hot)" opacity=".28" stroke="var(--hot)" stroke-width="2"/>
+      <text x="262" y="374" class="lbl" text-anchor="middle" style="fill:var(--hot)">lesion</text>
+    </g>
+
+    <g id="stations"></g>
+  </svg>
+
+  <section class="panel" id="panel" aria-live="polite">
+    <h2>Start here</h2>
+    <p class="tier">How to read the map</p>
+    <p>The brainstem is drawn as three floors: midbrain on top, pons in the middle, medulla at the bottom. Left and right sides are shown, split by the dotted midline.</p>
+    <p>Purple bosses decide where the eyes go. The teal phone line (MLF) links the two sides. Amber workers carry the order to each eye.</p>
+  </section>
+
+  <p class="foot">Schematic only, not to anatomic scale. Rule of four: III and IV in the midbrain, V to VIII in the pons, IX to XII in the medulla.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+
+<script>
+const T = {
+  supra:{c:"var(--supra)", n:"Supranuclear (boss)"},
+  inter:{c:"var(--inter)", n:"Internuclear (phone line)"},
+  infra:{c:"var(--infra)", n:"Nuclear or infranuclear (worker)"},
+  nb:{c:"var(--neighbor)", n:"Neighbor (not ocular motor)"}
+};
+const S = [
+  {id:"fef",t:"supra",name:"Frontal eye fields (FEF)",pts:[[135,48],[225,48]],lab:[180,52,"middle"],short:"FEF",
+   modes:["hgaze"],does:"Starts voluntary fast eye movements toward the opposite side.",
+   dmg:"Acutely, the eyes look toward the lesion. A doll's head maneuver still moves them, so the workers are fine.",
+   ex:"Hemispheric stroke: the patient looks at the lesion."},
+  {id:"rimlf",t:"supra",name:"riMLF",pts:[[135,128],[225,128]],lab:[122,132,"end"],short:"riMLF",
+   modes:["vgaze"],does:"The \"go\" button for vertical and torsional fast eye movements.",
+   dmg:"Slow or absent vertical saccades, while the VOR can still move the eyes.",
+   ex:"Progressive supranuclear palsy; top-of-basilar stroke."},
+  {id:"inc",t:"supra",name:"Interstitial nucleus of Cajal (INC)",pts:[[135,160],[225,160]],lab:[122,164,"end"],short:"INC",
+   modes:["vgaze","tilt"],does:"The \"stay\" center that holds vertical and torsional eye position. It is also the top stop on the tilt wire.",
+   dmg:"Contraversive ocular tilt reaction (lesion-side eye up) and vertical or torsional nystagmus.",
+   ex:"Rostral midbrain stroke. Nothing above the INC causes skew."},
+  {id:"cn3",t:"infra",name:"CN III nucleus",pts:[[135,198],[225,198]],lab:[122,202,"end"],short:"III nucleus",
+   modes:["hgaze","vgaze","tilt"],does:"Drives the medial, superior and inferior recti, inferior oblique, levator and pupil.",
+   dmg:"Nuclear quirk: bilateral ptosis plus weakness of the opposite superior rectus. A nerve lesion instead gives a down-and-out eye with ptosis, with or without a dilated pupil.",
+   ex:"Midbrain infarct (nuclear); posterior communicating aneurysm (nerve)."},
+  {id:"cn4",t:"infra",name:"CN IV nucleus",pts:[[135,232],[225,232]],lab:[122,236,"end"],short:"IV nucleus",
+   modes:["vgaze","tilt"],does:"Drives the superior oblique. The only nerve that exits dorsally and crosses, so the nucleus serves the opposite eye.",
+   dmg:"Hypertropia worse in opposite gaze and same-side head tilt; the hyper eye is extorted.",
+   ex:"Head trauma; decompensated congenital palsy."},
+  {id:"mlf",t:"inter",name:"Medial longitudinal fasciculus (MLF)",pts:[[162,290],[198,290]],lab:[148,294,"end"],short:"MLF",
+   modes:["hgaze","tilt"],does:"Links the CN VI nucleus to the opposite CN III nucleus so both eyes move together side to side. It also carries the tilt wire upward.",
+   dmg:"INO: the eye on the lesion side can't adduct, and the other eye shows abducting nystagmus. Convergence is often spared. Can come with a contraversive skew.",
+   ex:"Multiple sclerosis (young, often bilateral); stroke (older, one side)."},
+  {id:"pprf",t:"supra",name:"Paramedian pontine reticular formation (PPRF)",pts:[[135,330],[225,330]],lab:[122,334,"end"],short:"PPRF",
+   modes:["hgaze"],does:"The \"go\" button for horizontal fast eye movements toward the same side.",
+   dmg:"Can't make fast movements toward the lesion side, while the VOR may still work.",
+   ex:"Paramedian pontine stroke."},
+  {id:"cn6",t:"infra",name:"CN VI nucleus",pts:[[135,372],[225,372]],lab:[122,376,"end"],short:"VI nucleus",
+   modes:["hgaze"],does:"Holds motor neurons for the same-side lateral rectus and interneurons that cross into the opposite MLF.",
+   dmg:"A horizontal gaze palsy toward that side, not just weak abduction. Often travels with CN VII weakness because the facial fibers loop around it. A nerve lesion instead gives esotropia worse at distance.",
+   ex:"Facial colliculus syndrome (nucleus); raised intracranial pressure (nerve)."},
+  {id:"cn7",t:"nb",name:"CN VII genu (facial colliculus)",pts:[[240,388]],lab:[244,392,"start"],short:"VII",
+   modes:["patient"],does:"Not an eye mover, but its fibers wrap around the CN VI nucleus.",
+   dmg:"Facial weakness. Facial weakness plus gaze palsy points to the facial colliculus.",
+   ex:"Her patient: right facial weakness."},
+  {id:"vn",t:"supra",name:"Vestibular nuclei",pts:[[110,440],[250,440]],lab:[110,462,"middle"],short:"VN",
+   modes:["tilt","patient"],does:"Receive balance signals from the inner ear and send them upward. The tilt wire crosses just above them.",
+   dmg:"Ipsiversive ocular tilt reaction (lesion-side eye down), nystagmus and vertigo.",
+   ex:"Wallenberg syndrome; her patient's region."},
+  {id:"cn8",t:"nb",name:"CN VIII",pts:[[296,455]],lab:[296,474,"middle"],short:"VIII",
+   modes:["patient"],does:"Hearing and balance nerve feeding the vestibular nuclei.",
+   dmg:"Hearing loss, vertigo and imbalance.",
+   ex:"Her patient: right hearing loss."},
+  {id:"ear",t:"nb",name:"Inner ear (utricle)",pts:[[30,440],[332,466]],lab:[30,424,"middle"],short:"utricle",
+   modes:["tilt"],does:"Senses static head tilt. This is where the tilt wire starts.",
+   dmg:"A small, usually short-lived ipsiversive tilt.",
+   ex:"Vestibular neuritis."},
+  {id:"mcp",t:"supra",name:"Middle cerebellar peduncle (MCP)",pts:[[293,361]],lab:[293,344,"middle"],short:"MCP",
+   modes:["patient"],does:"The largest cable from the pons into the cerebellum.",
+   dmg:"Same-side clumsiness and imbalance. MCP lesions have been linked to the ipsiversive tilt pattern.",
+   ex:"Her patient's lesion site."},
+  {id:"cbl",t:"supra",name:"Cerebellum",pts:[[330,300]],lab:[330,288,"middle"],short:"",
+   modes:["patient"],does:"The calibrator: fine-tunes accuracy, helps hold gaze and adjusts the VOR.",
+   dmg:"Gaze-evoked nystagmus, inaccurate saccades and skew in either direction, depending on the exact spot.",
+   ex:"Cerebellar stroke or hemorrhage."},
+  {id:"lm",t:"supra",name:"Lateral medulla",pts:[[230,520]],lab:[242,524,"start"],short:"lateral medulla",
+   modes:["tilt"],does:"The vestibular neighborhood below the cross.",
+   dmg:"Ipsiversive ocular tilt reaction with Horner syndrome, crossed sensory loss and ataxia.",
+   ex:"Wallenberg syndrome (vertebral or PICA territory)."}
+];
+const MODES = {
+  hgaze:{title:"Look right",tier:"Horizontal gaze circuit",body:
+   "<p>Left FEF crosses to the right PPRF. The right CN VI nucleus fires the right lateral rectus and sends an interneuron across to the left MLF, which tells the left CN III nucleus to fire the left medial rectus.</p><p>Cut the MLF and the left eye can't adduct: that's an INO. Damage the CN VI nucleus and neither eye looks right: that's a gaze palsy.</p>"},
+  vgaze:{title:"Look up or down",tier:"Vertical gaze circuit",body:
+   "<p>Vertical control lives in the rostral midbrain. The riMLF is \"go,\" the INC is \"stay,\" and both feed CN III and CN IV on both sides.</p><p>Damage at the posterior commissure gives Parinaud syndrome: upgaze palsy, light-near dissociation and convergence-retraction nystagmus.</p>"},
+  tilt:{title:"The tilt wire",tier:"Utricle to INC, the skew pathway",body:
+   "<p>The left utricle reports to the left vestibular nuclei. The wire crosses in the caudal pons, climbs the right MLF and ends at the right INC, which drives CN III and CN IV.</p><p>Lesion below the cross: ipsiversive, the lesion-side eye drops. Lesion above the cross: contraversive, the lesion-side eye rises. Either way, head tilt, eye roll and perceived vertical all lean toward the low eye.</p>"},
+  patient:{title:"Her patient",tier:"Right dorsal pons and MCP",body:
+   "<p>The lesion sits at the vestibular nuclei and MCP, right near the cross. Result: ipsiversive tilt with the right eye down, a left hypertropia and both eyes rolled to the right.</p><p>The neighbors explain the rest: CN VIII for right hearing loss and CN VII for right facial weakness. The MLF and CN VI nucleus were spared, so his eye movements are full and there's no INO.</p>"}
+};
+const NS="http://www.w3.org/2000/svg";
+const svg=document.getElementById("map"), g=document.getElementById("stations"), panel=document.getElementById("panel");
+const el=(n,a)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e};
+S.forEach(s=>{
+  const grp=el("g",{class:"st","data-id":s.id});
+  s.pts.forEach(([x,y])=>{
+    grp.appendChild(el("circle",{class:"dot",cx:x,cy:y,r:7,fill:T[s.t].c}));
+    const hit=el("circle",{class:"hit",cx:x,cy:y,r:14,tabindex:0,role:"button","aria-label":s.name});
+    hit.addEventListener("click",()=>pick(s));
+    hit.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(s)}});
+    grp.appendChild(hit);
+  });
+  if(s.short){const t=el("text",{x:s.lab[0],y:s.lab[1],class:"lbl","text-anchor":s.lab[2]});t.textContent=s.short;grp.appendChild(t)}
+  g.appendChild(grp);
+});
+function pick(s){
+  document.querySelectorAll(".st").forEach(n=>n.classList.toggle("sel",n.dataset.id===s.id));
+  panel.style.borderLeftColor=T[s.t].c;
+  panel.innerHTML=`<h2>${s.name}</h2><p class="tier">${T[s.t].n}</p><dl><dt>What it does</dt><dd>${s.does}</dd><dt>When it's damaged</dt><dd>${s.dmg}</dd><dt>Classic example</dt><dd>${s.ex}</dd></dl>`;
+}
+document.querySelectorAll(".modes button").forEach(b=>b.addEventListener("click",()=>{
+  const m=b.dataset.mode, on=svg.dataset.mode!==m;
+  document.querySelectorAll(".modes button").forEach(x=>x.setAttribute("aria-pressed",String(on&&x===b)));
+  if(on){svg.dataset.mode=m}else{delete svg.dataset.mode}
+  document.querySelectorAll(".draw").forEach(p=>{p.style.animation="none";p.getBoundingClientRect();p.style.animation=""});
+  document.querySelectorAll(".st").forEach(n=>{
+    const s=S.find(x=>x.id===n.dataset.id);
+    n.classList.toggle("dim",on&&!s.modes.includes(m));
+  });
+  panel.style.borderLeftColor="var(--hot)";
+  if(on){const d=MODES[m];panel.innerHTML=`<h2>${d.title}</h2><p class="tier">${d.tier}</p>${d.body}`}
+}));
+</script>
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 3: Neuroimaging</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 3 of 22</p>
+  <h1>Neuroimaging</h1>
+  <p class="sub">MRI sequences, CT vs MRI, vascular imaging, and ordering the right study for the question. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="seq" aria-selected="true">Sequence explorer</button>
+    <button role="tab" data-tab="order" aria-selected="false">What to order</button>
+    <button role="tab" data-tab="cheat" aria-selected="false">Cheat sheet</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and sources</button>
+  </nav>
+
+  <section class="tab on" id="tab-seq">
+    <h2>How tissues look on each sequence</h2>
+    <p class="sub">Pick a sequence, then add a lesion. Watch what turns bright and what turns dark.</p>
+    <h3>Sequence</h3>
+    <div class="chips" id="seqChips"></div>
+    <h3>Lesion</h3>
+    <div class="chips" id="lesChips"></div>
+    <div class="pacs">
+      <svg id="slice" viewBox="0 0 300 360" role="img" aria-label="Schematic axial head slice"></svg>
+      <p class="cap">Schematic composite of orbit and brain levels, not a single real slice. Radiology convention: the patient's right is on the viewer's left.</p>
+    </div>
+    <div class="card accent" id="seqCard"></div>
+  </section>
+
+  <section class="tab" id="tab-order">
+    <h2>Order the right study</h2>
+    <p class="sub">Pick a clinical question. Each answer lists the study, the must-have extras to write on the order, and the classic pitfall.</p>
+    <div class="chips" id="ordChips"></div>
+    <div class="card accent" id="ordCard"></div>
+  </section>
+
+  <section class="tab" id="tab-cheat">
+    <h2>Sequence cheat sheet</h2>
+    <table>
+      <tr><th>Sequence</th><th>CSF</th><th>Fat</th><th>Best for</th></tr>
+      <tr><td>T1</td><td>Dark</td><td>Bright</td><td>Anatomy, subacute blood, fat-containing lesions</td></tr>
+      <tr><td>T1 + gadolinium, fat-suppressed</td><td>Dark</td><td>Dark</td><td>Enhancement: optic neuritis, meningioma, inflammation, tumor</td></tr>
+      <tr><td>T2</td><td>Bright</td><td>Bright (fast spin echo)</td><td>Edema, cysts, most pathology</td></tr>
+      <tr><td>FLAIR</td><td>Dark</td><td>Intermediate</td><td>Periventricular and juxtacortical lesions (MS), edema next to CSF</td></tr>
+      <tr><td>STIR or T2 fat-sat</td><td>Bright</td><td>Dark</td><td>Optic nerve signal, orbital inflammation, active TED muscles</td></tr>
+      <tr><td>DWI with ADC</td><td>Dark on DWI</td><td>Dark</td><td>Acute ischemia (bright DWI, dark ADC), abscess, some optic nerve infarcts</td></tr>
+      <tr><td>SWI or GRE</td><td>Variable</td><td>Variable</td><td>Blood products, calcium, cavernomas, microbleeds</td></tr>
+      <tr><td>CT (noncontrast)</td><td>Dark</td><td>Very dark</td><td>Acute blood, bone, fractures, calcification, metal</td></tr>
+      <tr><td>CTA or MRA</td><td></td><td></td><td>Aneurysm, dissection, stenosis</td></tr>
+      <tr><td>CTV or MRV</td><td></td><td></td><td>Cerebral venous sinus thrombosis</td></tr>
+    </table>
+    <div class="card"><p><b>Memory hook:</b> on T2, water is white ("World War Two"). FLAIR is a T2 that turns CSF black, so lesions touching the ventricles pop. Fat suppression is what makes enhancement visible in the orbit, where fat is everywhere.</p></div>
+  </section>
+
+  <section class="tab" id="tab-cases"><h2>Case vignettes</h2><p class="sub">Work each question before revealing the answer.</p><div id="caseList"></div></section>
+  <section class="tab" id="tab-pearls"><h2>Clinical pearls</h2><div id="pearlList"></div></section>
+  <section class="tab" id="tab-quiz">
+    <h2>Self-quiz</h2><p class="sub">Ten questions. Tap an answer to see the explanation.</p>
+    <div id="quizList"></div><p class="score" id="score" aria-live="polite"></p><button class="reveal" id="resetQuiz">Reset quiz</button>
+  </section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Differentiate MRI sequences</label>
+      <label><input type="checkbox"> Indicate CT vs MRI for a clinical scenario</label>
+      <label><input type="checkbox"> Recognize common neuro-ophthalmic imaging findings</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="src">
+      <li><b>38.1% of pre-referral neuroimaging studies were suboptimal; leading reasons were incomplete area imaged (34.4%), wrong study type (28.1%) and poor image quality (21.9%); 28.6% of patients needed more imaging; the intraorbital optic nerve was the most common site of discordant reads:</b> McClelland C, Van Stavern GP, Shepherd JB, Gordon M, Huecker J. Neuroimaging in patients referred to a neuro-ophthalmology service: the rates of appropriateness and concordance in interpretation. <i>Ophthalmology.</i> 2012;119(8):1701-1704. doi:10.1016/j.ophtha.2012.01.044.</li>
+      <li><b>Only 36% of patients with acute third nerve palsy received timely arterial imaging:</b> Chung JE, Schroeder RM, Wilson B, Van Stavern GP, Stunkel L. Failure to obtain urgent arterial imaging in acute third nerve palsies. <i>J Neuroophthalmol.</i> 2021. doi:10.1097/WNO.0000000000001337.</li>
+      <li><b>Noninvasive vascular studies can miss PComm aneurysms:</b> Elmalem VI, Hudgins PA, Bruce BB, Newman NJ, Biousse V. Underdiagnosis of posterior communicating artery aneurysm in noninvasive brain vascular studies. <i>J Neuroophthalmol.</i> 2011;31(2):103-109. doi:10.1097/WNO.0b013e3181f8d985.</li>
+      <li>Tissue brightness in the explorer is a simplified teaching model; real signal varies with scanner, technique and lesion age.</li>
+    </ul></div>
+    <h3>Core reading (from the program curriculum)</h3>
+    <div class="card"><ul class="refs">
+      <li>Al Othman B, Raabe J, Kini A, Lee AG. Neuroradiology for ophthalmologists. <i>Eye (Lond).</i> 2020;34(6):1027-1038. doi:10.1038/s41433-019-0753-z.</li>
+      <li>Jacobs DA, Galetta SL. Neuro-ophthalmology for neuroradiologists. <i>AJNR Am J Neuroradiol.</i> 2007;28(1):3-8.</li>
+      <li>Kim JD, Hashemi N, Gelman R, Lee AG. Neuroimaging in ophthalmology. <i>Saudi J Ophthalmol.</i> 2012;26(4):401-407. doi:10.1016/j.sjopt.2012.07.001.</li>
+      <li>Micieli JA. <i>Case-Based Neuro-Ophthalmology</i>, chapter 1. Pressbooks.</li>
+    </ul></div>
+  </section>
+
+  <p class="foot">Schematic images for teaching, not real scans. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick){host.innerHTML="";items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});host.querySelector("button").click();}
+
+/* ---------- sequence explorer ---------- */
+// tissue intensities 0 (black) to 1 (white)
+const SEQ={
+ "T1":{t:{scalp:.95,bone:.06,ofat:.95,vit:.12,nerve:.55,musc:.4,gm:.5,wm:.7,csf:.1},
+   note:"Fat bright, CSF dark. Great for anatomy. White matter is brighter than gray matter."},
+ "T1 + gad, fat-sat":{t:{scalp:.15,bone:.06,ofat:.12,vit:.12,nerve:.5,musc:.65,gm:.5,wm:.66,csf:.1},
+   note:"Fat suppression darkens orbital and scalp fat so enhancement stands out. Extraocular muscles normally enhance; a normal optic nerve does not."},
+ "T2":{t:{scalp:.75,bone:.05,ofat:.75,vit:1,nerve:.42,musc:.25,gm:.58,wm:.35,csf:1},
+   note:"Water bright: CSF and vitreous are white. Gray matter is brighter than white matter. Most pathology is bright."},
+ "FLAIR":{t:{scalp:.7,bone:.05,ofat:.7,vit:.12,nerve:.42,musc:.3,gm:.58,wm:.4,csf:.04},
+   note:"A T2 with CSF nulled. Lesions next to the ventricles and cortex stand out against black CSF."},
+ "STIR":{t:{scalp:.06,bone:.05,ofat:.05,vit:1,nerve:.42,musc:.3,gm:.58,wm:.35,csf:1},
+   note:"Fat-suppressed T2. The orbital workhorse for optic nerve signal and inflamed or edematous muscles."},
+ "DWI":{t:{scalp:.12,bone:.04,ofat:.1,vit:.06,nerve:.4,musc:.3,gm:.5,wm:.45,csf:.05},
+   note:"Restricted water movement turns bright. Always pair with the ADC map: true restriction is bright on DWI and dark on ADC."},
+ "ADC":{t:{scalp:.15,bone:.04,ofat:.12,vit:1,nerve:.45,musc:.4,gm:.5,wm:.45,csf:1},
+   note:"Free water is bright. Acute infarcts are dark here. Bright on both DWI and ADC is T2 shine-through, not restriction."},
+ "SWI":{t:{scalp:.5,bone:.1,ofat:.5,vit:.6,nerve:.5,musc:.45,gm:.55,wm:.48,csf:.65,},
+   note:"Very sensitive to blood products and calcium, which turn dark and bloom larger than their true size."},
+ "CT":{t:{scalp:.04,bone:1,ofat:.03,vit:.22,nerve:.5,musc:.52,gm:.56,wm:.46,csf:.15},
+   note:"Bone white, fat black. Best for acute blood, fractures, calcification and metal. Fast and available, but poor for the optic nerve, brainstem and posterior fossa."}
+};
+const LES={
+ "None":{},
+ "Acute infarct":{shape:"inf",v:{"T1":.42,"T1 + gad, fat-sat":.5,"T2":.75,"FLAIR":.78,"STIR":.75,"DWI":1,"ADC":.08,"SWI":.5,"CT":.5},
+   note:"Right occipital (PCA) infarct. Bright on DWI and dark on ADC within minutes to hours. CT is often normal early. Causes a left homonymous hemianopia."},
+ "MS plaque":{shape:"ms",v:{"T1":.42,"T1 + gad, fat-sat":.9,"T2":.92,"FLAIR":.96,"STIR":.9,"DWI":.55,"ADC":.62,"SWI":.48,"CT":.44},
+   note:"Ovoid periventricular plaque perpendicular to the ventricle. Best seen on FLAIR. Enhancement means activity (shown here as active)."},
+ "Optic neuritis":{shape:"on",v:{"T1":.55,"T1 + gad, fat-sat":.97,"T2":.45,"FLAIR":.45,"STIR":.85,"DWI":.5,"ADC":.45,"SWI":.5,"CT":.5},
+   note:"Left intraorbital optic nerve. Enhancement on fat-suppressed post-contrast T1 and high signal on STIR. Nearly invisible on CT."},
+ "Acute hemorrhage":{shape:"hem",v:{"T1":.5,"T1 + gad, fat-sat":.5,"T2":.12,"FLAIR":.2,"STIR":.12,"DWI":.25,"ADC":.2,"SWI":.02,"CT":.9},
+   note:"Right frontal acute hemorrhage. Bright on CT immediately. On MRI, signal changes with the age of the blood; acute blood (deoxyhemoglobin) is dark on T2 and blooms on SWI."},
+ "Meningioma":{shape:"men",v:{"T1":.5,"T1 + gad, fat-sat":.96,"T2":.55,"FLAIR":.52,"STIR":.55,"DWI":.55,"ADC":.5,"SWI":.45,"CT":.68},
+   note:"Left sphenoid wing meningioma. Dural-based and avidly enhancing, often with a dural tail. CT may show calcification or hyperostosis."}
+};
+
+// One orbit in axial section. side=1: patient right (viewer left); side=-1: patient left.
+function fusiform(p,a,w){
+  const dx=a[0]-p[0], dy=a[1]-p[1], len=Math.hypot(dx,dy), nx=-dy/len, ny=dx/len;
+  const pt=(t,o)=>[p[0]+dx*t+nx*o, p[1]+dy*t+ny*o];
+  const A=pt(0,1.2),B=pt(.45,w/2),C=pt(1,.8),D=pt(1,-.8),E=pt(.45,-w/2),F=pt(0,-1.2);
+  return `M${A} Q${B} ${C} L${D} Q${E} ${F} Z`;
+}
+function orbit(side,T,L,lc){
+  const X=x=>150-side*(150-x); // mirror around midline
+  const gc=[X(92),74], r=24, apex=[X(128),146];
+  const latWall=[X(70),87], medWall=[X(119),74], medBack=[X(133),144];
+  const lrIns=[X(75),91], mrIns=[X(114),86];
+  const nerveStart=[X(96),97];
+  const isON = side===-1 && L.shape==="on";
+  const nerveCol = isON? lc : g(T.nerve);
+  return `
+  <path d="M${latWall} L${apex} L${medBack} L${medWall} Z" fill="${g(T.ofat)}"/>
+  <path d="${fusiform(lrIns,[X(124),144],10)}" fill="${g(T.musc)}"/>
+  <path d="${fusiform(mrIns,[X(130),143],9)}" fill="${g(T.musc)}"/>
+  <path d="M${nerveStart} C${X(108)},114 ${X(116)},126 ${apex}" stroke="${nerveCol}" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+  <circle cx="${gc[0]}" cy="${gc[1]}" r="${r}" fill="${g(T.vit)}" stroke="${g(.55)}" stroke-width="2"/>
+  <ellipse cx="${X(92)}" cy="${gc[1]-r+4}" rx="7" ry="2.6" fill="${g(.45)}"/>`;
+}
+let curSeq="T1", curLes="None";
+const g=v=>{const n=Math.round(Math.max(0,Math.min(1,v))*255);return `rgb(${n},${n},${n})`};
+function drawSlice(){
+  const T=SEQ[curSeq].t, L=LES[curLes], svg=document.getElementById("slice");
+  const lc = L.v? g(L.v[curSeq]) : null;
+  const tail = (curLes==="Meningioma" && curSeq==="T1 + gad, fat-sat");
+  const big = (curLes==="Acute hemorrhage" && curSeq==="SWI");
+  svg.innerHTML = `
+  <rect x="14" y="22" width="272" height="334" rx="92" ry="112" fill="${g(T.scalp)}"/>
+  <rect x="23" y="31" width="254" height="316" rx="84" ry="104" fill="${g(T.bone)}"/>
+  ${orbit(1,T,L,lc)}${orbit(-1,T,L,lc)}
+  <ellipse cx="150" cy="248" rx="108" ry="98" fill="${g(T.csf)}"/>
+  <ellipse cx="150" cy="248" rx="103" ry="93" fill="${g(T.gm)}"/>
+  <ellipse cx="150" cy="248" rx="86" ry="77" fill="${g(T.wm)}"/>
+  <path d="M138,212 C122,220 114,252 120,282 C126,270 134,246 142,226 Z" fill="${g(T.csf)}"/>
+  <path d="M162,212 C178,220 186,252 180,282 C174,270 166,246 158,226 Z" fill="${g(T.csf)}"/>
+  <line x1="150" y1="152" x2="150" y2="344" stroke="${g(T.csf)}" stroke-width="3"/>
+  ${curLes==="Acute infarct"?`<path d="M58,290 C68,318 96,338 128,344 L131,324 C108,318 90,304 80,282 Z" fill="${lc}"/>`:""}
+  ${curLes==="MS plaque"?`<ellipse cx="188" cy="238" rx="7" ry="13" transform="rotate(-20 188 238)" fill="${lc}"/>`:""}
+  ${curLes==="Acute hemorrhage"?`<circle cx="104" cy="206" r="${big?20:14}" fill="${lc}"/>`:""}
+  ${curLes==="Meningioma"?`<path d="M196,152 C214,150 234,160 240,178 C224,184 206,178 196,166 Z" fill="${lc}"/>${tail?`<path d="M240,178 C247,190 251,204 252,218" stroke="${lc}" stroke-width="3" fill="none"/>`:""}`:""}
+  <text x="10" y="352">R</text><text x="284" y="352">L</text>
+  <text x="150" y="16" text-anchor="middle">${curSeq}</text>`;
+  document.getElementById("seqCard").innerHTML = `<dl><dt>${curSeq}</dt><dd>${SEQ[curSeq].note}</dd>${L.note?`<dt>${curLes}</dt><dd>${L.note}</dd>`:""}</dl>`;
+}
+chips(document.getElementById("seqChips"),Object.keys(SEQ),i=>{curSeq=Object.keys(SEQ)[i];drawSlice()});
+chips(document.getElementById("lesChips"),Object.keys(LES),i=>{curLes=Object.keys(LES)[i];drawSlice()});
+
+/* ---------- ordering ---------- */
+const ORD=[
+ {n:"Optic neuritis",s:"MRI brain and orbits with and without gadolinium",x:"Fat-suppressed post-contrast T1 of the orbits; FLAIR of the brain.",p:"A brain-only MRI can miss the orbital findings and won't image the optic nerve properly."},
+ {n:"Papilledema",s:"MRI brain with and without gadolinium plus MRV",x:"Ask the radiologist to comment on signs of raised ICP: empty sella, flattened posterior globes, distended nerve sheaths, transverse sinus stenosis.",p:"Venous sinus thrombosis must be excluded; a normal noncontrast CT does not exclude it. Follow imaging with a lumbar puncture and opening pressure."},
+ {n:"Pupil-involving CN III palsy",s:"Emergent CTA (or MRA) of the head",x:"Specify 'evaluate for posterior communicating artery aneurysm'.",p:"Noninvasive studies can miss small aneurysms; if suspicion stays high, conventional catheter angiography. Don't let the patient leave without vascular imaging."},
+ {n:"Painful Horner syndrome",s:"Emergent CTA or MRA of head and neck",x:"MRI with fat-suppressed axial T1 of the neck can show intramural hematoma.",p:"Imaging must cover from the aortic arch to the skull base; a head-only study misses most dissections."},
+ {n:"Acute homonymous hemianopia",s:"MRI brain with DWI, plus vascular imaging",x:"Use the stroke pathway; CT if MRI is unavailable or contraindicated.",p:"Early CT is often normal in ischemic stroke; DWI is far more sensitive."},
+ {n:"Chiasmal syndrome",s:"MRI brain with and without gadolinium, pituitary (sella) protocol",x:"Thin coronal and sagittal cuts through the sella.",p:"A standard brain MRI with thick slices can miss a sellar lesion."},
+ {n:"Suspected pituitary apoplexy",s:"Emergent CT, then MRI sella",x:"Endocrine labs urgently (cortisol).",p:"CT shows acute blood quickly but can miss the adenoma itself; follow with MRI."},
+ {n:"Isolated CN VI palsy, under 50 or atypical",s:"MRI brain with and without gadolinium",x:"Include skull base and cavernous sinus; check discs for papilledema.",p:"Clival and petrous lesions are easy to miss without post-contrast images through the skull base."},
+ {n:"Orbital trauma or fracture",s:"CT orbits, thin axial and coronal cuts",x:"Bone windows; assess the optic canal.",p:"Never order MRI until a ferromagnetic foreign body is excluded."},
+ {n:"Orbital cellulitis",s:"CT orbits and sinuses with contrast",x:"Look for subperiosteal abscess and cavernous sinus involvement.",p:"If cavernous sinus thrombosis is suspected, add MRI or CT venography."},
+ {n:"Thyroid eye disease",s:"CT orbits (bony anatomy, apex crowding) or MRI orbits with STIR (activity)",x:"Coronal images to assess the orbital apex for compressive optic neuropathy.",p:"Muscle bellies enlarge with tendon sparing in TED; tendon involvement suggests orbital inflammation (myositis)."},
+ {n:"Suspected optic disc drusen",s:"Usually no MRI: EDI-OCT, autofluorescence or B-scan",x:"Image the disc first.",p:"Imaging the brain for drusen wastes time; but true papilledema must be ruled out before labeling pseudopapilledema."}
+];
+chips(document.getElementById("ordChips"),ORD.map(o=>o.n),i=>{const o=ORD[i];
+  document.getElementById("ordCard").innerHTML=`<h3 style="margin-top:0">${o.n}</h3><dl><dt>Order</dt><dd>${o.s}</dd><dt>Write on the order</dt><dd>${o.x}</dd></dl><dl class="miss"><dt>Pitfall</dt><dd>${o.p}</dd></dl>`;});
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: Painful vision loss in a young woman",stem:"A 29-year-old woman has 4 days of right eye pain on movement and blurred vision. Right RAPD, red desaturation, normal disc.",
+  steps:[
+   {q:"What imaging do you order, and how do you word it?",a:"MRI brain and orbits with and without gadolinium, with fat-suppressed post-contrast T1 orbits and brain FLAIR."},
+   {q:"The right intraorbital optic nerve enhances. Which sequences show the brain lesions that matter for MS risk?",a:"FLAIR (and T2) for ovoid periventricular, juxtacortical and infratentorial lesions; post-contrast T1 for active lesions."},
+   {q:"What features on imaging would make you think beyond MS?",a:"Long-segment or chiasmal nerve involvement, perineural sheath enhancement, or area postrema and longitudinally extensive cord lesions suggest MOGAD or NMOSD; send MOG and AQP4 antibodies."}
+  ]},
+ {t:"Case 2: A droopy lid and a big pupil",stem:"A 56-year-old man has had headache and right ptosis since this morning. The right eye is down and out, and the right pupil is 7 mm and unreactive.",
+  steps:[
+   {q:"What study and how fast?",a:"Emergent CTA of the head (or MRA) in the emergency department, today."},
+   {q:"How often is this step missed in practice?",a:"In one retrospective study, only 36% of patients with acute third nerve palsy got timely arterial imaging (Chung 2021)."},
+   {q:"The CTA is read as normal, but suspicion stays high. Next step?",a:"Discuss with neuroradiology and consider catheter angiography; noninvasive studies can miss small PComm aneurysms (Elmalem 2011)."}
+  ]},
+ {t:"Case 3: Headaches and swollen discs",stem:"A 31-year-old woman with obesity has daily headaches, pulsatile tinnitus and bilateral grade 3 disc edema. A noncontrast head CT in the emergency department was normal.",
+  steps:[
+   {q:"Is the CT enough?",a:"No. She needs MRI brain with and without gadolinium plus MRV to exclude a mass and venous sinus thrombosis."},
+   {q:"Which MRI findings support raised intracranial pressure?",a:"Empty or partially empty sella, flattening of the posterior globes, distended and tortuous optic nerve sheaths, and transverse sinus stenosis."},
+   {q:"What comes after imaging?",a:"Lumbar puncture with opening pressure and CSF analysis, done in the lateral decubitus position."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{const d=document.createElement("div");d.className="card";d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map(s=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");caseList.appendChild(d);});
+caseList.addEventListener("click",e=>{if(!e.target.classList.contains("reveal"))return;const a=e.target.nextElementSibling,on=!a.classList.contains("on");a.classList.toggle("on",on);e.target.setAttribute("aria-expanded",String(on));e.target.textContent=on?"Hide answer":"Reveal answer";});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "The most common imaging error isn't reading, it's ordering: in one series, 38% of pre-referral studies were suboptimal, most often from imaging the wrong area or using the wrong study (McClelland 2012).",
+ "Always tell the radiologist where to look and what you suspect. 'Evaluate left intraorbital optic nerve for enhancement' beats 'vision loss'.",
+ "Order orbits and brain for optic nerve questions; a brain MRI alone often doesn't image the orbit well.",
+ "Fat suppression is essential for orbital enhancement; without it, enhancement hides in bright orbital fat.",
+ "CT is best for acute blood, bone, calcification and metal. MRI is best for the optic nerve, brainstem, posterior fossa and demyelination.",
+ "DWI bright plus ADC dark is true restriction. DWI bright plus ADC bright is T2 shine-through.",
+ "Papilledema needs MRV (or CTV) to exclude venous sinus thrombosis, not just a brain scan.",
+ "A dissection workup must image the neck, from the aortic arch to the skull base.",
+ "Screen for metal before MRI; after orbital trauma, CT comes first.",
+ "Gadolinium is generally avoided in pregnancy and needs caution in severe renal disease; discuss with radiology rather than skipping needed imaging."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"On which sequence is CSF dark but most edema bright?",o:["T2","FLAIR","STIR","ADC"],a:1,e:"FLAIR is T2-weighted with CSF nulled, ideal for lesions near the ventricles and cortex."},
+ {q:"Best sequence to show optic nerve enhancement in optic neuritis:",o:["Noncontrast T1","Fat-suppressed post-contrast T1 of the orbits","FLAIR brain","SWI"],a:1,e:"Fat suppression removes the bright orbital fat signal that would otherwise hide enhancement."},
+ {q:"An acute infarct looks like:",o:["Dark DWI, bright ADC","Bright DWI, dark ADC","Bright DWI, bright ADC","Normal DWI, dark ADC"],a:1,e:"Restricted diffusion is bright on DWI with a matching dark ADC. Bright on both is T2 shine-through."},
+ {q:"Which study best shows acute hemorrhage in the first hours?",o:["MRI T1","Noncontrast CT","MRA","STIR"],a:1,e:"Acute blood is bright on CT immediately; MRI signal varies with the age of blood."},
+ {q:"Papilledema with a normal noncontrast head CT. Which study is still needed?",o:["None","MRI brain with and without contrast plus MRV","CT orbits","Carotid ultrasound"],a:1,e:"Mass lesions and venous sinus thrombosis need MRI with venography; CT without contrast is insufficient."},
+ {q:"In McClelland 2012, the most common reason a pre-referral study was suboptimal was:",o:["Motion artifact","Incomplete area of imaging","Contrast allergy","Wrong patient"],a:1,e:"Incomplete area imaged (34.4%), followed by wrong study type (28.1%) and poor image quality (21.9%)."},
+ {q:"After orbital trauma with a possible metallic foreign body, the first study is:",o:["MRI orbits","CT orbits","Ultrasound only","MRA"],a:1,e:"CT detects metal and fractures; MRI is contraindicated until a ferromagnetic foreign body is excluded."},
+ {q:"A painful Horner syndrome needs vascular imaging covering:",o:["Head only","Neck only","Aortic arch through the skull base and head","Chest only"],a:2,e:"Postganglionic fibers run with the carotid; dissections usually sit in the neck."},
+ {q:"Which feature suggests TED rather than orbital myositis on imaging?",o:["Tendon involvement","Muscle belly enlargement with tendon sparing","Single muscle with pain","Scleral enhancement"],a:1,e:"TED classically spares the tendons; myositis often involves the tendon insertions."},
+ {q:"Which MRI finding is NOT a sign of raised intracranial pressure?",o:["Empty sella","Flattened posterior globes","Transverse sinus stenosis","Optic nerve enhancement"],a:3,e:"Optic nerve enhancement suggests inflammation or infiltration, not raised ICP."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>

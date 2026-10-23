@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 19: Major studies</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.cmp{display:grid;gap:6px}
+.cmprow{background:var(--panel);border-radius:12px;padding:8px 10px}
+.cmprow h4{margin:0 0 6px;font-size:.84rem;color:var(--muted);font-weight:600}
+.cmpcells{display:grid;gap:8px}
+.cmpcells div{font-size:.88rem;border-left:3px solid var(--stem);padding-left:7px}
+.cmpcells b{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.fundus{background:#000;border-radius:14px;padding:8px;display:flex;justify-content:center}
+.fundus svg{max-width:300px}
+
+.slider{width:100%;accent-color:var(--hot);margin:10px 0 2px}
+.gl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.ladder li{margin:8px 0}
+
+.vfwrap{background:var(--panel);border-radius:14px;padding:10px}
+.prog{font-size:.85rem;color:var(--muted);margin:4px 0 0}
+.next{font:inherit;margin-top:10px;padding:9px 14px;border-radius:10px;border:none;background:var(--ink);color:var(--bg);cursor:pointer}
+.brain svg .rg{cursor:pointer}
+.brain svg .rg:focus-visible{outline:none;stroke:var(--inter);stroke-width:3}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.read{display:flex;justify-content:space-around;font-size:.9rem;margin-top:4px}
+.read b{font-family:Charter,Georgia,serif;font-size:1.05rem}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.9rem;margin:6px 0}
+.toggle input{width:20px;height:20px;accent-color:var(--inter)}
+ol.algo li{margin:8px 0}
+
+.nine{background:var(--panel);border-radius:14px;padding:8px}
+.step3{margin:8px 0}
+.step3 p{margin:4px 0;font-weight:600;font-size:.9rem}
+.result{font-family:Charter,Georgia,serif;font-size:1.3rem;font-weight:600;margin:4px 0}
+
+.trial{background:var(--panel);border-radius:14px;padding:12px 14px;margin-top:10px;border-left:5px solid var(--inter)}
+.trial h3{margin:0 0 2px}
+.trial .meta{font-size:.82rem;color:var(--muted);margin:0 0 6px}
+.trial dt{font-weight:600;font-size:.84rem;margin-top:6px}
+.trial dd{margin:2px 0 0;font-size:.92rem}
+.trial .cite{font-size:.8rem;color:var(--muted);margin-top:8px}
+.tag{display:inline-block;font-size:.75rem;padding:2px 8px;border-radius:999px;background:var(--stem);margin-right:4px}
+.search{width:100%;font:inherit;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);margin:6px 0}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 19 of 22</p>
+  <h1>Major studies</h1>
+  <p class="sub">The landmark trials behind neuro-ophthalmic practice, what they found, how they changed care, and how to read them critically. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="ex" aria-selected="true">Trial explorer</button>
+    <button role="tab" data-tab="read" aria-selected="false">Read like a reviewer</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Which trial?</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and notes</button>
+  </nav>
+
+  <section class="tab on" id="tab-ex">
+    <h2>Trial explorer</h2>
+    <p class="sub">Filter by topic or search. Every figure was checked against the primary paper, its abstract, or an authoritative summary during this series.</p>
+    <div class="chips" id="topics"></div>
+    <input class="search" id="q" type="search" placeholder="Search trials (for example, steroids, tocilizumab)" aria-label="Search trials">
+    <div id="list"></div>
+  </section>
+
+  <section class="tab" id="tab-read">
+    <h2>Read a trial like a reviewer</h2>
+    <p class="sub">Tap a question to see a real example from these trials.</p>
+    <div class="chips" id="rChips"></div>
+    <div class="card accent" id="rCard"></div>
+  </section>
+
+  <section class="tab" id="tab-quiz">
+    <h2>Which trial?</h2>
+    <p class="sub">Match each finding to its study.</p>
+    <div id="quizList"></div><p class="score" id="score" aria-live="polite"></p><button class="reveal" id="resetQuiz">Reset quiz</button>
+  </section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Summarize key study results</label>
+      <label><input type="checkbox"> Translate evidence to management</label>
+      <label><input type="checkbox"> Recognize research impact and limitations</label>
+    </div>
+    <div class="card"><p><b>How figures were checked:</b> each trial's numbers were verified during this curriculum build against the journal abstract, the full text, a Cochrane review or a regulatory document, as noted on each card. The ONTT treatment trial and IONDT citations were confirmed against PubMed in the verification pass.</p>
+    <p><b>Evidence changes:</b> CRAO thrombolysis (REVISION trial ongoing) and GLP-1 receptor agonists in NAION and IIH are moving quickly; recheck before teaching.</p></div>
+  </section>
+
+  <p class="foot">Teaching summary; read the primary papers for full methods and results.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick,init=0){host.innerHTML="";items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});if(init!==null)host.children[init].click();}
+
+const T=[
+ {n:"ONTT (treatment)",y:1992,t:"Optic neuritis",d:"Randomized trial (457 patients, 15 centers): IV methylprednisolone then oral prednisone vs oral prednisone alone vs placebo",q:"Do corticosteroids improve vision in acute optic neuritis?",r:"IV methylprednisolone sped recovery, with slightly better fields, contrast and color at 6 months but not better acuity; oral prednisone alone was ineffective and increased new episodes of optic neuritis (relative risk 1.79).",i:"Steroids are optional to hasten recovery; avoid standard-dose oral prednisone alone.",c:"Beck RW, Cleary PA, Anderson MM Jr, et al. N Engl J Med. 1992;326(9):581-588. doi:10.1056/NEJM199202273260901. (Verified.)",m:"Module 4"},
+ {n:"ONTT (15-year MS risk)",y:2008,t:"Optic neuritis",d:"Long-term follow-up of the ONTT cohort",q:"What is the risk of MS after optic neuritis?",r:"15-year MS risk 50% overall: 25% with a normal baseline brain MRI vs 72% with one or more lesions; low risk without lesions in men, with disc swelling or atypical features.",i:"Baseline MRI stratifies MS risk and guides neurology referral.",c:"Optic Neuritis Study Group. Arch Neurol. 2008;65(6):727-732. (Verified from abstract.)",m:"Module 4"},
+ {n:"IONDT",y:1995,t:"Ischemic optic neuropathy",d:"Randomized trial (258 randomized; 6-month outcomes reported for 244): optic nerve decompression surgery vs careful follow-up in NAION, stopped early",q:"Does optic nerve sheath decompression help NAION?",r:"Not effective and possibly harmful.",i:"No surgery for NAION; manage risk factors.",c:"Ischemic Optic Neuropathy Decompression Trial Research Group. JAMA. 1995;273(8):625-632. doi:10.1001/jama.273.8.625. (Verified.)",m:"Module 4"},
+ {n:"GiACTA",y:2017,t:"Giant cell arteritis",d:"Randomized placebo-controlled phase 3 trial (251 patients, 2:1:1:1): tocilizumab weekly or every other week with a 26-week prednisone taper vs placebo with 26- or 52-week tapers",q:"Does tocilizumab sustain glucocorticoid-free remission in GCA?",r:"Sustained remission at 52 weeks: 56% (weekly) and 53% (every other week) vs 14% and 18% with placebo; cumulative median prednisone 1862 mg vs 3296 and 3818 mg.",i:"Tocilizumab reduces relapse and steroid exposure; steroids remain the immediate treatment for vision-threatening GCA.",c:"Stone JH, Tuckwell K, Dimonaco S, et al. N Engl J Med. 2017;377(4):317-328. doi:10.1056/NEJMoa1613849. (Verified.)",m:"Module 4"},
+ {n:"IIHTT",y:2014,t:"IIH",d:"Randomized trial: acetazolamide (up to 4 g/day) plus diet vs placebo plus diet in mild vision loss (PMD -2 to -7 dB)",q:"Does acetazolamide improve vision in IIH with mild loss?",r:"PMD improved 1.43 dB vs 0.71 dB (difference 0.71 dB, modest); papilledema grade and quality of life also improved.",i:"Acetazolamide plus weight loss is first-line for mild vision loss.",c:"NORDIC IIH Study Group; Wall M, McDermott MP, Kieburtz KD, et al. JAMA. 2014;311(16):1641-1651. (Verified.)",m:"Module 5"},
+ {n:"IIH:WT",y:2021,t:"IIH",d:"Randomized trial: bariatric surgery vs community weight management in women with IIH and obesity",q:"Is bariatric surgery better than a weight program for lowering intracranial pressure?",r:"Bariatric surgery lowered intracranial pressure more at 12 and 24 months.",i:"Supports referral for bariatric surgery in appropriate patients.",c:"Mollan SP, Mitchell JL, Ottridge RS, et al. JAMA Neurol. 2021;78(6):678-686. (Verified superiority finding.)",m:"Module 5"},
+ {n:"Teprotumumab phase 2",y:2017,t:"Thyroid eye disease",d:"Randomized placebo-controlled trial (88 patients) in active moderate-to-severe TED",q:"Does IGF-1 receptor blockade reduce proptosis and activity?",r:"Response (CAS reduction of 2 or more plus proptosis reduction of 2 mm or more) at week 24: 69% vs 20%.",i:"Led to phase 3 testing; defined the CAS of 3 or more as active disease.",c:"Smith TJ, Kahaly GJ, Ezra DG, et al. N Engl J Med. 2017;376(18):1748-1761. (Verified.)",m:"Module 11"},
+ {n:"OPTIC",y:2020,t:"Thyroid eye disease",d:"Randomized placebo-controlled phase 3 trial (83 patients) of teprotumumab in active TED",q:"Does teprotumumab reduce proptosis?",r:"Proptosis response of 2 mm or more at week 24: 83% vs 10%; diplopia and quality of life also improved.",i:"First approved TED drug; label now warns of hearing impairment that may be permanent.",c:"Douglas RS, Kahaly GJ, Patel A, et al. N Engl J Med. 2020;382(4):341-352. (Verified.)",m:"Module 11"},
+ {n:"MGTX",y:2016,t:"Myasthenia gravis",d:"Randomized trial (126 patients, ages 18 to 65): thymectomy plus prednisone vs prednisone alone in generalized, nonthymomatous, AChR-positive MG",q:"Does thymectomy help MG without thymoma?",r:"Lower time-weighted QMG score over 3 years and lower prednisone requirements, with fewer hospitalizations.",i:"Thymectomy is recommended for eligible generalized AChR-positive MG; ocular and seronegative patients weren't studied.",c:"Wolfe GI, Kaminski HJ, Aban IB, et al. N Engl J Med. 2016;375(6):511-522. (Verified.)",m:"Module 12"},
+ {n:"IONTS",y:1999,t:"Trauma",d:"Comparative nonrandomized study (133 patients with indirect TON)",q:"Do steroids or optic canal decompression help traumatic optic neuropathy?",r:"No significant difference after adjusting for baseline acuity; 3 or more lines gained in 57% untreated, 52% steroids, 32% surgery.",i:"Neither treatment is standard of care; individualize.",c:"Levin LA, Beck RW, Joseph MP, et al. Ophthalmology. 1999;106(7):1268-1277; rates from Yu-Wai-Man P, Griffiths PG. Cochrane Database Syst Rev. 2013. (Verified.)",m:"Module 16"},
+ {n:"CRASH",y:2004,t:"Trauma",d:"Randomized placebo-controlled trial (10,008 adults with significant head injury) of high-dose methylprednisolone within 8 hours",q:"Do steroids improve outcomes after head injury?",r:"Higher 2-week mortality with steroids: 21% vs 18%.",i:"Avoid high-dose steroids in head injury, including for TON in head-injured patients.",c:"CRASH trial collaborators. Lancet. 2004;364(9442):1321-1328. (Verified.)",m:"Module 16"},
+ {n:"THEIA",y:2025,t:"Retinal artery occlusion",d:"Randomized double-dummy trial (70 patients): IV alteplase vs aspirin within 4.5 hours of CRAO",q:"Does IV thrombolysis improve vision after CRAO?",r:"Improvement of 0.3 logMAR or more in 66% vs 48%, not statistically significant; likely underpowered; no symptomatic hemorrhage.",i:"No proven benefit; thrombolysis is not routine care.",c:"Préterre C, Gaultier A, Obadia M, et al. Lancet Neurol. 2025;24(11):909-919. (Verified.)",m:"Module 13"},
+ {n:"TenCRAOS",y:2026,t:"Retinal artery occlusion",d:"Randomized double-dummy trial (78 patients): IV tenecteplase vs aspirin within 4.5 hours of CRAO",q:"Does tenecteplase improve vision after CRAO?",r:"Vision recovery at 30 days in 20% vs 24% (P = 0.69); more adverse events with tenecteplase, including one fatal intracranial hemorrhage.",i:"Authors don't support routine thrombolysis for CRAO; await REVISION and pooled analyses.",c:"Ryan SJ, Jørstad ØK, Skjelland M, et al. N Engl J Med. 2026;394(5):442-450. (Verified.)",m:"Module 13"},
+ {n:"ZEDS",y:2025,t:"Infection",d:"Randomized placebo-controlled trial (527 patients): valacyclovir 1000 mg daily for 12 months in HZO with recent keratitis or iritis",q:"Does suppressive valacyclovir reduce HZO eye disease?",r:"Primary 12-month endpoint not significant; secondary 18-month endpoint and multiple-episode outcomes favored valacyclovir.",i:"Authors support considering 1 year of suppression; recombinant zoster vaccine remains the best prevention.",c:"Cohen EJ, Troxel AB, Liu M, et al. JAMA Ophthalmol. 2025;143(4):269-276. (Verified.)",m:"Module 15"},
+ {n:"McLean memantine/gabapentin",y:2007,t:"Nystagmus",d:"Randomized double-masked placebo-controlled trial (48 patients) in infantile nystagmus",q:"Can drugs improve infantile nystagmus?",r:"Both memantine and gabapentin improved acuity, nystagmus intensity and foveation vs placebo.",i:"Drug therapy is an option for selected patients.",c:"McLean R, Proudlock F, Thomas S, et al. Ann Neurol. 2007;61(2):130-138. (Verified.)",m:"Module 10"},
+ {n:"Kattah HINTS",y:2009,t:"Diagnostics",d:"Prospective diagnostic accuracy study in high-risk acute vestibular syndrome",q:"Can bedside eye signs detect stroke better than early MRI?",r:"Any dangerous HINTS sign was 100% sensitive and 96% specific for stroke; early DWI was falsely negative in 12%, all within 48 hours.",i:"Trained examiners can use HINTS to triage acute vertigo; applies only to acute continuous vertigo with nystagmus.",c:"Kattah JC, Talkad AV, Wang DZ, et al. Stroke. 2009;40(11):3504-3510. (Verified.)",m:"Modules 2, 9 and 10"},
+ {n:"Tamhankar microvascular palsies",y:2013,t:"Diagnostics",d:"Prospective cohort (109 patients aged 50 or older) with isolated CN III, IV or VI palsy",q:"How often is a 'microvascular' palsy something else?",r:"A non-microvascular cause was found in 16.5% (10% of those with vascular risk factors only).",i:"Supports early MRI even in vasculopathic patients.",c:"Tamhankar MA, Biousse V, Ying GS, et al. Ophthalmology. 2013;120(11):2264-2269. (Verified.)",m:"Module 8"},
+ {n:"Melles and Marmor HCQ risk",y:2014,t:"Drug toxicity",d:"Large cohort (2361 patients using HCQ more than 5 years) screened with fields or SD-OCT",q:"What is the true risk of HCQ retinopathy?",r:"Risk depends on daily dose by real weight and duration; underpinned the 5.0 mg/kg real-weight limit.",i:"AAO 2016 guidance and its 2025 revision (dose limit unchanged; OCT and wide-pattern FAF now primary).",c:"Melles RB, Marmor MF. JAMA Ophthalmol. 2014;132(12):1453-1460; AAO 2016 recommendations (Ophthalmology 2016;123:1386-1394) and 2025 revision (Ophthalmology 2026;133:439-450). (Verified.)",m:"Module 17"},
+ {n:"EMA semaglutide and NAION",y:2025,t:"Ischemic optic neuropathy",d:"Regulatory review of epidemiological studies and reports",q:"Is semaglutide linked to NAION?",r:"Classified as a very rare side effect (up to 1 in 10,000 users), with about a two-fold risk in type 2 diabetes in epidemiological studies.",i:"Discuss risk and stop semaglutide if NAION is confirmed; NANOS and AAO advise shared decision-making.",c:"European Medicines Agency PRAC conclusion, June 2025; NANOS and AAO clinical statement, 2026. (Verified.)",m:"Module 4"}
+];
+const topics=["All",...new Set(T.map(x=>x.t))];
+let curT="All";
+function render(){
+  const q=document.getElementById("q").value.toLowerCase();
+  const items=T.filter(x=>(curT==="All"||x.t===curT)&&(!q||JSON.stringify(x).toLowerCase().includes(q)));
+  document.getElementById("list").innerHTML=items.map(x=>`<div class="trial"><h3>${x.n}</h3><p class="meta"><span class="tag">${x.y}</span><span class="tag">${x.t}</span><span class="tag">${x.m}</span></p>
+  <dl><dt>Design</dt><dd>${x.d}</dd><dt>Question</dt><dd>${x.q}</dd><dt>Result</dt><dd>${x.r}</dd><dt>Practice impact</dt><dd>${x.i}</dd></dl><p class="cite">${x.c}</p></div>`).join("") || "<p>No trials match.</p>";
+}
+chips(document.getElementById("topics"),topics,i=>{curT=topics[i];render();});
+document.getElementById("q").addEventListener("input",render);
+
+/* ---------- read like a reviewer ---------- */
+const R=[
+ {n:"Was it randomized?",e:"IONTS was planned as a randomized trial but became nonrandomized when recruitment failed; treatment groups may differ in ways that bias results. Interpret its 'no benefit' cautiously, but note that no later trial has shown benefit either."},
+ {n:"Did it meet its primary endpoint?",e:"ZEDS missed its 12-month primary endpoint; benefits appeared in secondary outcomes at 18 months. Secondary results are hypothesis-supporting, not definitive, and the authors' recommendation reflects that judgment."},
+ {n:"Was it powered to find a difference?",e:"THEIA showed 66% vs 48% improvement with alteplase, a numerically large difference that wasn't significant in 70 patients. Small trials can miss real effects; pooled analyses help."},
+ {n:"Is the effect clinically meaningful?",e:"IIHTT's acetazolamide effect on mean deviation was 0.71 dB, statistically significant but modest. Secondary benefits (papilledema, quality of life) strengthened the case."},
+ {n:"What about harm?",e:"CRASH found more deaths with high-dose steroids in head injury (21% vs 18%). A harm signal in a large trial can outweigh small, uncontrolled benefit claims in related conditions such as TON."},
+ {n:"Who was studied?",e:"MGTX enrolled generalized, AChR-positive, nonthymomatous adults 18 to 65; results don't automatically apply to ocular, seronegative or older patients."},
+ {n:"Who funded it?",e:"OPTIC was industry-sponsored. That doesn't invalidate results, but look at independent replication, long-term outcomes and later safety data (the teprotumumab hearing warning came after approval)."},
+ {n:"Is it a diagnostic study?",e:"HINTS sensitivity and specificity come from high-risk patients examined by trained clinicians. Performance drops in less experienced hands and in patients without continuous vertigo and nystagmus."}
+];
+chips(document.getElementById("rChips"),R.map(x=>x.n),i=>{document.getElementById("rCard").innerHTML=`<h3 style="margin-top:0">${R[i].n}</h3><p>${R[i].e}</p>`;});
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"Oral prednisone alone was associated with more recurrences of optic neuritis.",o:["IONDT","ONTT","IIHTT","MGTX"],a:1,e:"ONTT treatment trial (1992)."},
+ {q:"MS risk at 15 years: 25% with normal MRI vs 72% with lesions.",o:["ONTT follow-up","IONTS","GiACTA","OPTIC"],a:0,e:"Optic Neuritis Study Group, 2008."},
+ {q:"Optic nerve decompression for NAION was ineffective and possibly harmful.",o:["IONTS","IONDT","CRASH","THEIA"],a:1,e:"IONDT, 1995."},
+ {q:"Sustained remission at 52 weeks: 56% vs 14%.",o:["OPTIC","GiACTA","MGTX","ZEDS"],a:1,e:"Tocilizumab in GCA."},
+ {q:"Acetazolamide improved PMD by 1.43 vs 0.71 dB.",o:["IIH:WT","IIHTT","ONTT","IONDT"],a:1,e:"IIHTT, 2014."},
+ {q:"Proptosis response 83% vs 10%.",o:["OPTIC","Smith 2017","GiACTA","MGTX"],a:0,e:"Teprotumumab phase 3."},
+ {q:"Higher mortality with high-dose steroids after head injury.",o:["IONTS","CRASH","TenCRAOS","ZEDS"],a:1,e:"21% vs 18%."},
+ {q:"Vision recovery 20% vs 24% with a fatal intracranial hemorrhage in the active arm.",o:["THEIA","TenCRAOS","IONDT","GiACTA"],a:1,e:"Tenecteplase for CRAO, 2026."},
+ {q:"Primary endpoint missed at 12 months, benefit at 18 months.",o:["ZEDS","MGTX","IIHTT","OPTIC"],a:0,e:"Valacyclovir suppression in HZO."},
+ {q:"Non-microvascular cause found in 16.5% of older patients with isolated ocular motor palsy.",o:["Kattah","Tamhankar","McLean","Melles"],a:1,e:"Supports early MRI."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>

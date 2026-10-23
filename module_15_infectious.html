@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 15: Infectious disease</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.cmp{display:grid;gap:6px}
+.cmprow{background:var(--panel);border-radius:12px;padding:8px 10px}
+.cmprow h4{margin:0 0 6px;font-size:.84rem;color:var(--muted);font-weight:600}
+.cmpcells{display:grid;gap:8px}
+.cmpcells div{font-size:.88rem;border-left:3px solid var(--stem);padding-left:7px}
+.cmpcells b{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.fundus{background:#000;border-radius:14px;padding:8px;display:flex;justify-content:center}
+.fundus svg{max-width:300px}
+
+.slider{width:100%;accent-color:var(--hot);margin:10px 0 2px}
+.gl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.ladder li{margin:8px 0}
+
+.vfwrap{background:var(--panel);border-radius:14px;padding:10px}
+.prog{font-size:.85rem;color:var(--muted);margin:4px 0 0}
+.next{font:inherit;margin-top:10px;padding:9px 14px;border-radius:10px;border:none;background:var(--ink);color:var(--bg);cursor:pointer}
+.brain svg .rg{cursor:pointer}
+.brain svg .rg:focus-visible{outline:none;stroke:var(--inter);stroke-width:3}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.read{display:flex;justify-content:space-around;font-size:.9rem;margin-top:4px}
+.read b{font-family:Charter,Georgia,serif;font-size:1.05rem}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.9rem;margin:6px 0}
+.toggle input{width:20px;height:20px;accent-color:var(--inter)}
+ol.algo li{margin:8px 0}
+
+.nine{background:var(--panel);border-radius:14px;padding:8px}
+.step3{margin:8px 0}
+.step3 p{margin:4px 0;font-weight:600;font-size:.9rem}
+.result{font-family:Charter,Georgia,serif;font-size:1.3rem;font-weight:600;margin:4px 0}
+
+.sl{margin:10px 0}
+.sl label{display:flex;justify-content:space-between;font-size:.9rem;font-weight:600}
+.sl input{width:100%;accent-color:var(--hot)}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.pacs{background:var(--panel);border-radius:14px;padding:8px}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 15 of 22</p>
+  <h1>Infectious disease</h1>
+  <p class="sub">Meningitis and encephalitis, orbital infections, herpes zoster ophthalmicus, acute retinal necrosis and specific infections with eye and brain findings. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="csf" aria-selected="true">CSF decoder</button>
+    <button role="tab" data-tab="orbit" aria-selected="false">Orbital infection</button>
+    <button role="tab" data-tab="hzo" aria-selected="false">Zoster and ARN</button>
+    <button role="tab" data-tab="bugs" aria-selected="false">Specific infections</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and sources</button>
+  </nav>
+
+  <section class="tab on" id="tab-csf">
+    <h2>Read the lumbar puncture</h2>
+    <p class="sub">Move the sliders or load a preset. The pattern updates live. This is a teaching heuristic; real profiles overlap.</p>
+    <div class="chips" id="presets"></div>
+    <div class="card">
+      <div class="sl"><label>Opening pressure <span id="vOP"></span></label><input type="range" id="OP" min="5" max="60" value="18"></div>
+      <div class="sl"><label>White cells (per µL) <span id="vWBC"></span></label><input type="range" id="WBC" min="0" max="3000" step="5" value="2"></div>
+      <div class="sl"><label>Neutrophils <span id="vPMN"></span></label><input type="range" id="PMN" min="0" max="100" value="0"></div>
+      <div class="sl"><label>CSF to serum glucose ratio <span id="vGLU"></span></label><input type="range" id="GLU" min="0" max="100" value="65"></div>
+      <div class="sl"><label>Protein (mg/dL) <span id="vPRO"></span></label><input type="range" id="PRO" min="10" max="500" step="5" value="35"></div>
+    </div>
+    <div class="verdict" id="csfOut" aria-live="polite"></div>
+    <div class="card accent"><dl><dt>Neuro-ophthalmic angle</dt><dd>Papilledema and CN VI palsy are common with raised pressure in cryptococcal, tuberculous and bacterial meningitis. Basal meningitis (TB, fungal, sarcoid, carcinomatous) causes multiple cranial neuropathies. Always measure opening pressure with the patient lateral decubitus.</dd></dl></div>
+  </section>
+
+  <section class="tab" id="tab-orbit">
+    <h2>Orbital infection: Chandler stages</h2>
+    <p class="sub">Pick a stage. The schematic shows an axial right orbit beside the ethmoid sinus, the usual source.</p>
+    <div class="chips" id="chChips"></div>
+    <div class="pacs"><svg id="orb" viewBox="0 0 300 200" role="img" aria-label="Axial orbit schematic"></svg></div>
+    <div class="card accent" id="chCard"></div>
+  </section>
+
+  <section class="tab" id="tab-hzo">
+    <h2>Herpes zoster ophthalmicus and acute retinal necrosis</h2>
+    <div class="chips" id="hzChips"></div>
+    <div class="card accent" id="hzCard"></div>
+  </section>
+
+  <section class="tab" id="tab-bugs">
+    <h2>Specific infections with eye and brain findings</h2>
+    <div class="chips" id="bugChips"></div>
+    <div class="card accent" id="bugCard"></div>
+  </section>
+
+  <section class="tab" id="tab-cases"><h2>Case vignettes</h2><p class="sub">Work each question before revealing the answer.</p><div id="caseList"></div></section>
+  <section class="tab" id="tab-pearls"><h2>Clinical pearls</h2><div id="pearlList"></div></section>
+  <section class="tab" id="tab-quiz"><h2>Self-quiz</h2><p class="sub">Ten questions. Tap an answer to see the explanation.</p><div id="quizList"></div><p class="score" id="score" aria-live="polite"></p><button class="reveal" id="resetQuiz">Reset quiz</button></section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Identify key infectious syndromes</label>
+      <label><input type="checkbox"> Order the appropriate workup</label>
+      <label><input type="checkbox"> Initiate urgent treatment pathways</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="src">
+      <li><b>Ocular syphilis: treat like neurosyphilis even with normal CSF; aqueous crystalline penicillin G 18 to 24 million units per day IV for 10 to 14 days; CSF exam unnecessary before treatment with isolated ocular findings and no cranial nerve or neurologic signs; test for HIV:</b> Centers for Disease Control and Prevention. Sexually Transmitted Infections Treatment Guidelines, 2021: Neurosyphilis, Ocular Syphilis, and Otosyphilis (cdc.gov); Workowski KA, Bachmann LH, Chan PA, et al. <i>MMWR Recomm Rep.</i> 2021;70(4):1-187.</li>
+      <li><b>ZEDS: 1 year of valacyclovir 1000 mg daily vs placebo in HZO with recent keratitis or iritis; primary 12-month endpoint not significant; secondary 18-month endpoint and multiple-episode outcomes favored valacyclovir; authors support considering 1 year of suppression:</b> Cohen EJ, Troxel AB, Liu M, et al; ZEDS Trial Research Group. Low-dose valacyclovir in herpes zoster ophthalmicus: the Zoster Eye Disease randomized clinical trial. <i>JAMA Ophthalmol.</i> 2025;143(4):269-276. doi:10.1001/jamaophthalmol.2024.6114.</li>
+      <li><b>Chandler staging of orbital complications of sinusitis:</b> Chandler JR, Langenbrunner DJ, Stevens ER. The pathogenesis of orbital complications in acute sinusitis. <i>Laryngoscope.</i> 1970;80(9):1414-1428. doi:10.1288/00005537-197009000-00007. Group I in the original scheme is inflammatory (preseptal) edema; later modifications (for example, the Groote Schuur classification) refine it.</li>
+      <li>CSF patterns in the decoder are a simplified teaching model. Other content reflects standard teaching in the core texts.</li>
+    </ul></div>
+    <h3>Core reading (from the program curriculum)</h3>
+    <div class="card"><ul class="refs">
+      <li>Vegunta S, ed. <i>Neuro-Ophthalmology.</i> Moran CORE, University of Utah.</li>
+      <li>American Academy of Ophthalmology. <i>Basic and Clinical Science Course, Section 5: Neuro-Ophthalmology.</i> AAO; 2025.</li>
+      <li>Liu GT, Volpe NJ, Galetta SL. <i>Neuro-Ophthalmology: Diagnosis and Management.</i> 2nd ed. Saunders Elsevier; 2010.</li>
+    </ul></div>
+  </section>
+
+  <p class="foot">Simulations and diagrams for teaching. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick,init=0){host.innerHTML="";items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});if(init!==null)host.children[init].click();}
+
+/* ---------- CSF decoder ---------- */
+const F=["OP","WBC","PMN","GLU","PRO"];
+const PRE={
+ "Normal":[18,2,0,65,35],
+ "Bacterial":[35,1800,90,20,250],
+ "Viral":[20,120,15,62,70],
+ "Tuberculous":[32,250,20,30,300],
+ "Cryptococcal":[45,60,10,40,90],
+ "Neurosyphilis":[22,40,5,60,80],
+ "IIH":[38,2,0,65,25],
+ "Guillain-Barré":[16,3,0,65,180]
+};
+function readCSF(){
+  const v=Object.fromEntries(F.map(k=>[k,+document.getElementById(k).value]));
+  document.getElementById("vOP").textContent=v.OP+" cm H2O";
+  document.getElementById("vWBC").textContent=v.WBC;
+  document.getElementById("vPMN").textContent=v.PMN+"%";
+  document.getElementById("vGLU").textContent=(v.GLU/100).toFixed(2);
+  document.getElementById("vPRO").textContent=v.PRO;
+  let t;
+  const high=v.OP>=25, lowG=v.GLU<45, highP=v.PRO>45;
+  if(v.WBC<=5){
+    if(highP) t="Albuminocytologic dissociation (high protein, normal cells): Guillain-Barré or Miller Fisher syndrome, spinal block, or tumor.";
+    else if(high) t="Raised pressure with normal composition: idiopathic intracranial hypertension pattern, if imaging (with venography) excludes a mass or venous thrombosis.";
+    else t="Normal CSF.";
+  } else if(v.PMN>50 && lowG){
+    t="Neutrophilic pleocytosis with low glucose: bacterial meningitis until proven otherwise. Don't delay antibiotics for imaging or the LP.";
+  } else if(lowG){
+    t="Lymphocytic pleocytosis with low glucose: tuberculous or fungal (check cryptococcal antigen) meningitis, or carcinomatous meningitis (cytology). Expect basal cranial neuropathies and raised pressure.";
+  } else {
+    t="Lymphocytic pleocytosis with normal glucose: viral (send HSV and VZV PCR), neurosyphilis (CSF-VDRL), Lyme, or autoimmune and inflammatory causes.";
+  }
+  if(high && v.WBC>5) t+=" Opening pressure is high: watch for papilledema and CN VI palsy; cryptococcal meningitis often needs therapeutic LPs.";
+  document.getElementById("csfOut").textContent=t;
+}
+F.forEach(k=>document.getElementById(k).addEventListener("input",readCSF));
+chips(document.getElementById("presets"),Object.keys(PRE),i=>{PRE[Object.keys(PRE)[i]].forEach((x,j)=>document.getElementById(F[j]).value=x);readCSF();});
+
+/* ---------- Chandler ---------- */
+const CH=[
+ {n:"I: Preseptal cellulitis",d:"Lid swelling and redness anterior to the orbital septum. Normal vision, pupils and motility; no proptosis.",m:"Oral antibiotics if mild and reliable follow-up; treat the source.",p:"Any pain on eye movement, proptosis, reduced vision or motility means it is no longer preseptal."},
+ {n:"II: Orbital cellulitis",d:"Infection behind the septum: proptosis, chemosis, painful and limited eye movements, possible reduced vision or RAPD.",m:"Admit, IV antibiotics, CT orbits and sinuses with contrast, ENT involvement.",p:"Check optic nerve function at least daily."},
+ {n:"III: Subperiosteal abscess",d:"Pus collects between the lamina papyracea and the periorbita, usually medially, displacing the globe laterally and down.",m:"IV antibiotics; drainage for large abscesses, vision compromise, older children and adults, or failure to improve.",p:"Young children with small medial abscesses often respond to antibiotics alone; adults usually need surgery."},
+ {n:"IV: Orbital abscess",d:"Pus within the orbital tissues: severe proptosis, ophthalmoplegia, vision loss.",m:"Surgical drainage plus IV antibiotics.",p:"Vision can be lost quickly from compression or ischemia."},
+ {n:"V: Cavernous sinus thrombosis",d:"Bilateral signs, multiple cranial neuropathies (III, IV, V1, V2, VI), decreased consciousness, sepsis.",m:"IV antibiotics, imaging with venography, neurosurgery and infectious disease involvement; anticoagulation is often considered.",p:"Contralateral eye findings mean the cavernous sinus is involved."}
+];
+function drawOrb(i){
+  // axial right orbit: lateral wall left, medial wall right, apex at bottom; ethmoid sits medial to the medial wall
+  const cone="M60,62 L200,62 L140,178 Z", hot="rgba(194,48,59,.35)", hotS="rgba(194,48,59,.75)";
+  let s=`<rect x="6" y="6" width="288" height="188" rx="14" fill="var(--bg)"/>
+  <path d="M206,62 L280,62 L280,178 L146,178 Z" fill="#F2E6D6" stroke="var(--stemline)"/><text x="236" y="126" class="lvl" text-anchor="middle">ethmoid</text>
+  <path d="${cone}" fill="#EEDFC8" stroke="var(--stemline)" stroke-width="2"/>
+  <line x1="200" y1="62" x2="140" y2="178" stroke="#9C8A74" stroke-width="3"/>
+  <line x1="130" y1="76" x2="138" y2="172" stroke="#C9A97F" stroke-width="5"/>
+  <line x1="70" y1="30" x2="190" y2="30" stroke="var(--neighbor)" stroke-width="2" stroke-dasharray="4 3"/><text x="196" y="34" class="lvl">orbital septum</text>`;
+  if(i===0) s+=`<ellipse cx="130" cy="20" rx="66" ry="12" fill="${hot}"/>`;
+  if(i===1||i===4) s+=`<path d="${cone}" fill="${hot}"/>`;
+  if(i===2) s+=`<path d="M196,72 C180,96 166,128 150,160 L156,164 C166,140 186,104 200,74 Z" fill="${hotS}"/>`;
+  if(i===3) s+=`<ellipse cx="118" cy="118" rx="22" ry="15" fill="${hotS}"/>`;
+  if(i===4) s+=`<circle cx="140" cy="182" r="10" fill="${hotS}"/><text x="156" y="190" class="lvl">to cavernous sinus</text>`;
+  const gx = i===2?118:(i===3?136:130), gy = i>=2?40:48;
+  s+=`<circle cx="${gx}" cy="${gy}" r="26" fill="#FBF8F3" stroke="var(--stemline)" stroke-width="2"/>`;
+  if(i>=2) s+=`<circle cx="130" cy="48" r="26" fill="none" stroke="var(--hot)" stroke-width="1.2" stroke-dasharray="3 3"/>`;
+  s+=`<text x="40" y="188" class="lvl">lateral</text><text x="246" y="188" class="lvl">medial</text>`;
+  document.getElementById("orb").innerHTML=s;
+  const C=CH[i];document.getElementById("chCard").innerHTML=`<h3 style="margin-top:0">${C.n}</h3><dl><dt>Findings</dt><dd>${C.d}</dd><dt>Management</dt><dd>${C.m}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${C.p}</dd></dl>`;
+}
+chips(document.getElementById("chChips"),CH.map(c=>c.n),drawOrb);
+
+/* ---------- zoster ---------- */
+const HZ=[
+ {n:"HZO overview",f:"Dermatomal V1 rash; Hutchinson sign (vesicles on the nasal tip, nasociliary branch) predicts eye involvement. Keratitis, uveitis (often with raised IOP and sectoral iris atrophy), scleritis.",m:"Oral antivirals within 72 hours of rash onset (valacyclovir or famciclovir), ophthalmology follow-up; recombinant zoster vaccine prevents zoster.",p:"After HZO with keratitis or iritis, ZEDS supports considering 1 year of valacyclovir 1000 mg daily."},
+ {n:"Neuro-ophthalmic complications",f:"Optic neuritis, ocular motor palsies (CN III most often), orbital apex syndrome, and VZV vasculopathy causing stroke weeks to months after the rash, sometimes mimicking GCA.",m:"MRI, LP with VZV PCR and VZV IgG antibody index for vasculopathy; IV acyclovir with or without steroids.",p:"A stroke or new cranial neuropathy weeks after zoster: think VZV vasculopathy."},
+ {n:"Acute retinal necrosis",f:"Immunocompetent or immunosuppressed patients: peripheral full-thickness necrotizing retinitis spreading circumferentially, occlusive arteritis, prominent vitritis; often VZV or HSV.",m:"Aqueous or vitreous PCR; high-dose oral valacyclovir or IV acyclovir plus intravitreal foscarnet or ganciclovir; watch the fellow eye and for retinal detachment.",p:"HSV-2 ARN in young patients may follow neonatal or prior encephalitis; check for concurrent encephalitis."},
+ {n:"Progressive outer retinal necrosis",f:"Severely immunocompromised (advanced HIV): rapid multifocal deep retinal whitening with little vitritis or vasculitis.",m:"Aggressive combined intravitreal and systemic antivirals; immune reconstitution.",p:"Little inflammation does not mean mild disease; PORN progresses faster than ARN."}
+];
+chips(document.getElementById("hzChips"),HZ.map(x=>x.n),i=>{const x=HZ[i];document.getElementById("hzCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Features</dt><dd>${x.f}</dd><dt>Management</dt><dd>${x.m}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- specific infections ---------- */
+const BUG=[
+ {n:"Syphilis",f:"Panuveitis or posterior uveitis, placoid chorioretinitis, optic neuritis or perineuritis, neuroretinitis, Argyll Robertson pupils, cranial neuropathies.",w:"Treponemal and nontreponemal serology; CSF if cranial nerve or neurologic signs; HIV testing. Treat ocular syphilis as neurosyphilis (IV penicillin G 10 to 14 days).",p:"The great imitator: test for syphilis in every unexplained uveitis, optic neuropathy or neuroretinitis."},
+ {n:"Tuberculosis",f:"Basal meningitis with cranial neuropathies and papilledema, choroidal tubercles, serpiginous-like choroiditis, optochiasmatic arachnoiditis.",w:"CSF (lymphocytic, low glucose, high protein), CSF PCR and culture, chest imaging, interferon-gamma release assay.",p:"Ethambutol used to treat TB can itself cause optic neuropathy (Module 17)."},
+ {n:"Lyme disease",f:"Facial palsy (sometimes bilateral), other cranial neuropathies, optic neuritis rarely, meningitis.",w:"Two-tier serology; CSF in neurologic disease.",p:"Bilateral facial palsy in an endemic area: think Lyme (also sarcoid, GBS)."},
+ {n:"Bartonella (cat scratch)",f:"Neuroretinitis with a macular star, focal retinochoroiditis, Parinaud oculoglandular syndrome.",w:"Bartonella serology.",p:"Neuroretinitis is not demyelinating; MS risk isn't increased."},
+ {n:"Toxoplasmosis",f:"Focal necrotizing retinochoroiditis next to an old scar ('headlight in the fog'); in AIDS, ring-enhancing brain lesions.",w:"Clinical diagnosis; PCR when atypical; serology.",p:"In immunosuppressed patients, lesions can be large, bilateral and without a scar."},
+ {n:"CMV and HIV-related disease",f:"CMV retinitis (hemorrhagic 'pizza pie' or granular) with low CD4; HIV neuroretinal disorder; PML causing homonymous field loss and cortical blindness; cryptococcal meningitis with papilledema.",w:"CD4 count, viral load, CMV PCR, MRI, CSF JC virus PCR, cryptococcal antigen.",p:"Immune reconstitution can cause inflammatory flares (immune recovery uveitis, IRIS)."},
+ {n:"Cryptococcal meningitis",f:"Headache, papilledema, CN VI palsy, vision loss from raised pressure or optic nerve infiltration.",w:"CSF and serum cryptococcal antigen; opening pressure.",p:"Raised pressure drives vision loss and death: serial therapeutic LPs or drainage."},
+ {n:"Mucormycosis",f:"Diabetic ketoacidosis or immunosuppression: orbital apex syndrome, black eschar on palate or nasal mucosa, CRAO, cavernous sinus and ICA involvement.",w:"Urgent ENT biopsy, MRI with contrast.",p:"Emergency: amphotericin B, aggressive debridement and correcting the underlying cause."},
+ {n:"Whipple disease",f:"Oculomasticatory myorhythmia (pathognomonic), vertical supranuclear gaze palsy, uveitis.",w:"Duodenal biopsy, CSF PCR for Tropheryma whipplei.",p:"Treatable: long-term antibiotics."},
+ {n:"Creutzfeldt-Jakob disease",f:"Heidenhain variant begins with visual symptoms (cortical vision loss, distortions, hallucinations) before rapid dementia and myoclonus.",w:"MRI DWI (cortical ribboning, basal ganglia), CSF RT-QuIC, EEG.",p:"Rapidly progressive cortical vision loss with normal eyes: consider CJD."}
+];
+chips(document.getElementById("bugChips"),BUG.map(x=>x.n),i=>{const x=BUG[i];document.getElementById("bugCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Eye and neuro findings</dt><dd>${x.f}</dd><dt>Workup and treatment</dt><dd>${x.w}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: Black spot on the palate",stem:"A 58-year-old man in diabetic ketoacidosis has 2 days of left facial pain, ptosis, complete ophthalmoplegia, light perception vision and a black eschar on the palate.",
+  steps:[
+   {q:"Diagnosis and localization?",a:"Rhino-orbital-cerebral mucormycosis with left orbital apex syndrome."},
+   {q:"Immediate steps?",a:"Urgent ENT biopsy and debridement, IV amphotericin B, correct the ketoacidosis, MRI with contrast to assess the cavernous sinus and brain."},
+   {q:"Why is vision lost so quickly?",a:"Angioinvasive fungus causes thrombosis and infarction of the optic nerve and ophthalmic or central retinal artery."}
+  ]},
+ {t:"Case 2: Floaters and a rash on the palms",stem:"A 34-year-old man has blurred vision in both eyes for 2 weeks and a recent palmar rash. Bilateral panuveitis with placoid outer retinal lesions; no cranial nerve or neurologic abnormalities. RPR 1:128, treponemal test positive.",
+  steps:[
+   {q:"Diagnosis?",a:"Ocular syphilis."},
+   {q:"Does he need an LP before treatment?",a:"Not per the CDC 2021 guidelines: with isolated ocular findings, confirmed abnormalities on exam and reactive serology, CSF exam is unnecessary before treatment. An LP is indicated if cranial nerve or other neurologic abnormalities are present."},
+   {q:"Treatment and other testing?",a:"Treat as neurosyphilis: aqueous crystalline penicillin G 18 to 24 million units per day IV for 10 to 14 days. Test for HIV and offer PrEP if negative; manage partners."}
+  ]},
+ {t:"Case 3: The nose was a clue",stem:"A 72-year-old woman has a painful vesicular rash on the left forehead extending to the tip of her nose for 2 days.",
+  steps:[
+   {q:"What does the nasal tip involvement mean?",a:"Hutchinson sign: the nasociliary nerve is involved, raising the risk of ocular involvement."},
+   {q:"Initial management?",a:"Oral antivirals now (within 72 hours of rash onset) and an ophthalmology exam for keratitis and uveitis."},
+   {q:"She later develops stromal keratitis and iritis. Is long-term suppression reasonable?",a:"Yes, it can be considered. In ZEDS, a year of valacyclovir 1000 mg daily missed its 12-month primary endpoint but reduced events at 18 months and reduced multiple episodes, and the authors support considering 1 year of suppression."}
+  ]},
+ {t:"Case 4: Headache and swollen discs with HIV",stem:"A 39-year-old man with untreated HIV (CD4 40) has headache, double vision from a right CN VI palsy and bilateral disc swelling. Opening pressure is 42 cm H2O.",
+  steps:[
+   {q:"Most likely diagnosis?",a:"Cryptococcal meningitis."},
+   {q:"Key tests?",a:"CSF and serum cryptococcal antigen, India ink, culture; MRI."},
+   {q:"What protects his vision and life besides antifungals?",a:"Lowering intracranial pressure with serial therapeutic LPs (or a drain); delaying ART appropriately to reduce IRIS risk, per infectious disease guidance."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{const d=document.createElement("div");d.className="card";d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map(s=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");caseList.appendChild(d);});
+caseList.addEventListener("click",e=>{if(!e.target.classList.contains("reveal"))return;const a=e.target.nextElementSibling,on=!a.classList.contains("on");a.classList.toggle("on",on);e.target.setAttribute("aria-expanded",String(on));e.target.textContent=on?"Hide answer":"Reveal answer";});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "Don't delay antibiotics for imaging or LP when bacterial meningitis is suspected.",
+ "Preseptal cellulitis has normal vision, pupils and motility; any proptosis or painful limited movement means orbital cellulitis.",
+ "Contralateral eye signs with orbital infection suggest cavernous sinus thrombosis.",
+ "Diabetic ketoacidosis plus orbital apex syndrome is mucormycosis until proven otherwise: biopsy and debride urgently.",
+ "Test for syphilis in every unexplained uveitis, optic neuropathy or neuroretinitis, and treat ocular syphilis as neurosyphilis.",
+ "Hutchinson sign predicts ocular involvement in herpes zoster ophthalmicus.",
+ "A stroke or cranial neuropathy weeks after zoster suggests VZV vasculopathy.",
+ "ARN is a peripheral necrotizing retinitis with vitritis; send intraocular PCR and treat both systemically and intravitreally.",
+ "Raised pressure drives vision loss in cryptococcal meningitis; therapeutic LPs save sight.",
+ "Rapid cortical vision loss with normal eyes and myoclonus: consider Heidenhain variant CJD."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"Neutrophilic pleocytosis with low CSF glucose most suggests:",o:["Viral meningitis","Bacterial meningitis","IIH","Guillain-Barré"],a:1,e:"Treat immediately."},
+ {q:"High protein with normal cell count is called:",o:["Pleocytosis","Albuminocytologic dissociation","Xanthochromia","Oligoclonal banding"],a:1,e:"Classic for Guillain-Barré and Miller Fisher syndromes."},
+ {q:"Chandler stage III is:",o:["Preseptal cellulitis","Subperiosteal abscess","Orbital abscess","Cavernous sinus thrombosis"],a:1,e:"Pus between the bone and periorbita, usually medial."},
+ {q:"Per CDC 2021, CSF exam before treating ocular syphilis is unnecessary when:",o:["Never","Ocular findings are isolated, confirmed on exam, with reactive serology and no cranial nerve or neurologic signs","Always","Only if HIV-positive"],a:1,e:"If cranial nerve dysfunction is present, CSF evaluation is needed."},
+ {q:"Recommended treatment for ocular syphilis:",o:["Single-dose benzathine penicillin","Aqueous crystalline penicillin G IV for 10 to 14 days","Oral doxycycline for 7 days","Topical steroids only"],a:1,e:"Ocular syphilis is treated like neurosyphilis."},
+ {q:"Hutchinson sign refers to vesicles on the:",o:["Upper eyelid","Nasal tip","Cornea","Scalp"],a:1,e:"Nasociliary nerve involvement predicts eye disease."},
+ {q:"In ZEDS, suppressive valacyclovir for HZO:",o:["Met its 12-month primary endpoint","Missed the 12-month primary endpoint but showed benefit at 18 months and on multiple episodes","Caused harm","Was compared with acyclovir"],a:1,e:"Authors support considering 1 year of suppression."},
+ {q:"Peripheral necrotizing retinitis with vitritis and occlusive arteritis in a healthy adult suggests:",o:["CMV retinitis","Acute retinal necrosis","Toxoplasmosis","PORN"],a:1,e:"ARN, usually VZV or HSV."},
+ {q:"Oculomasticatory myorhythmia is pathognomonic for:",o:["CJD","Whipple disease","Lyme","Syphilis"],a:1,e:"Treatable with antibiotics."},
+ {q:"Black eschar and orbital apex syndrome in DKA:",o:["Aspergillosis","Mucormycosis","Bacterial cellulitis","Tolosa-Hunt"],a:1,e:"Angioinvasive fungal infection; emergency."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>

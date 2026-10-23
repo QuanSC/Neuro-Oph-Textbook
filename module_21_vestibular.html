@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 21: Vestibular disorders</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.cmp{display:grid;gap:6px}
+.cmprow{background:var(--panel);border-radius:12px;padding:8px 10px}
+.cmprow h4{margin:0 0 6px;font-size:.84rem;color:var(--muted);font-weight:600}
+.cmpcells{display:grid;gap:8px}
+.cmpcells div{font-size:.88rem;border-left:3px solid var(--stem);padding-left:7px}
+.cmpcells b{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.fundus{background:#000;border-radius:14px;padding:8px;display:flex;justify-content:center}
+.fundus svg{max-width:300px}
+
+.slider{width:100%;accent-color:var(--hot);margin:10px 0 2px}
+.gl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.ladder li{margin:8px 0}
+
+.vfwrap{background:var(--panel);border-radius:14px;padding:10px}
+.prog{font-size:.85rem;color:var(--muted);margin:4px 0 0}
+.next{font:inherit;margin-top:10px;padding:9px 14px;border-radius:10px;border:none;background:var(--ink);color:var(--bg);cursor:pointer}
+.brain svg .rg{cursor:pointer}
+.brain svg .rg:focus-visible{outline:none;stroke:var(--inter);stroke-width:3}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.read{display:flex;justify-content:space-around;font-size:.9rem;margin-top:4px}
+.read b{font-family:Charter,Georgia,serif;font-size:1.05rem}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.9rem;margin:6px 0}
+.toggle input{width:20px;height:20px;accent-color:var(--inter)}
+ol.algo li{margin:8px 0}
+
+.nine{background:var(--panel);border-radius:14px;padding:8px}
+.step3{margin:8px 0}
+.step3 p{margin:4px 0;font-weight:600;font-size:.9rem}
+.result{font-family:Charter,Georgia,serif;font-size:1.3rem;font-weight:600;margin:4px 0}
+
+.stepbox{background:var(--panel);border-radius:14px;padding:12px}
+.nav2{display:flex;gap:8px;margin-top:8px}
+.nav2 button{font:inherit;padding:8px 14px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.nav2 button:disabled{opacity:.4;cursor:default}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 21 of 22</p>
+  <h1>Vestibular disorders</h1>
+  <p class="sub">History by timing and triggers, the bedside vestibular exam, BPPV and its maneuvers, and central vs peripheral disorders. Builds on Modules 2, 9 and 10. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="tt" aria-selected="true">Timing and triggers</button>
+    <button role="tab" data-tab="bppv" aria-selected="false">BPPV lab</button>
+    <button role="tab" data-tab="exam" aria-selected="false">Bedside exam</button>
+    <button role="tab" data-tab="dis" aria-selected="false">Disorders</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and sources</button>
+  </nav>
+
+  <section class="tab on" id="tab-tt">
+    <h2>Sort dizziness by timing and triggers</h2>
+    <p class="sub">The quality of dizziness (spinning vs lightheaded) is unreliable; timing and triggers are what localize. Pick a pattern.</p>
+    <div class="chips" id="ttChips"></div>
+    <div class="card accent" id="ttCard"></div>
+  </section>
+
+  <section class="tab" id="tab-bppv">
+    <h2>Right posterior canal BPPV: Dix-Hallpike and Epley</h2>
+    <p class="sub">Step through the maneuver. The left panel shows the patient's position; the right panel shows the otoconia (dot) moving through the right posterior canal toward the utricle.</p>
+    <div class="stepbox">
+      <svg id="ep" viewBox="0 0 330 170" role="img" aria-label="Epley maneuver schematic"></svg>
+      <div class="card accent" id="epCard" style="margin-top:6px"></div>
+      <div class="nav2"><button id="prev">Back</button><button id="next">Next step</button></div>
+    </div>
+    <div class="card"><dl><dt>Horizontal canal BPPV</dt><dd>Tested with the supine roll test. Geotropic nystagmus (beating toward the ground) on both sides suggests canalithiasis, with the affected ear on the side of stronger nystagmus. Apogeotropic nystagmus suggests cupulolithiasis or debris near the cupula, with the affected ear on the side of weaker nystagmus. Treat with a barbecue roll or Gufoni maneuver.</dd>
+    <dt>When it isn't BPPV</dt><dd>Positional nystagmus without latency, that doesn't fatigue, is purely vertical (downbeat) or doesn't match a canal pattern suggests central positional nystagmus: image the posterior fossa.</dd></dl></div>
+  </section>
+
+  <section class="tab" id="tab-exam">
+    <h2>Bedside vestibular exam</h2>
+    <div class="chips" id="exChips"></div>
+    <div class="card accent" id="exCard"></div>
+  </section>
+
+  <section class="tab" id="tab-dis">
+    <h2>Peripheral, central and functional disorders</h2>
+    <div class="chips" id="disChips"></div>
+    <div class="card accent" id="disCard"></div>
+  </section>
+
+  <section class="tab" id="tab-cases"><h2>Case vignettes</h2><p class="sub">Work each question before revealing the answer.</p><div id="caseList"></div></section>
+  <section class="tab" id="tab-pearls"><h2>Clinical pearls</h2><div id="pearlList"></div></section>
+  <section class="tab" id="tab-quiz"><h2>Self-quiz</h2><p class="sub">Ten questions. Tap an answer to see the explanation.</p><div id="quizList"></div><p class="score" id="score" aria-live="polite"></p><button class="reveal" id="resetQuiz">Reset quiz</button></section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Demonstrate history and exam skills</label>
+      <label><input type="checkbox"> Recognize central vs peripheral causes</label>
+      <label><input type="checkbox"> Comanage in multidisciplinary teams</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="src">
+      <li><b>Vestibular migraine: at least 5 episodes of moderate or severe vestibular symptoms lasting 5 minutes to 72 hours; current or past migraine; migraine features with at least 50% of episodes; not better explained otherwise:</b> Lempert T, Olesen J, Furman J, et al. Vestibular migraine: diagnostic criteria (update). <i>J Vestib Res.</i> 2022;32(1):1-6. doi:10.3233/VES-201644.</li>
+      <li><b>HINTS performance in acute vestibular syndrome:</b> Kattah JC, Talkad AV, Wang DZ, Hsieh YH, Newman-Toker DE. <i>Stroke.</i> 2009;40(11):3504-3510.</li>
+      <li><b>Definite Ménière disease: two or more spontaneous vertigo episodes of 20 minutes to 12 hours, audiometric low- to medium-frequency sensorineural hearing loss in the affected ear, fluctuating aural symptoms, not better explained (probable: 20 minutes to 24 hours without audiometric proof):</b> Lopez-Escamez JA, Carey J, Chung WH, et al. Diagnostic criteria for Menière's disease. <i>J Vestib Res.</i> 2015;25(1):1-7. doi:10.3233/VES-150549.</li>
+      <li><b>PPPD: dizziness, unsteadiness or non-spinning vertigo on most days for 3 months or more, worse with upright posture, movement and complex visual stimuli; a chronic functional vestibular disorder, not structural or psychiatric:</b> Staab JP, Eckhardt-Henn A, Horii A, et al. Diagnostic criteria for persistent postural-perceptual dizziness (PPPD). <i>J Vestib Res.</i> 2017;27(4):191-208. doi:10.3233/VES-170622.</li>
+      <li><b>Timing-and-triggers approach:</b> based on the TiTrATE framework described by Newman-Toker and Edlow.</li>
+      <li>Maneuver diagrams are schematic. Other content reflects standard teaching.</li>
+    </ul></div>
+    <h3>Core reading (from the program curriculum)</h3>
+    <div class="card"><ul class="refs">
+      <li>Gold D. <i>Neuro-Ophthalmology and Neuro-Otology: A Case-Based Guide for Clinicians and Scientists.</i> Springer Nature; 2022.</li>
+      <li>Newman-Toker DE. Neuro-vestibular examination. NANOS Neuro-Ophthalmology Virtual Education Library; 2006 (nanosweb.org).</li>
+      <li>Video: HINTS exam (curriculum link).</li>
+      <li>American Academy of Ophthalmology. <i>Basic and Clinical Science Course, Section 5: Neuro-Ophthalmology.</i> AAO; 2025.</li>
+    </ul></div>
+  </section>
+
+  <p class="foot">Teaching tool; maneuvers should be learned with supervised practice. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick,init=0){host.innerHTML="";items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});if(init!==null)host.children[init].click();}
+
+/* ---------- timing and triggers ---------- */
+const TT=[
+ {n:"Acute continuous (days)",d:"Acute vestibular syndrome: continuous vertigo with nausea, nystagmus and gait instability for a day or more.",x:"Peripheral: vestibular neuritis, labyrinthitis (with hearing loss). Central: posterior circulation stroke, MS, cerebellar hemorrhage.",e:"HINTS (plus new hearing loss). A normal head impulse, direction-changing nystagmus or skew suggests stroke; early MRI can miss small strokes.",p:"Severe truncal ataxia (can't sit or walk unaided) favors a central cause even if other signs are subtle."},
+ {n:"Episodic, triggered (seconds to a minute)",d:"Brief spells provoked by a specific trigger: lying down, rolling over, looking up, standing up, loud sound or pressure.",x:"BPPV (head position), orthostatic hypotension (standing), superior canal dehiscence (sound or pressure), central positional nystagmus.",e:"Dix-Hallpike and supine roll; orthostatic vitals; Valsalva and sound testing for dehiscence.",p:"'Trigger' differs from 'exacerbation': all vertigo worsens with head movement, but BPPV is provoked by a change in position."},
+ {n:"Episodic, spontaneous (minutes to hours)",d:"Unprovoked attacks that come and go.",x:"Vestibular migraine (5 minutes to 72 hours), Ménière disease (20 minutes to 12 hours with fluctuating hearing loss, tinnitus, fullness), vertebrobasilar TIA (minutes), panic attacks.",e:"Exam often normal between attacks; audiogram; vascular imaging if vascular risk factors or brainstem symptoms.",p:"New spontaneous episodic vertigo in an older vascular patient can be TIA heralding basilar stroke."},
+ {n:"Chronic (months)",d:"Persistent dizziness or unsteadiness on most days.",x:"Persistent postural-perceptual dizziness, bilateral vestibulopathy, cerebellar degeneration, medication effects, poorly compensated unilateral loss.",e:"Head impulse both sides (bilateral loss), dynamic visual acuity, cerebellar exam, medication review.",p:"Oscillopsia when walking with bilateral abnormal head impulses: bilateral vestibulopathy (ask about gentamicin)."}
+];
+chips(document.getElementById("ttChips"),TT.map(x=>x.n),i=>{const x=TT[i];document.getElementById("ttCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Pattern</dt><dd>${x.d}</dd><dt>Differential</dt><dd>${x.x}</dd><dt>Targeted exam</dt><dd>${x.e}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- Epley ---------- */
+// body: angle of body (0 = sitting upright, 90 = supine); head yaw (deg, + = right); hang: head extension
+const EP=[
+ {t:"Start: sitting",b:"Sit the patient on the table so the head will hang off the end when lying back. Explain that vertigo will come and that it's expected.",body:"sit",yaw:0,dot:200},
+ {t:"1. Turn the head 45 degrees to the right",b:"This aligns the right posterior canal with the plane of movement.",body:"sit",yaw:45,dot:200},
+ {t:"2. Lie back quickly, head hanging (Dix-Hallpike)",b:"Head about 20 to 30 degrees below horizontal, still turned right. In right posterior canal BPPV, after a few seconds of latency, torsional upbeating nystagmus appears (upper poles beating toward the right, lowermost ear) and fades within a minute. Hold until it stops, usually 30 to 60 seconds.",body:"hang",yaw:45,dot:250},
+ {t:"3. Turn the head 90 degrees to the left",b:"Keep the head hanging while turning it to 45 degrees left. Hold 30 to 60 seconds. Debris moves further around the canal.",body:"hang",yaw:-45,dot:310},
+ {t:"4. Roll onto the left side, nose down",b:"Roll the body onto the left shoulder and turn the head so the nose points 45 degrees toward the floor. Hold 30 to 60 seconds. Same-direction nystagmus here is a good sign that debris is moving correctly.",body:"side",yaw:-135,dot:20},
+ {t:"5. Sit up",b:"Bring the patient up to sitting with the chin slightly down. Debris should now be in the utricle. Recheck with Dix-Hallpike at the same or a later visit; repeat if needed.",body:"sit",yaw:0,dot:60}
+];
+let ei=0;
+function drawEp(){
+  const S=EP[ei]; let s=`<rect x="0" y="0" width="330" height="170" rx="12" fill="var(--bg)"/>`;
+  // patient panel
+  const cx=90, cy=90;
+  if(S.body==="sit"){ s+=`<line x1="${cx}" y1="${cy}" x2="${cx}" y2="${cy+55}" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/><line x1="${cx-30}" y1="${cy+60}" x2="${cx+40}" y2="${cy+60}" stroke="var(--stemline)" stroke-width="4"/>`;}
+  if(S.body==="hang"){ s+=`<line x1="${cx-10}" y1="${cy+20}" x2="${cx+70}" y2="${cy+20}" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/><line x1="${cx-5}" y1="${cy+30}" x2="${cx+80}" y2="${cy+30}" stroke="var(--stemline)" stroke-width="4"/>`;}
+  if(S.body==="side"){ s+=`<line x1="${cx-10}" y1="${cy+20}" x2="${cx+70}" y2="${cy+20}" stroke="var(--ink)" stroke-width="10" stroke-linecap="round" opacity=".6"/><line x1="${cx-5}" y1="${cy+32}" x2="${cx+80}" y2="${cy+32}" stroke="var(--stemline)" stroke-width="4"/>`;}
+  const hx = S.body==="sit"?cx:cx-28, hy = S.body==="sit"?cy-18:cy+(S.body==="hang"?30:20);
+  s+=`<circle cx="${hx}" cy="${hy}" r="16" fill="#EBD5C2" stroke="var(--stemline)"/>`;
+  // nose direction indicator (top-down yaw arrow)
+  const a=(S.yaw)*Math.PI/180;
+  s+=`<line x1="${hx}" y1="${hy}" x2="${hx+Math.sin(a)*22}" y2="${hy-Math.cos(a)*22}" stroke="var(--hot)" stroke-width="3" stroke-linecap="round"/>`;
+  s+=`<text x="${cx}" y="160" class="lvl" text-anchor="middle">head: ${S.yaw===0?"straight":Math.abs(S.yaw)+"° "+(S.yaw>0?"right":"left")}${S.body==="hang"?", hanging":S.body==="side"?", on left side":""}</text>`;
+  // canal panel
+  const kx=250, ky=78, r=45;
+  s+=`<circle cx="${kx}" cy="${ky}" r="${r}" fill="none" stroke="var(--inter)" stroke-width="10" opacity=".35"/>
+  <ellipse cx="${kx-45}" cy="${ky+40}" rx="16" ry="12" fill="var(--stem)" stroke="var(--stemline)"/><text x="${kx-45}" y="${ky+64}" class="lvl" text-anchor="middle">utricle</text>
+  <text x="${kx}" y="${ky-52}" class="lvl" text-anchor="middle">right posterior canal</text>`;
+  const da=S.dot*Math.PI/180;
+  const dx = ei===EP.length-1 ? kx-45 : kx+r*Math.cos(da), dy = ei===EP.length-1 ? ky+40 : ky+r*Math.sin(da);
+  s+=`<circle cx="${dx}" cy="${dy}" r="7" fill="var(--hot)"/>`;
+  document.getElementById("ep").innerHTML=s;
+  document.getElementById("epCard").innerHTML=`<h3 style="margin-top:0">${S.t}</h3><p>${S.b}</p>`;
+  document.getElementById("prev").disabled=ei===0; document.getElementById("next").disabled=ei===EP.length-1;
+}
+document.getElementById("prev").addEventListener("click",()=>{ei=Math.max(0,ei-1);drawEp()});
+document.getElementById("next").addEventListener("click",()=>{ei=Math.min(EP.length-1,ei+1);drawEp()});
+drawEp();
+
+/* ---------- exam ---------- */
+const EX=[
+ {n:"Spontaneous and gaze-evoked nystagmus",h:"Look in primary and eccentric gaze with and without fixation (penlight-cover test, Frenzel lenses or video goggles).",m:"Peripheral nystagmus is unidirectional, horizontal-torsional and grows when fixation is removed. Direction-changing, purely vertical or purely torsional nystagmus is central (Module 10)."},
+ {n:"Head impulse test",h:"Patient fixates your nose; make small, fast, unpredictable head turns about 10 to 20 degrees.",m:"A corrective (catch-up) saccade after turning toward one side means that side's horizontal canal or nerve is weak. In acute vestibular syndrome, a normal head impulse is the worrying finding."},
+ {n:"Test of skew",h:"Alternate cover test in primary gaze looking for a vertical refixation.",m:"Skew in acute vertigo is a central sign."},
+ {n:"Dix-Hallpike",h:"Head turned 45 degrees, lie back with head hanging; watch for latency, torsional upbeating nystagmus and fatigue.",m:"Diagnoses posterior canal BPPV; the lower ear is the affected one."},
+ {n:"Supine roll test",h:"Patient supine with head flexed about 30 degrees; turn the head quickly to each side.",m:"Horizontal canal BPPV: geotropic or apogeotropic horizontal nystagmus."},
+ {n:"Dynamic visual acuity",h:"Measure acuity while you oscillate the head about 2 Hz.",m:"A drop of several lines suggests vestibular hypofunction (often bilateral)."},
+ {n:"VOR suppression",h:"Patient fixates a target moving with the head (thumbs while rotating in a chair).",m:"Breakthrough nystagmus means impaired cancellation, a cerebellar sign."},
+ {n:"Romberg and gait",h:"Feet together, eyes open then closed; tandem gait.",m:"Romberg tests proprioception and vestibular function; severe truncal ataxia suggests a central cause."},
+ {n:"Hearing, Valsalva and sound",h:"Finger rub, Weber and Rinne; Valsalva against a closed glottis or pinched nose; loud tone.",m:"Sound- or pressure-induced vertigo and vertical-torsional nystagmus suggest superior canal dehiscence; new hearing loss with vertigo may be AICA stroke."}
+];
+chips(document.getElementById("exChips"),EX.map(x=>x.n),i=>{const x=EX[i];document.getElementById("exCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>How</dt><dd>${x.h}</dd><dt>Meaning</dt><dd>${x.m}</dd></dl>`;});
+
+/* ---------- disorders ---------- */
+const DIS=[
+ {n:"BPPV",f:"Brief positional vertigo; posterior canal most common.",w:"Dix-Hallpike, supine roll.",p:"Treat with repositioning (Epley); vestibular suppressants don't fix it."},
+ {n:"Vestibular neuritis",f:"Acute continuous vertigo for days, unidirectional horizontal-torsional nystagmus beating away from the lesion, abnormal head impulse toward the lesion, no hearing loss.",w:"HINTS to exclude stroke.",p:"Short course of steroids may help early; limit vestibular suppressants and start vestibular rehabilitation."},
+ {n:"Labyrinthitis",f:"Vestibular neuritis plus hearing loss.",w:"Audiogram; consider AICA stroke, which can cause both.",p:"New hearing loss with acute vertigo is 'HINTS plus': treat as possible stroke."},
+ {n:"Ménière disease",f:"Definite disease: two or more spontaneous attacks of 20 minutes to 12 hours, audiometrically documented low- to medium-frequency hearing loss in the affected ear, and fluctuating hearing, tinnitus or fullness.",w:"Audiogram during or after attacks; MRI to exclude schwannoma.",p:"Salt restriction and diuretics are common first steps; overlaps with vestibular migraine."},
+ {n:"Superior canal dehiscence",f:"Vertigo and oscillopsia with loud sounds (Tullio) or pressure, autophony, hearing own eye movements; vertical-torsional nystagmus.",w:"High-resolution temporal bone CT; VEMP testing.",p:"Sound-induced eye movements in the plane of the superior canal are characteristic."},
+ {n:"Bilateral vestibulopathy",f:"Oscillopsia when walking, unsteadiness worse in the dark; abnormal head impulses on both sides.",w:"Dynamic visual acuity; ask about aminoglycosides; check for cerebellar signs (CANVAS).",p:"Gentamicin can destroy vestibular function without hearing loss."},
+ {n:"Vestibular schwannoma",f:"Slowly progressive unilateral hearing loss and tinnitus; vertigo is uncommon because of compensation; large tumors cause CN V and VII signs and hydrocephalus.",w:"MRI with contrast of the internal auditory canals.",p:"Asymmetric hearing loss deserves an MRI; bilateral schwannomas mean NF2."},
+ {n:"Posterior circulation stroke",f:"Acute vertigo with central HINTS signs, ataxia, dysarthria, diplopia, crossed sensory signs; may be isolated vertigo.",w:"MRI with DWI (repeat if early and negative) and vascular imaging.",p:"Isolated vertigo can be a stroke; don't rely on the absence of other neurologic signs."},
+ {n:"Vestibular migraine",f:"Episodes of 5 minutes to 72 hours with migraine features in at least half; between attacks, exam often normal or shows mild central positional nystagmus.",w:"Clinical criteria; exclude other causes.",p:"Treat with migraine preventives and lifestyle measures; vestibular rehabilitation helps."},
+ {n:"Persistent postural-perceptual dizziness",f:"Chronic non-spinning dizziness and unsteadiness for 3 or more months, worse upright, with motion and with complex visual scenes; often follows an acute vestibular event.",w:"Diagnosis by positive criteria, not exclusion alone.",p:"Classified by the Bárány Society as a chronic functional vestibular disorder, not a structural or psychiatric one. Vestibular rehabilitation, SSRIs or SNRIs and cognitive behavioral therapy help."}
+];
+chips(document.getElementById("disChips"),DIS.map(x=>x.n),i=>{const x=DIS[i];document.getElementById("disCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Features</dt><dd>${x.f}</dd><dt>Workup</dt><dd>${x.w}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: Spinning when rolling over",stem:"A 67-year-old woman has 2 weeks of brief spinning, under a minute, when she rolls to the right in bed or looks up. Right Dix-Hallpike: after 3 seconds, torsional upbeating nystagmus that fades in 20 seconds.",
+  steps:[
+   {q:"Diagnosis?",a:"Right posterior canal BPPV."},
+   {q:"Treatment?",a:"Epley maneuver; recheck and repeat if needed. Vestibular suppressants aren't needed."},
+   {q:"What would make you image?",a:"Nystagmus without latency or fatigue, purely downbeat or atypical direction, or other neurologic signs: central positional nystagmus."}
+  ]},
+ {t:"Case 2: Continuous vertigo, normal head impulse",stem:"A 71-year-old man with atrial fibrillation has 14 hours of continuous vertigo and vomiting. Left-beating nystagmus that becomes right-beating on right gaze; head impulse normal both ways; small skew.",
+  steps:[
+   {q:"Central or peripheral?",a:"Central: all three HINTS findings are dangerous."},
+   {q:"Next step?",a:"Stroke pathway with MRI DWI and vascular imaging; a negative early MRI doesn't exclude stroke."},
+   {q:"Why does the normal head impulse matter?",a:"A peripheral lesion should impair the VOR; a normal head impulse in acute vestibular syndrome points away from the labyrinth."}
+  ]},
+ {t:"Case 3: Dizzy spells with headaches",stem:"A 34-year-old woman with lifelong migraine has had 8 episodes of vertigo lasting 1 to 6 hours over a year, most with photophobia and headache. Hearing is normal; exam between episodes is normal.",
+  steps:[
+   {q:"Does she meet vestibular migraine criteria?",a:"Yes: at least 5 episodes of 5 minutes to 72 hours, migraine history, migraine features with at least half of episodes, and no better explanation."},
+   {q:"What should you check to exclude Ménière disease?",a:"An audiogram, ideally around an attack, for fluctuating low-frequency hearing loss."},
+   {q:"Treatment approach?",a:"Migraine lifestyle measures and preventives, vestibular rehabilitation, and limiting suppressants."}
+  ]},
+ {t:"Case 4: The world bounces when walking",stem:"A 58-year-old man treated with IV gentamicin for endocarditis now has oscillopsia when walking and is unsteady in the dark. Hearing is normal. Corrective saccades with head impulses in both directions.",
+  steps:[
+   {q:"Diagnosis?",a:"Bilateral vestibulopathy from gentamicin toxicity."},
+   {q:"Why is hearing normal?",a:"Gentamicin is preferentially vestibulotoxic."},
+   {q:"Management?",a:"Vestibular rehabilitation (substitution strategies), fall prevention, avoiding further ototoxic drugs."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{const d=document.createElement("div");d.className="card";d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map(s=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");caseList.appendChild(d);});
+caseList.addEventListener("click",e=>{if(!e.target.classList.contains("reveal"))return;const a=e.target.nextElementSibling,on=!a.classList.contains("on");a.classList.toggle("on",on);e.target.setAttribute("aria-expanded",String(on));e.target.textContent=on?"Hide answer":"Reveal answer";});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "Ask about timing and triggers, not whether it's spinning or lightheaded.",
+ "HINTS applies only to acute continuous vertigo with nystagmus; add hearing to catch AICA stroke.",
+ "A normal head impulse in acute vestibular syndrome is the worrying finding.",
+ "Posterior canal BPPV: latency, torsional upbeating nystagmus toward the lower ear, fatigue within a minute.",
+ "Positional nystagmus without latency or fatigue, or purely downbeat: think central and image.",
+ "Remove fixation to see peripheral nystagmus; central nystagmus doesn't suppress much.",
+ "Vestibular migraine episodes last 5 minutes to 72 hours and often lack headache in some attacks.",
+ "Fluctuating low-frequency hearing loss with spontaneous attacks suggests Ménière disease.",
+ "Oscillopsia when walking with bilateral abnormal head impulses: bilateral vestibulopathy (ask about gentamicin).",
+ "Limit vestibular suppressants to the first days; they slow central compensation."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"Which history feature localizes dizziness best?",o:["Spinning vs lightheaded","Timing and triggers","Severity","Nausea"],a:1,e:"Quality descriptors are unreliable."},
+ {q:"Right posterior canal BPPV on Dix-Hallpike produces:",o:["Downbeat nystagmus without latency","Torsional upbeating nystagmus with latency and fatigue","Pure horizontal nystagmus","No nystagmus"],a:1,e:"Upper poles beat toward the lower (right) ear."},
+ {q:"Geotropic horizontal nystagmus on both sides during the supine roll test suggests:",o:["Posterior canal BPPV","Horizontal canal canalithiasis","Superior canal dehiscence","Vestibular neuritis"],a:1,e:"The affected side gives the stronger nystagmus."},
+ {q:"Vestibular migraine episodes last:",o:["Seconds","5 minutes to 72 hours","Over a week","Continuously"],a:1,e:"Bárány and IHS criteria."},
+ {q:"Sound-induced vertigo with autophony suggests:",o:["Ménière","Superior canal dehiscence","BPPV","PPPD"],a:1,e:"Confirm with temporal bone CT and VEMPs."},
+ {q:"Gentamicin typically causes:",o:["Hearing loss first","Bilateral vestibular loss often with preserved hearing","Unilateral schwannoma","BPPV"],a:1,e:"Preferentially vestibulotoxic."},
+ {q:"In acute vestibular syndrome, which finding is reassuring for a peripheral cause?",o:["Normal head impulse","Corrective saccade on head impulse to one side","Direction-changing nystagmus","Skew"],a:1,e:"An abnormal head impulse localizes to the labyrinth or nerve."},
+ {q:"Chronic non-spinning dizziness worse with complex visual scenes after a vestibular event suggests:",o:["Ménière","PPPD","BPPV","Neuritis"],a:1,e:"Treat with rehabilitation, SSRIs or SNRIs and CBT."},
+ {q:"Acute vertigo plus new unilateral hearing loss should raise concern for:",o:["BPPV","AICA stroke","Vestibular migraine","PPPD"],a:1,e:"'HINTS plus'."},
+ {q:"Breakthrough nystagmus during VOR suppression indicates:",o:["Peripheral loss","Cerebellar dysfunction","BPPV","Normal finding"],a:1,e:"Impaired VOR cancellation is cerebellar."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>

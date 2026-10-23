@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 11: Inflammation and orbital disease</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.cmp{display:grid;gap:6px}
+.cmprow{background:var(--panel);border-radius:12px;padding:8px 10px}
+.cmprow h4{margin:0 0 6px;font-size:.84rem;color:var(--muted);font-weight:600}
+.cmpcells{display:grid;gap:8px}
+.cmpcells div{font-size:.88rem;border-left:3px solid var(--stem);padding-left:7px}
+.cmpcells b{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.fundus{background:#000;border-radius:14px;padding:8px;display:flex;justify-content:center}
+.fundus svg{max-width:300px}
+
+.slider{width:100%;accent-color:var(--hot);margin:10px 0 2px}
+.gl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.ladder li{margin:8px 0}
+
+.vfwrap{background:var(--panel);border-radius:14px;padding:10px}
+.prog{font-size:.85rem;color:var(--muted);margin:4px 0 0}
+.next{font:inherit;margin-top:10px;padding:9px 14px;border-radius:10px;border:none;background:var(--ink);color:var(--bg);cursor:pointer}
+.brain svg .rg{cursor:pointer}
+.brain svg .rg:focus-visible{outline:none;stroke:var(--inter);stroke-width:3}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.read{display:flex;justify-content:space-around;font-size:.9rem;margin-top:4px}
+.read b{font-family:Charter,Georgia,serif;font-size:1.05rem}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.9rem;margin:6px 0}
+.toggle input{width:20px;height:20px;accent-color:var(--inter)}
+ol.algo li{margin:8px 0}
+
+.nine{background:var(--panel);border-radius:14px;padding:8px}
+.step3{margin:8px 0}
+.step3 p{margin:4px 0;font-weight:600;font-size:.9rem}
+.result{font-family:Charter,Georgia,serif;font-size:1.3rem;font-weight:600;margin:4px 0}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+.scorebox{display:flex;align-items:baseline;gap:10px;margin-top:8px}
+.scorebox b{font-family:Charter,Georgia,serif;font-size:2rem}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 11 of 22</p>
+  <h1>Inflammation and orbital disease</h1>
+  <p class="sub">Thyroid eye disease, orbital inflammation, demyelinating disease, inflammatory neuropathies, and systemic and ocular inflammatory disorders. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="orbit" aria-selected="true">Orbit sorter</button>
+    <button role="tab" data-tab="cas" aria-selected="false">TED activity</button>
+    <button role="tab" data-tab="demy" aria-selected="false">Demyelinating</button>
+    <button role="tab" data-tab="sys" aria-selected="false">Systemic and ocular</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and sources</button>
+  </nav>
+
+  <section class="tab on" id="tab-orbit">
+    <h2>Read the coronal orbit</h2>
+    <p class="sub">Pick a diagnosis to see which structures enlarge on a coronal CT or MRI behind the globe.</p>
+    <div class="chips" id="orbChips"></div>
+    <div class="pacs"><svg id="orbit" viewBox="0 0 320 175" role="img" aria-label="Schematic coronal orbits"></svg>
+      <p class="cap">Schematic coronal view. Radiology convention: the patient's right orbit is on your left. SR superior rectus, IR inferior rectus, MR medial rectus, LR lateral rectus, SO superior oblique, ON optic nerve, LG lacrimal gland, ION infraorbital nerve.</p></div>
+    <div class="card accent" id="orbCard"></div>
+  </section>
+
+  <section class="tab" id="tab-cas">
+    <h2>Clinical Activity Score</h2>
+    <p class="sub">Check each feature present. A score of 3 or more out of 7 indicates active thyroid eye disease.</p>
+    <div class="card check" id="casBox">
+      <label><input type="checkbox"> Spontaneous retrobulbar pain</label>
+      <label><input type="checkbox"> Pain with eye movement</label>
+      <label><input type="checkbox"> Eyelid redness</label>
+      <label><input type="checkbox"> Conjunctival redness</label>
+      <label><input type="checkbox"> Eyelid swelling</label>
+      <label><input type="checkbox"> Chemosis</label>
+      <label><input type="checkbox"> Inflamed caruncle or plica</label>
+    </div>
+    <div class="card"><div class="scorebox"><b id="casScore">0</b><span id="casText">of 7: inactive</span></div></div>
+    <div class="card accent">
+      <dl><dt>Activity vs severity</dt><dd>Activity (CAS) tells you whether inflammation is ongoing; severity (mild, moderate to severe, sight-threatening) tells you how much damage it is causing. Treatment depends on both.</dd>
+      <dt>Treatment framework</dt><dd>All patients: stop smoking, restore euthyroidism, lubricate. Moderate to severe active disease: IV glucocorticoids or teprotumumab are common first-line choices; other options include mycophenolate, tocilizumab, rituximab and orbital radiotherapy. Inactive disease: rehabilitative surgery in order: decompression, then strabismus, then lids.</dd>
+      <dt>Teprotumumab (OPTIC trial)</dt><dd>83% had a proptosis response of 2 mm or more at week 24 vs 10% with placebo. The FDA label warns of hearing impairment that may be permanent: test hearing before, during and after treatment. Hyperglycemia and inflammatory bowel disease flares are other warnings.</dd></dl>
+      <dl class="miss"><dt>Sight-threatening</dt><dd>Dysthyroid optic neuropathy (reduced acuity or color, RAPD, field loss, apical crowding) or corneal breakdown: IV methylprednisolone and urgent orbital decompression if no rapid response.</dd></dl>
+    </div>
+  </section>
+
+  <section class="tab" id="tab-demy">
+    <h2>Demyelinating and antibody-mediated CNS disease</h2>
+    <p class="sub">Pick one to see its eye features and workup. Module 4 has a side-by-side optic neuritis comparison.</p>
+    <div class="chips" id="demyChips"></div>
+    <div class="card accent" id="demyCard"></div>
+  </section>
+
+  <section class="tab" id="tab-sys">
+    <h2>Systemic, inflammatory neuropathy and ocular disorders</h2>
+    <div class="chips" id="sysChips"></div>
+    <div class="card accent" id="sysCard"></div>
+  </section>
+
+  <section class="tab" id="tab-cases"><h2>Case vignettes</h2><p class="sub">Work each question before revealing the answer.</p><div id="caseList"></div></section>
+  <section class="tab" id="tab-pearls"><h2>Clinical pearls</h2><div id="pearlList"></div></section>
+  <section class="tab" id="tab-quiz"><h2>Self-quiz</h2><p class="sub">Ten questions. Tap an answer to see the explanation.</p><div id="quizList"></div><p class="score" id="score" aria-live="polite"></p><button class="reveal" id="resetQuiz">Reset quiz</button></section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Differentiate orbital from neuro-inflammatory disease</label>
+      <label><input type="checkbox"> Order appropriate labs and imaging</label>
+      <label><input type="checkbox"> Initiate management and referrals</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="src">
+      <li><b>OPTIC: proptosis response of 2 mm or more at week 24 in 83% with teprotumumab vs 10% with placebo (83 patients):</b> Douglas RS, Kahaly GJ, Patel A, et al. Teprotumumab for the treatment of active thyroid eye disease. <i>N Engl J Med.</i> 2020;382(4):341-352. doi:10.1056/NEJMoa1910434.</li>
+      <li><b>Clinical Activity Score ranges 0 to 7; a score of 3 or more indicates active disease:</b> as defined in Smith TJ, Kahaly GJ, Ezra DG, et al. Teprotumumab for thyroid-associated ophthalmopathy. <i>N Engl J Med.</i> 2017;376(18):1748-1761.</li>
+      <li><b>Teprotumumab hearing warning:</b> US Food and Drug Administration. TEPEZZA prescribing information, revised July 2023 (accessdata.fda.gov): severe hearing impairment including hearing loss, in some cases permanent; assess hearing before, during and after treatment.</li>
+      <li><b>MOGAD and NMOSD criteria:</b> Banwell B, et al. <i>Lancet Neurol.</i> 2023;22(3):268-282. Wingerchuk DM, et al. <i>Neurology.</i> 2015;85(2):177-189.</li>
+      <li>Orbit diagrams are schematic. Other content reflects standard teaching in the core texts and curriculum readings.</li>
+    </ul></div>
+    <h3>Core reading (from the program curriculum)</h3>
+    <div class="card"><ul class="refs">
+      <li>Frohman EM, Frohman TC, Zee DS, McColl R, Galetta S. The neuro-ophthalmology of multiple sclerosis. <i>Lancet Neurol.</i> 2005;4(2):111-121.</li>
+      <li>Gospe SM 3rd, Chen JJ, Bhatti MT. NMOSD and MOGAD optic neuritis: a comprehensive review of diagnosis and treatment. <i>Eye (Lond).</i> 2021;35(3):753-768.</li>
+      <li>Dohlman JC, Cestari DM, Freitag SK. Orbital disease in neuro-ophthalmology. <i>Curr Opin Ophthalmol.</i> 2020;31(6):469-474.</li>
+      <li>Pakdaman MN, Sepahdari AR, Elkhamary SM. Orbital inflammatory disease: pictorial review and differential diagnosis. <i>World J Radiol.</i> 2014;6(4):106-115.</li>
+      <li>Moledina M, Damato EM, Lee V. The changing landscape of thyroid eye disease. <i>Eye (Lond).</i> 2024;38(8):1425-1437.</li>
+    </ul></div>
+  </section>
+
+  <p class="foot">Schematic diagrams for teaching. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick,init=0){host.innerHTML="";items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});if(init!==null)host.children[init].click();}
+
+/* ---------- orbit sorter ---------- */
+// scale factors per side: R = patient's right (viewer left), L = patient's left
+const base={SR:1,IR:1,MR:1,LR:1,SO:1,ON:1,LG:1,ION:1,mass:0,fuzzy:[],apex:false};
+const ORB={
+ "Normal":{R:{},L:{},d:"Thin muscles, central optic nerve, no lacrimal or nerve enlargement.",x:"Baseline.",m:"Compare sides; subtle asymmetry matters."},
+ "Thyroid eye disease":{R:{IR:2.3,MR:2.1,SR:1.6,LR:1.25},L:{IR:2.1,MR:1.9,SR:1.5,LR:1.2},
+  d:"Bilateral, often asymmetric enlargement of the muscle bellies with tendon sparing, most often inferior rectus, then medial, superior and lateral ('I'm SLow'). Increased orbital fat in some.",
+  x:"Thyroid function and antibodies (TSH receptor antibodies or TSI). Can occur in euthyroid or hypothyroid patients.",
+  m:"Lid retraction plus restrictive strabismus in an adult is TED until proven otherwise."},
+ "TED with apex crowding":{R:{IR:2.7,MR:2.6,SR:1.9,LR:1.4,ON:.75,apex:true},L:{IR:2.2,MR:2.0,SR:1.5,LR:1.2},
+  d:"Massively enlarged muscles crowd the orbital apex and squeeze the optic nerve (right side here).",
+  x:"Acuity, color, RAPD, fields and OCT every visit; coronal CT or MRI to judge apical crowding.",
+  m:"Dysthyroid optic neuropathy: IV methylprednisolone and urgent decompression if not rapidly improving. Proptosis can be mild because tight muscles limit forward movement."},
+ "Orbital myositis":{R:{MR:2.0,fuzzy:["MR"]},L:{},
+  d:"Usually one muscle, here the right medial rectus, enlarged including its tendon, with fuzzy margins and surrounding fat stranding. Painful, especially on eye movement.",
+  x:"Rapid response to steroids supports the diagnosis; recurrence or atypical features need biopsy. Screen for IgG4 disease, sarcoid, GPA, and thyroid disease.",
+  m:"Tendon involvement and pain favor myositis over TED."},
+ "Dacryoadenitis":{R:{LG:2.1,fuzzy:["LG"]},L:{},
+  d:"Enlarged, inflamed lacrimal gland superotemporally with an S-shaped upper lid; tender.",
+  x:"Infection (viral, bacterial) vs idiopathic inflammation vs sarcoid, IgG4 disease, Sjögren syndrome, lymphoma. Biopsy if chronic or not steroid-responsive.",
+  m:"Painless lacrimal enlargement in an older adult: think lymphoma and biopsy."},
+ "IgG4-related disease":{R:{LG:1.8,ION:2.4,LR:1.6},L:{LG:1.7,ION:2.0,LR:1.4},
+  d:"Bilateral lacrimal enlargement, enlarged infraorbital nerves and lateral rectus involvement; often painless.",
+  x:"Serum IgG4 (can be normal), biopsy with IgG4-positive plasma cells and storiform fibrosis; look for pancreas, salivary glands, retroperitoneum.",
+  m:"Infraorbital nerve enlargement is a strong clue."},
+ "Orbital lymphoma":{R:{mass:1},L:{},
+  d:"Homogeneous mass molding around the globe and orbital structures without bone destruction, often superolateral or lacrimal; usually painless. May show a salmon patch in the conjunctiva.",
+  x:"Biopsy with flow cytometry; systemic staging.",
+  m:"Steroids can shrink lymphoma and mask the diagnosis; biopsy before treating when lymphoma is possible."},
+ "Sarcoidosis":{R:{LG:1.7,ON:1.4},L:{LG:1.6},
+  d:"Lacrimal gland enlargement; optic nerve or sheath thickening and enhancement; may also involve muscles or cause granulomatous uveitis.",
+  x:"Chest CT for hilar adenopathy, biopsy of the most accessible lesion; ACE and lysozyme are supportive but insensitive.",
+  m:"Optic neuropathy with uveitis or lacrimal enlargement: think sarcoid."}
+};
+function orbitSVG(cx,cy,m,s){
+  const S={...base,...s}, g=v=>`rgb(${v},${v},${v})`;
+  const mus=(x,y,rx,ry,k,key)=>`<ellipse cx="${x}" cy="${y}" rx="${rx*(ry<rx?k:1)}" ry="${ry*(ry<rx?1:1)*(ry>=rx?k:1)}" fill="${g(120)}" ${S.fuzzy&&S.fuzzy.includes(key)?'stroke="#BFBFBF" stroke-width="3" stroke-dasharray="2 2"':''}/>`;
+  let o=`<circle cx="${cx}" cy="${cy}" r="62" fill="${g(25)}" stroke="#E8E8E8" stroke-width="5"/>`;
+  o+=mus(cx,cy-38,17,5.5*S.SR,1,"SR").replace(`ry="${5.5*S.SR}"`,`ry="${5.5*S.SR}"`);
+  o+=`<ellipse cx="${cx}" cy="${cy-38}" rx="17" ry="${5.5*S.SR}" fill="${g(120)}"/>`;
+  o+=`<ellipse cx="${cx}" cy="${cy+38}" rx="17" ry="${5.5*S.IR}" fill="${g(120)}"/>`;
+  o+=`<ellipse cx="${cx+38*m}" cy="${cy}" rx="${5.5*S.MR}" ry="16" fill="${g(120)}" ${S.fuzzy.includes("MR")?'stroke="#D9D9D9" stroke-width="3" stroke-dasharray="2 2"':''}/>`;
+  o+=`<ellipse cx="${cx-38*m}" cy="${cy}" rx="${5.5*S.LR}" ry="16" fill="${g(120)}"/>`;
+  o+=`<ellipse cx="${cx+26*m}" cy="${cy-30}" rx="${4*S.SO}" ry="4" fill="${g(120)}"/>`;
+  o+=`<ellipse cx="${cx-36*m}" cy="${cy-42}" rx="${9*S.LG}" ry="${5*S.LG}" fill="${g(140)}" ${S.fuzzy.includes("LG")?'stroke="#D9D9D9" stroke-width="3" stroke-dasharray="2 2"':''}/>`;
+  o+=`<circle cx="${cx}" cy="${cy}" r="${7*S.ON}" fill="${g(150)}" stroke="${g(200)}" stroke-width="1.5"/>`;
+  o=o.replace(mus(cx,cy-38,17,5.5*S.SR,1,"SR"),"");
+  o+=`<circle cx="${cx}" cy="${cy+70}" r="${2.2*S.ION}" fill="${g(150)}"/>`;
+  if(S.mass) o+=`<path d="M${cx-30*m},${cy-56} C${cx-56*m},${cy-48} ${cx-58*m},${cy-14} ${cx-44*m},${cy+4} C${cx-30*m},${cy-14} ${cx-18*m},${cy-38} ${cx-30*m},${cy-56} Z" fill="${g(135)}"/>`;
+  if(S.apex) o+=`<circle cx="${cx}" cy="${cy}" r="13" fill="none" stroke="#FF6B6B" stroke-width="1.5" stroke-dasharray="3 2"/>`;
+  return o;
+}
+chips(document.getElementById("orbChips"),Object.keys(ORB),i=>{const k=Object.keys(ORB)[i],O=ORB[k];
+  const sv=document.getElementById("orbit");
+  sv.innerHTML=orbitSVG(85,82,1,O.R)+orbitSVG(235,82,-1,O.L)+`<text x="10" y="170">R</text><text x="302" y="170">L</text><text x="85" y="14" text-anchor="middle">SR</text><text x="85" y="134" text-anchor="middle">IR</text><text x="137" y="86">MR</text><text x="1" y="86">LR</text>`;
+  document.getElementById("orbCard").innerHTML=`<h3 style="margin-top:0">${k}</h3><dl><dt>Imaging pattern</dt><dd>${O.d}</dd><dt>Workup</dt><dd>${O.x}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${O.m}</dd></dl>`;});
+
+/* ---------- CAS ---------- */
+function cas(){const n=[...document.querySelectorAll("#casBox input")].filter(i=>i.checked).length;
+  document.getElementById("casScore").textContent=n;
+  document.getElementById("casText").textContent=`of 7: ${n>=3?"active disease":"inactive"}`;}
+document.querySelectorAll("#casBox input").forEach(i=>i.addEventListener("change",cas));
+
+/* ---------- demyelinating ---------- */
+const DEMY=[
+ {n:"Multiple sclerosis",e:"Typical optic neuritis (painful, unilateral, good recovery), INO (often bilateral), nystagmus (acquired pendular, gaze-evoked), skew, intermediate uveitis and retinal periphlebitis; OCT RNFL and GCL thinning track neurodegeneration.",w:"MRI brain and spine (McDonald criteria), CSF oligoclonal bands.",p:"Bilateral INO in a young adult is MS until proven otherwise."},
+ {n:"NMOSD (AQP4)",e:"Severe, often bilateral or chiasmal optic neuritis with poor recovery; area postrema syndrome (intractable hiccups or vomiting).",w:"AQP4-IgG by cell-based assay; MRI for long-segment optic nerve and longitudinally extensive cord lesions.",p:"Treat attacks aggressively (steroids, early plasma exchange); prevent relapses with approved targeted therapies. Some MS drugs worsen NMOSD."},
+ {n:"MOGAD",e:"Severe optic neuritis with marked disc swelling, often bilateral and recurrent, with good recovery; perineural sheath enhancement.",w:"MOG-IgG by cell-based assay in the right clinical context; titer and supporting features matter.",p:"Watch for relapse as steroids taper; consider a slow taper."},
+ {n:"ADEM",e:"Optic neuritis (often bilateral) as part of a monophasic encephalopathy with multifocal neurologic signs, usually in children after infection.",w:"MRI with large, poorly marginated lesions; test MOG-IgG (often positive).",p:"Encephalopathy is required; without it, think MS, MOGAD or NMOSD."},
+ {n:"Anti-GAD disease",e:"Nystagmus (downbeat, periodic alternating), saccadic intrusions and cerebellar ataxia; associated with stiff-person spectrum.",w:"High-titer serum (and CSF) GAD65 antibodies.",p:"Consider in cerebellar ocular motor syndromes with diabetes or other autoimmunity."}
+];
+chips(document.getElementById("demyChips"),DEMY.map(x=>x.n),i=>{const x=DEMY[i];document.getElementById("demyCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Eye features</dt><dd>${x.e}</dd><dt>Workup</dt><dd>${x.w}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- systemic ---------- */
+const SYS=[
+ {n:"Giant cell arteritis",e:"Arteritic AION, CRAO, cilioretinal artery occlusion, diplopia from ocular motor ischemia, transient vision loss.",w:"ESR, CRP, platelets; temporal artery biopsy or vascular ultrasound; treat immediately (see Module 4).",p:"Diplopia in an older adult can be GCA."},
+ {n:"Sarcoidosis",e:"Granulomatous uveitis, optic neuropathy, lacrimal and orbital disease, cranial neuropathies (especially VII), chiasmal and hypothalamic involvement.",w:"Chest CT, biopsy; ACE and lysozyme supportive only.",p:"Neurosarcoid often needs long-term steroid-sparing therapy."},
+ {n:"Systemic lupus erythematosus",e:"Retinal vasculitis, cotton wool spots, optic neuropathy, ocular motor palsies, venous sinus thrombosis with antiphospholipid antibodies.",w:"ANA, dsDNA, complement, antiphospholipid antibodies.",p:"Hydroxychloroquine screening belongs in Module 17; vasculitis is the threat here."},
+ {n:"Behçet disease",e:"Occlusive retinal vasculitis, panuveitis with hypopyon, papilledema from venous sinus thrombosis, neuro-Behçet.",w:"Clinical criteria (oral and genital ulcers, skin lesions, pathergy).",p:"Young adult with recurrent oral ulcers and papilledema: image for venous sinus thrombosis."},
+ {n:"Granulomatosis with polyangiitis",e:"Scleritis, peripheral ulcerative keratitis, orbital mass, dacryoadenitis, nasolacrimal obstruction.",w:"ANCA (usually PR3), sinus and chest imaging, urinalysis.",p:"Orbital inflammation plus sinus disease or saddle nose: check ANCA."},
+ {n:"IgG4-related disease",e:"Lacrimal enlargement, infraorbital nerve enlargement, extraocular muscle and orbital involvement, pachymeningitis.",w:"Serum IgG4 and biopsy.",p:"Responds to steroids and rituximab; relapses are common."},
+ {n:"Tolosa-Hunt syndrome",e:"Painful ophthalmoplegia from granulomatous inflammation of the cavernous sinus or orbital apex.",w:"MRI with contrast; diagnosis of exclusion (lymphoma, infection, metastasis, IgG4).",p:"Dramatic steroid response supports it, but tumors can also respond; follow-up imaging is essential."},
+ {n:"Guillain-Barré and Miller Fisher",e:"Miller Fisher: ophthalmoplegia, ataxia and areflexia, sometimes ptosis and pupil involvement; GBS can cause facial and ocular motor palsies.",w:"Anti-GQ1b antibodies (most Miller Fisher patients), CSF albuminocytologic dissociation, nerve conduction studies.",p:"Monitor breathing and swallowing; treat with IVIG or plasma exchange when indicated."},
+ {n:"Uveitis and retinal vasculitis",e:"Intermediate uveitis and periphlebitis with MS; granulomatous uveitis with sarcoid; occlusive vasculitis with Behçet.",w:"Tailored uveitis workup by pattern; MRI if neurologic features.",p:"Intermediate uveitis in a young adult: ask about neurologic symptoms."},
+ {n:"White dot syndromes",e:"MEWDS and AZOOR can mimic optic neuropathy: enlarged blind spot, photopsias, mild RAPD, normal-looking fundus.",w:"Multimodal imaging (OCT ellipsoid zone loss, fundus autofluorescence, ICG), ERG.",p:"An enlarged blind spot with a normal disc should prompt retinal imaging before neuroimaging."},
+ {n:"Vogt-Koyanagi-Harada",e:"Bilateral granulomatous panuveitis with serous retinal detachments and disc hyperemia; meningismus, tinnitus, poliosis, vitiligo.",w:"OCT, fluorescein angiography (pinpoint leaks), lumbar puncture (pleocytosis).",p:"Bilateral disc swelling with serous detachments isn't papilledema."},
+ {n:"Autoimmune and paraneoplastic retinopathy",e:"CAR: rapid progressive vision loss, photopsias, ring scotomas, abnormal ERG with near-normal fundus. MAR: night blindness and shimmering with melanoma.",w:"Full-field ERG, OCT, antiretinal antibodies (supportive), cancer search.",p:"Unexplained bilateral vision loss with a normal exam and abnormal ERG: look for cancer."}
+];
+chips(document.getElementById("sysChips"),SYS.map(x=>x.n),i=>{const x=SYS[i];document.getElementById("sysCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Neuro-ophthalmic features</dt><dd>${x.e}</dd><dt>Workup</dt><dd>${x.w}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: Bulging eyes and fading colors",stem:"A 58-year-old woman who smokes has Graves disease treated with radioactive iodine 4 months ago. Bilateral proptosis, lid retraction, limited upgaze. Right acuity has dropped to 20/50 with reduced color and a right RAPD.",
+  steps:[
+   {q:"What's threatening her vision?",a:"Dysthyroid optic neuropathy from apical crowding of enlarged muscles."},
+   {q:"Immediate management?",a:"IV methylprednisolone, coronal CT or MRI to confirm apical crowding, and urgent orbital decompression if vision doesn't improve quickly."},
+   {q:"What risk factors may have contributed?",a:"Smoking and radioactive iodine therapy, both associated with worsening TED; steroid prophylaxis is often given with radioactive iodine in at-risk patients."}
+  ]},
+ {t:"Case 2: Painful eye movements on one side",stem:"A 34-year-old man has 1 week of severe left eye pain worse looking right, mild proptosis and conjunctival injection over the medial rectus. MRI shows an enlarged left medial rectus including its tendon, with fat stranding.",
+  steps:[
+   {q:"Most likely diagnosis?",a:"Idiopathic orbital myositis."},
+   {q:"What distinguishes it from TED?",a:"Pain, a single muscle, tendon involvement and fuzzy margins with fat stranding; TED spares tendons and is usually painless and bilateral."},
+   {q:"Treatment and follow-up?",a:"Oral steroids with a taper (rapid response expected); recurrence or poor response prompts biopsy and screening for IgG4 disease, sarcoid, GPA and lymphoma."}
+  ]},
+ {t:"Case 3: Hiccups, then blindness",stem:"A 41-year-old woman had 10 days of intractable hiccups and vomiting, and now has severe bilateral vision loss (count fingers) with pain on eye movement.",
+  steps:[
+   {q:"Which syndrome is suggested by the hiccups?",a:"Area postrema syndrome, a core feature of AQP4-positive NMOSD."},
+   {q:"Tests?",a:"AQP4-IgG by cell-based assay, MRI brain, orbits and spine (long-segment optic nerve and cord lesions), plus MOG-IgG."},
+   {q:"Treatment?",a:"High-dose IV steroids and early plasma exchange, then long-term relapse prevention; avoid MS drugs that can worsen NMOSD."}
+  ]},
+ {t:"Case 4: Double vision after a stomach bug",stem:"A 29-year-old man developed double vision, unsteady gait and numb feet a week after diarrheal illness. Bilateral ophthalmoparesis, ataxia, absent reflexes.",
+  steps:[
+   {q:"Diagnosis?",a:"Miller Fisher syndrome."},
+   {q:"Confirming test?",a:"Anti-GQ1b antibodies, positive in most patients; CSF may show high protein with normal cell count."},
+   {q:"What must you monitor?",a:"Progression to Guillain-Barré syndrome with respiratory or bulbar weakness; IVIG or plasma exchange if severe."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{const d=document.createElement("div");d.className="card";d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map(s=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");caseList.appendChild(d);});
+caseList.addEventListener("click",e=>{if(!e.target.classList.contains("reveal"))return;const a=e.target.nextElementSibling,on=!a.classList.contains("on");a.classList.toggle("on",on);e.target.setAttribute("aria-expanded",String(on));e.target.textContent=on?"Hide answer":"Reveal answer";});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "TED enlarges muscle bellies and spares tendons; myositis involves the tendon and hurts.",
+ "Inferior rectus, then medial, superior, lateral: 'I'm SLow' for TED muscle involvement.",
+ "Check optic nerve function at every TED visit; dysthyroid optic neuropathy can occur with little proptosis.",
+ "Activity (CAS of 3 or more) and severity are different questions; you need both to choose treatment.",
+ "Get a baseline hearing test before teprotumumab and monitor during and after treatment.",
+ "Biopsy before steroids when lymphoma is possible; steroids can melt lymphoma and blur the diagnosis.",
+ "Infraorbital nerve enlargement points to IgG4-related disease.",
+ "Intractable hiccups or vomiting before optic neuritis suggests AQP4 NMOSD.",
+ "Painful ophthalmoplegia that responds to steroids may still be a tumor; Tolosa-Hunt is a diagnosis of exclusion.",
+ "Enlarged blind spot with a normal disc: look for MEWDS or AZOOR with retinal imaging."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"Which muscle is most commonly enlarged in TED?",o:["Lateral rectus","Inferior rectus","Superior oblique","Superior rectus"],a:1,e:"Inferior rectus, then medial, superior and lateral."},
+ {q:"Tendon involvement with pain suggests:",o:["TED","Orbital myositis","Lymphoma","Sarcoid"],a:1,e:"Myositis involves the tendon; TED spares it."},
+ {q:"A Clinical Activity Score of what indicates active TED?",o:["1 or more","2 or more","3 or more","5 or more"],a:2,e:"3 or more out of 7."},
+ {q:"In OPTIC, the proptosis response at week 24 with teprotumumab was:",o:["25%","50%","83%","100%"],a:2,e:"83% vs 10% with placebo."},
+ {q:"What monitoring does the teprotumumab label require?",o:["Visual fields only","Hearing before, during and after treatment","ECG","Liver biopsy"],a:1,e:"Hearing impairment, sometimes permanent, is a labeled warning."},
+ {q:"Infraorbital nerve enlargement on MRI is a clue to:",o:["TED","IgG4-related disease","MS","Lymphoma"],a:1,e:"A characteristic finding in IgG4-related ophthalmic disease."},
+ {q:"Area postrema syndrome is associated with:",o:["MS","AQP4 NMOSD","MOGAD only","Sarcoid"],a:1,e:"Intractable hiccups or vomiting is a core NMOSD clinical characteristic."},
+ {q:"Anti-GQ1b antibodies are most associated with:",o:["Myasthenia gravis","Miller Fisher syndrome","Tolosa-Hunt","Sarcoid"],a:1,e:"Ophthalmoplegia, ataxia, areflexia."},
+ {q:"Why biopsy before steroids in a suspected orbital lymphoma?",o:["Steroids cause infection","Steroids can shrink lymphoma and obscure the diagnosis","Biopsy is easier","Insurance"],a:1,e:"Lymphoma can respond transiently to steroids."},
+ {q:"An enlarged blind spot with photopsias and a normal disc most suggests:",o:["Papilledema","MEWDS or AZOOR","NAION","Optic neuritis"],a:1,e:"Outer retinal disease; image the retina."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>

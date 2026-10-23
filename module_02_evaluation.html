@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 2: Ocular and neurologic evaluation</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 2 of 22</p>
+  <h1>Ocular and neurologic evaluation</h1>
+  <p class="sub">History, visual function, pupils, motility, vestibular screen, neuro exam and diagnostic testing. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="sim" aria-selected="true">Pupil simulator</button>
+    <button role="tab" data-tab="tools" aria-selected="false">Exam toolkit</button>
+    <button role="tab" data-tab="hx" aria-selected="false">History</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and sources</button>
+  </nav>
+
+  <section class="tab on" id="tab-sim">
+    <h2>Swinging flashlight test</h2>
+    <p class="sub">Pick a scenario, then swing the light. Watch which way the pupils move the moment the light arrives.</p>
+    <div class="chips" id="scen"></div>
+    <div class="sim">
+      <svg id="eyesvg" viewBox="0 0 300 130" role="img" aria-label="Both eyes with pupils">
+        <text x="85" y="14" class="lvl" text-anchor="middle">Right eye (OD)</text>
+        <text x="215" y="14" class="lvl" text-anchor="middle">Left eye (OS)</text>
+        <ellipse cx="85" cy="70" rx="58" ry="34" fill="var(--panel)" stroke="var(--stemline)" stroke-width="1.5"/>
+        <ellipse cx="215" cy="70" rx="58" ry="34" fill="var(--panel)" stroke="var(--stemline)" stroke-width="1.5"/>
+        <circle cx="85" cy="70" r="27" fill="#5E7F94"/>
+        <circle cx="215" cy="70" r="27" fill="#5E7F94"/>
+        <circle id="pR" cx="85" cy="70" r="14" fill="#0A0F14"/>
+        <circle id="pL" cx="215" cy="70" r="14" fill="#0A0F14"/>
+        <g id="beam" opacity="0"><circle id="beamC" cx="85" cy="70" r="40" fill="#FFE27A" opacity=".28"/></g>
+        <text id="mmR" x="85" y="122" class="lbl" text-anchor="middle">6.0 mm</text>
+        <text id="mmL" x="215" y="122" class="lbl" text-anchor="middle">6.0 mm</text>
+      </svg>
+      <div class="ctrl">
+        <button id="lightR">Light on right eye</button>
+        <button id="lightL">Light on left eye</button>
+        <button id="swing" class="wide">Swing back and forth</button>
+      </div>
+      <p class="obs" id="obs" aria-live="polite">Start with the room dim and the patient fixing at distance.</p>
+    </div>
+    <div class="card accent" id="scenCard"></div>
+  </section>
+
+  <section class="tab" id="tab-tools">
+    <h2>Exam toolkit</h2>
+    <p class="sub">Choose a domain. Each test lists the question it answers and a pitfall.</p>
+    <div class="chips" id="toolChips"></div>
+    <div class="card" id="toolCard"></div>
+  </section>
+
+  <section class="tab" id="tab-hx">
+    <h2>History that localizes</h2>
+    <p class="sub">Tap a symptom to see the questions that sort it out.</p>
+    <div class="chips" id="hxChips"></div>
+    <div class="card accent" id="hxCard"></div>
+  </section>
+
+  <section class="tab" id="tab-cases">
+    <h2>Case vignettes</h2>
+    <p class="sub">Work each question before revealing the answer.</p>
+    <div id="caseList"></div>
+  </section>
+
+  <section class="tab" id="tab-pearls"><h2>Clinical pearls</h2><div id="pearlList"></div></section>
+
+  <section class="tab" id="tab-quiz">
+    <h2>Self-quiz</h2>
+    <p class="sub">Ten questions. Tap an answer to see the explanation.</p>
+    <div id="quizList"></div>
+    <p class="score" id="score" aria-live="polite"></p>
+    <button class="reveal" id="resetQuiz">Reset quiz</button>
+  </section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Obtain a targeted neuro-ophthalmic history</label>
+      <label><input type="checkbox"> Perform a pupillary and motility exam</label>
+      <label><input type="checkbox"> Select appropriate diagnostic tests</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="src">
+      <li><b>HINTS 100% sensitive and 96% specific for stroke; early DWI falsely negative in 12% (all within 48 hours):</b> Kattah JC, Talkad AV, Wang DZ, Hsieh YH, Newman-Toker DE. HINTS to diagnose stroke in the acute vestibular syndrome. <i>Stroke.</i> 2009;40(11):3504-3510. doi:10.1161/STROKEAHA.109.551234. Note: high-risk patients with acute vestibular syndrome, examined by trained clinicians.</li>
+      <li><b>About 19% of normal people show anisocoria of 0.4 mm or more at any given exam:</b> Lam BL, Thompson HS, Corbett JJ. The prevalence of simple anisocoria. <i>Am J Ophthalmol.</i> 1987;104(1):69-73. doi:10.1016/0002-9394(87)90296-0.</li>
+      <li><b>Upright-supine test, a drop of 50% or more favors skew:</b> Wong AMF. Understanding skew deviation and a new clinical test to differentiate it from trochlear nerve palsy. <i>J AAPOS.</i> 2010;14(1):61-67.</li>
+      <li>All other content reflects standard teaching in the core texts below; verify specifics against them.</li>
+    </ul></div>
+    <h3>Core reading</h3>
+    <div class="card"><ul class="refs">
+      <li>American Academy of Ophthalmology. <i>Basic and Clinical Science Course, Section 5: Neuro-Ophthalmology.</i> AAO; 2025.</li>
+      <li>Liu GT, Volpe NJ, Galetta SL. <i>Neuro-Ophthalmology: Diagnosis and Management.</i> 2nd ed. Saunders Elsevier; 2010.</li>
+      <li>Schiefer U, Wilhelm H, Hart W, eds. <i>Clinical Neuro-Ophthalmology: A Practical Guide.</i> Springer; 2007.</li>
+    </ul></div>
+  </section>
+
+  <p class="foot">Schematic simulations for teaching, not clinical devices. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick){
+  host.innerHTML="";
+  items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});
+  host.querySelector("button").click();
+}
+
+/* ---------- pupil simulator ---------- */
+// input = afferent strength per eye (1 normal); fixed = efferent failure (pupil cannot constrict)
+const SC=[
+ {n:"Normal",inR:1,inL:1,fixR:false,
+  card:"<dl><dt>What you see</dt><dd>Equal pupils that constrict equally whichever eye is lit. On swinging, each pupil stays small or shows brief escape equally on both sides.</dd><dt>Pitfall</dt><dd>Pupillary escape (slight redilation under steady light) is normal if it's symmetric.</dd></dl>"},
+ {n:"Mild left RAPD",inR:1,inL:.7,fixR:false,
+  card:"<dl><dt>What you see</dt><dd>Swinging to the left eye, both pupils start to dilate. Swinging back to the right, both constrict.</dd><dt>Grading</dt><dd>Quantify with neutral density filters over the good eye (0.3 log unit steps) until the response balances. Also records as 1+ to 4+.</dd><dt>Causes</dt><dd>Asymmetric optic neuropathy, large retinal lesion, contralateral optic tract lesion.</dd></dl><dl class='miss'><dt>Pearl</dt><dd>Cataract and refractive error do not cause an RAPD. Dense amblyopia causes a small one at most.</dd></dl>"},
+ {n:"Dense right RAPD",inR:.25,inL:1,fixR:false,
+  card:"<dl><dt>What you see</dt><dd>Light in the right eye barely constricts either pupil; swinging to the left, both constrict briskly.</dd><dt>Causes</dt><dd>Severe unilateral optic neuropathy (ischemic, compressive, traumatic), central retinal artery occlusion, total retinal detachment.</dd></dl><dl class='miss'><dt>Pearl</dt><dd>Both pupils stay equal in size in an isolated RAPD, because the efferent pathways are intact.</dd></dl>"},
+ {n:"Right RAPD with fixed right pupil",inR:.4,inL:1,fixR:true,
+  card:"<dl><dt>What you see</dt><dd>The right pupil doesn't move at all. Watch only the left pupil: it constricts well when the left eye is lit and dilates when the light swings to the right eye.</dd><dt>Name</dt><dd>Reverse (or contralateral) RAPD testing, used when one pupil is fixed, pharmacologically dilated or obscured.</dd></dl><dl class='miss'><dt>Pearl</dt><dd>You only need one working pupil to detect an RAPD, because the light reflex is consensual.</dd></dl>"},
+ {n:"Bilateral symmetric optic neuropathy",inR:.45,inL:.45,fixR:false,
+  card:"<dl><dt>What you see</dt><dd>Sluggish constriction in both eyes, but no difference when swinging: no RAPD.</dd><dt>Causes</dt><dd>Toxic or nutritional optic neuropathy, hereditary optic neuropathy, bilateral optic neuritis.</dd></dl><dl class='miss'><dt>Pearl</dt><dd>An absent RAPD does not mean healthy nerves; it means symmetric ones. Lean on color, fields and OCT.</dd></dl>"}
+];
+let S=SC[0], cur={R:6,L:6}, lit=null, swingT=null, anim=null;
+const BASE=6, MAXC=3.6;
+function target(eye){ // pupil sizes for a given lit eye
+  const inp = eye? (eye==="R"?S.inR:S.inL) : 0;
+  const c = BASE - MAXC*inp;
+  return {R: S.fixR?7:c, L:c};
+}
+function draw(){
+  document.getElementById("pR").setAttribute("r",(cur.R*2.4).toFixed(1));
+  document.getElementById("pL").setAttribute("r",(cur.L*2.4).toFixed(1));
+  document.getElementById("mmR").textContent=cur.R.toFixed(1)+" mm";
+  document.getElementById("mmL").textContent=cur.L.toFixed(1)+" mm";
+}
+function animateTo(t){
+  cancelAnimationFrame(anim);
+  const from={...cur}, t0=performance.now(), dur=matchMedia("(prefers-reduced-motion: reduce)").matches?1:700;
+  const step=now=>{const k=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-k,3);
+    cur.R=from.R+(t.R-from.R)*e; cur.L=from.L+(t.L-from.L)*e; draw(); if(k<1) anim=requestAnimationFrame(step);};
+  anim=requestAnimationFrame(step);
+}
+function light(eye){
+  const prev={...cur};
+  lit=eye;
+  const beam=document.getElementById("beam"); beam.setAttribute("opacity","1");
+  document.getElementById("beamC").setAttribute("cx", eye==="R"?85:215);
+  const t=target(eye); animateTo(t);
+  const watch = S.fixR ? "L" : eye;
+  const d = t[watch]-prev[watch];
+  const who = watch==="R"?"right":"left";
+  let msg;
+  if(Math.abs(d)<.15) msg=`The ${who} pupil holds steady.`;
+  else if(d<0) msg=`The ${who} pupil constricts (${prev[watch].toFixed(1)} to ${t[watch].toFixed(1)} mm).`;
+  else msg=`The ${who} pupil dilates (${prev[watch].toFixed(1)} to ${t[watch].toFixed(1)} mm): the ${eye==="R"?"right":"left"} eye, which is lit, has less afferent drive.`;
+  if(S.fixR && eye==="R") msg+=" The right pupil can't move, so read the left pupil.";
+  document.getElementById("obs").textContent=`Light on ${eye==="R"?"right":"left"} eye. `+msg;
+}
+function stopSwing(){clearInterval(swingT);swingT=null;document.getElementById("swing").textContent="Swing back and forth";}
+document.getElementById("lightR").addEventListener("click",()=>{stopSwing();light("R")});
+document.getElementById("lightL").addEventListener("click",()=>{stopSwing();light("L")});
+document.getElementById("swing").addEventListener("click",()=>{
+  if(swingT){stopSwing();return}
+  document.getElementById("swing").textContent="Stop swinging";
+  light(lit==="R"?"L":"R"); swingT=setInterval(()=>light(lit==="R"?"L":"R"),2200);
+});
+chips(document.getElementById("scen"),SC.map(s=>s.n),i=>{
+  stopSwing(); S=SC[i]; lit=null; document.getElementById("beam").setAttribute("opacity","0");
+  cur={R:S.fixR?7:BASE,L:BASE}; draw();
+  document.getElementById("obs").textContent="Room dim, patient fixing at distance. Shine the light.";
+  document.getElementById("scenCard").innerHTML=S.card;
+});
+
+/* ---------- toolkit ---------- */
+const TOOLS={
+ "Visual function":[
+  ["Best-corrected acuity","Is central function reduced?","Always refract or pinhole first; optic neuropathy can leave acuity normal."],
+  ["Color plates and red desaturation","Is the optic nerve involved?","Color loss out of proportion to acuity suggests optic neuropathy rather than maculopathy."],
+  ["Contrast sensitivity","Subtle or recovered optic neuropathy?","Often stays abnormal after optic neuritis even when acuity recovers."],
+  ["Photostress recovery","Macula or nerve?","Prolonged recovery points to macular disease, not optic neuropathy."],
+  ["Confrontation fields","Gross hemianopia or quadrantanopia?","Insensitive for subtle defects; use finger counting in each quadrant and compare red targets across the vertical meridian."],
+  ["Automated perimetry (24-2, 10-2, 30-2)","Pattern and localization of field loss","24-2 can miss small homonymous central scotomas; add 10-2 when acuity loss is unexplained."],
+  ["Kinetic perimetry (Goldmann)","Peripheral field, poor reliability patients","Needed for temporal crescent and many non-organic patterns (spiraling or non-expanding fields)."]],
+ "Pupils":[
+  ["Size in light and dark","Which pupil is abnormal?","Anisocoria greater in dark: the small pupil is abnormal. Greater in light: the large pupil is abnormal."],
+  ["Swinging flashlight with ND filters","Asymmetric afferent input?","Use a bright light, distance fixation, and equal time on each eye."],
+  ["Near response","Light-near dissociation?","Test near only if the light reaction is poor."],
+  ["Slit lamp of the iris","Mechanical or tonic pupil?","Sectoral palsy and vermiform movements suggest a tonic pupil; look for synechiae or sphincter tears."]],
+ "Motility and alignment":[
+  ["Ductions and versions","Which muscle or gaze direction is limited?","Compare ductions with versions; full ductions with limited versions point supranuclear."],
+  ["Saccades and pursuit","Supranuclear or cerebellar sign?","Slow adducting saccades reveal a subtle INO."],
+  ["Cover tests with prism","Tropia vs phoria, size of deviation","Measure in primary, side gazes and head tilts; incomitance points to paresis or restriction."],
+  ["Maddox rod and double Maddox rod","Small or torsional deviations","Double Maddox rod quantifies subjective torsion; more than about 10 degrees of excyclotorsion suggests bilateral CN IV palsy."],
+  ["Parks 3-step plus upright-supine","Superior oblique palsy vs skew","A deviation that drops by 50% or more when supine favors skew."],
+  ["Forced ductions and fatigue tests","Restriction vs weakness; myasthenia","Sustained upgaze, ice test or rest test for fatigable ptosis."]],
+ "Lids and orbit":[
+  ["MRD1, levator function, lid crease","Ptosis type","Good levator function with a high crease suggests aponeurotic ptosis; poor function suggests myogenic or neurogenic."],
+  ["Exophthalmometry","Proptosis or enophthalmos","More than 2 mm asymmetry is significant."],
+  ["Orbital signs","Orbital process?","Resistance to retropulsion, chemosis, injection over muscle insertions."]],
+ "Vestibular and neuro screen":[
+  ["HINTS (head impulse, nystagmus, test of skew)","Stroke vs peripheral in acute vestibular syndrome","Only valid in acute continuous vertigo with nystagmus; a normal head impulse is the worrying finding."],
+  ["Dix-Hallpike and supine roll","Positional vertigo","Torsional upbeating nystagmus with latency and fatigue fits posterior canal BPPV."],
+  ["Cranial nerves V, VII, VIII","Neighbors that localize","Corneal sensation and V1 numbness point to cavernous sinus or apex."],
+  ["Limb strength, sensation, gait","Brainstem or hemispheric involvement","Any long-tract sign moves the lesion into the brain."]],
+ "Diagnostic tests":[
+  ["OCT RNFL and ganglion cell layer","Axonal loss and its pattern","GCL loss respecting the vertical meridian suggests chiasmal or retrochiasmal disease. RNFL swelling masks early loss."],
+  ["Disc imaging for drusen (FAF, EDI-OCT, B-scan)","Pseudopapilledema","EDI-OCT detects buried drusen best; B-scan works for calcified ones."],
+  ["Fluorescein angiography","Disc leakage, retinal ischemia","Late disc leakage supports true edema; drusen show early autofluorescence."],
+  ["ERG and VEP","Retina vs nerve; non-organic loss","A normal pattern VEP with claimed severe vision loss argues against organic disease, though it doesn't fully exclude cortical causes."]]
+};
+chips(document.getElementById("toolChips"),Object.keys(TOOLS),i=>{
+  const k=Object.keys(TOOLS)[i];
+  document.getElementById("toolCard").innerHTML=TOOLS[k].map(t=>`<div class="tool"><b>${t[0]}</b><span><i>Answers:</i> ${t[1]}</span><br><span><i>Pitfall or pearl:</i> ${t[2]}</span></div>`).join("");
+});
+
+/* ---------- history ---------- */
+const HX=[
+ {n:"Transient vision loss",q:["One eye or both? (Cover each eye during an episode.)","How long: seconds, minutes, or hours?","Curtain coming down, or graying out?","Triggered by posture, bending, or bright light?","Jaw claudication, scalp tenderness, weight loss?"],
+  m:"Seconds with posture changes in a patient with disc edema suggests transient visual obscurations from raised ICP. Minutes in one eye suggests embolic or GCA. Over 50 with any GCA symptom: same-day ESR, CRP and platelets."},
+ {n:"Double vision",q:["Does it go away when either eye is covered (binocular) or persist (monocular)?","Horizontal, vertical, or tilted?","Worse at distance or near? Which gaze?","Variable or worse at day's end? Ptosis?","Headache, pain, or other neurologic symptoms?"],
+  m:"Monocular diplopia is ocular (refractive, tear film, cataract). Binocular diplopia that fluctuates with ptosis suggests myasthenia. A painful pupil-involving CN III palsy is an emergency."},
+ {n:"Unequal pupils",q:["When was it first noticed? Check old photos.","Any drops, patches, inhalers, or plant exposure?","Droopy lid? Neck, face, or head pain?","Is it worse in light or in dark?"],
+  m:"Old photos showing the same anisocoria are reassuring. Acute painful Horner suggests carotid dissection. A large pupil that won't constrict with a normal lid and motility is often pharmacologic or tonic."},
+ {n:"Headache with visual symptoms",q:["Positive phenomena (zigzags, sparkles) building over minutes?","Does it move across the field in both eyes?","Worst-ever or thunderclap onset?","Worse lying down, with pulsatile tinnitus?","Age over 50 with new headache?"],
+  m:"Gradually spreading positive phenomena lasting 5 to 60 minutes fit migraine aura. Thunderclap headache needs emergent imaging. Positional headache with pulsatile tinnitus suggests raised ICP."},
+ {n:"Dizziness",q:["Spinning vs lightheaded vs unsteady?","Continuous for days, episodic, or positional?","Hearing loss, tinnitus, ear fullness?","Any brainstem symptoms (slurred speech, numbness, weakness)?"],
+  m:"Timing and triggers beat symptom quality. Acute continuous vertigo with nystagmus calls for HINTS; positional brief episodes call for Dix-Hallpike."}
+];
+chips(document.getElementById("hxChips"),HX.map(h=>h.n),i=>{
+  const h=HX[i];
+  document.getElementById("hxCard").innerHTML=`<h3 style="margin-top:0">${h.n}</h3><dl><dt>Ask</dt><dd><ul style="margin:4px 0;padding-left:18px">${h.q.map(x=>`<li>${x}</li>`).join("")}</ul></dd></dl><dl class="miss"><dt>What the answers mean</dt><dd>${h.m}</dd></dl>`;
+});
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: A curtain over one eye",stem:"A 72-year-old woman had three episodes this week of a shade coming down over her right eye, each lasting about 5 minutes. Exam today is normal.",
+  steps:[
+   {q:"Which two diagnoses must you sort out today?",a:"Embolic transient monocular vision loss (carotid or cardiac source) and giant cell arteritis."},
+   {q:"What history helps separate them?",a:"Jaw claudication, scalp tenderness, new headache, weight loss and polymyalgia symptoms favor GCA. Vascular risk factors and a carotid bruit favor embolism, though neither rules out the other."},
+   {q:"What's the disposition?",a:"Same-day evaluation: ESR, CRP and platelets for GCA; urgent stroke-pathway workup with carotid and cardiac evaluation for embolism. Transient monocular vision loss is a retinal TIA."}
+  ]},
+ {t:"Case 2: Room spinning since yesterday",stem:"A 63-year-old man with diabetes and hypertension has had continuous vertigo, nausea and unsteadiness for 20 hours. Left-beating nystagmus in primary gaze.",
+  steps:[
+   {q:"Which bedside exam applies, and why here?",a:"HINTS, because this is acute vestibular syndrome: continuous vertigo with nystagmus. It's not designed for episodic or positional dizziness."},
+   {q:"Head impulse is normal, nystagmus turns right-beating on right gaze, and there's a small skew. Interpretation?",a:"All three findings are central signs. In Kattah 2009, any one dangerous sign was 100% sensitive and 96% specific for stroke in high-risk patients."},
+   {q:"His MRI with DWI at 20 hours is normal. Does that rule out stroke?",a:"No. In the same study, early DWI was falsely negative in 12%, all within 48 hours. Treat as stroke and repeat imaging."}
+  ]},
+ {t:"Case 3: Noticed in a selfie",stem:"A 28-year-old woman saw in a photo that her left pupil looks bigger. No symptoms. Anisocoria is 0.5 mm in both light and dark; both pupils react briskly; lids and motility are normal.",
+  steps:[
+   {q:"What's the most likely diagnosis?",a:"Physiologic (simple) anisocoria: the difference is the same in light and dark, with normal reactions."},
+   {q:"How common is this?",a:"Very. About 19% of normal people show 0.4 mm or more of anisocoria at any given exam (Lam 1987)."},
+   {q:"What would change your mind?",a:"Anisocoria that increases in the dark with dilation lag or ptosis (Horner), increases in light (parasympathetic), or any pain, diplopia or neurologic symptoms."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{const d=document.createElement("div");d.className="card";
+  d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map(s=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");caseList.appendChild(d);});
+caseList.addEventListener("click",e=>{if(!e.target.classList.contains("reveal"))return;const a=e.target.nextElementSibling,on=!a.classList.contains("on");a.classList.toggle("on",on);e.target.setAttribute("aria-expanded",String(on));e.target.textContent=on?"Hide answer":"Reveal answer";});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "Ask whether double vision resolves when either eye is covered. Monocular diplopia is almost always ocular.",
+ "Color vision loss out of proportion to acuity points to the optic nerve.",
+ "An RAPD needs only one working pupil to detect; use the reverse test when one pupil is fixed.",
+ "Media opacities and refractive error do not cause an RAPD.",
+ "Anisocoria worse in the dark: the small pupil is abnormal. Worse in light: the large pupil is abnormal.",
+ "Compare ductions with versions. If ductions are full but versions are limited, the problem is supranuclear.",
+ "Measure deviations in primary gaze, side gazes and head tilts; comitance matters for localization.",
+ "HINTS works only in acute continuous vertigo with nystagmus, and a normal head impulse is the dangerous finding.",
+ "A 24-2 can miss small homonymous central scotomas; add a 10-2 for unexplained central vision loss.",
+ "OCT ganglion cell loss respecting the vertical meridian can reveal chiasmal or tract disease before fields do."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"Anisocoria is greater in dim light than in bright light. Which pupil is abnormal?",o:["The larger pupil","The smaller pupil","Both","Neither; this is always physiologic"],a:1,e:"The small pupil fails to dilate in the dark, pointing to a sympathetic problem such as Horner syndrome (or physiologic anisocoria if the difference is small and stable)."},
+ {q:"One pupil is pharmacologically dilated. How do you test for an RAPD?",o:["You can't","Watch the reactive pupil only while swinging the light","Use only ND filters","Test near response"],a:1,e:"The light reflex is consensual, so the reactive pupil reveals the afferent input of both eyes."},
+ {q:"Which finding does NOT cause an RAPD?",o:["Asymmetric glaucoma","Dense cataract","Central retinal artery occlusion","Contralateral optic tract lesion"],a:1,e:"Cataract scatters but doesn't block light enough to produce an RAPD; if anything it can cause a tiny RAPD in the other eye."},
+ {q:"Color vision is severely reduced with 20/25 acuity. This most suggests:",o:["Macular degeneration","Optic neuropathy","Cataract","Refractive error"],a:1,e:"Dyschromatopsia out of proportion to acuity is a hallmark of optic neuropathy."},
+ {q:"In acute vestibular syndrome, which head impulse result is most concerning?",o:["Corrective saccade to one side","Normal head impulse","Bilateral corrective saccades","Head impulse can't be tested"],a:1,e:"A normal head impulse in a patient with acute continuous vertigo suggests a central cause, because a peripheral lesion should impair the VOR."},
+ {q:"In Kattah 2009, early MRI DWI was falsely negative in about what proportion of strokes?",o:["1%","12%","35%","50%"],a:1,e:"About 12%, all within 48 hours of symptom onset."},
+ {q:"A vertical deviation drops from 12 PD upright to 4 PD supine. This favors:",o:["Superior oblique palsy","Skew deviation","Thyroid eye disease","Myasthenia"],a:1,e:"A decrease of 50% or more from upright to supine favors skew deviation (Wong upright-supine test)."},
+ {q:"Full ductions with limited versions in one direction suggest a problem that is:",o:["Muscular","Nerve-level","Supranuclear","Mechanical"],a:2,e:"If each eye can move on its own (ductions) but not together on command (versions), the motor apparatus works and the control system is at fault."},
+ {q:"Which test best detects buried optic disc drusen?",o:["Red-free photo","EDI-OCT","Confrontation fields","ERG"],a:1,e:"Enhanced depth imaging OCT is the most sensitive for buried drusen; B-scan picks up calcified drusen."},
+ {q:"Transient vision loss for seconds when standing, in a patient with swollen discs, suggests:",o:["Amaurosis fugax","Transient visual obscurations from raised ICP","Migraine aura","Retinal detachment"],a:1,e:"Brief, postural graying out with disc edema is classic for transient visual obscurations from papilledema."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>

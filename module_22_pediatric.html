@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 22: Pediatric neuro-ophthalmology</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.cmp{display:grid;gap:6px}
+.cmprow{background:var(--panel);border-radius:12px;padding:8px 10px}
+.cmprow h4{margin:0 0 6px;font-size:.84rem;color:var(--muted);font-weight:600}
+.cmpcells{display:grid;gap:8px}
+.cmpcells div{font-size:.88rem;border-left:3px solid var(--stem);padding-left:7px}
+.cmpcells b{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.fundus{background:#000;border-radius:14px;padding:8px;display:flex;justify-content:center}
+.fundus svg{max-width:300px}
+
+.slider{width:100%;accent-color:var(--hot);margin:10px 0 2px}
+.gl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.ladder li{margin:8px 0}
+
+.vfwrap{background:var(--panel);border-radius:14px;padding:10px}
+.prog{font-size:.85rem;color:var(--muted);margin:4px 0 0}
+.next{font:inherit;margin-top:10px;padding:9px 14px;border-radius:10px;border:none;background:var(--ink);color:var(--bg);cursor:pointer}
+.brain svg .rg{cursor:pointer}
+.brain svg .rg:focus-visible{outline:none;stroke:var(--inter);stroke-width:3}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.read{display:flex;justify-content:space-around;font-size:.9rem;margin-top:4px}
+.read b{font-family:Charter,Georgia,serif;font-size:1.05rem}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.9rem;margin:6px 0}
+.toggle input{width:20px;height:20px;accent-color:var(--inter)}
+ol.algo li{margin:8px 0}
+
+.nine{background:var(--panel);border-radius:14px;padding:8px}
+.step3{margin:8px 0}
+.step3 p{margin:4px 0;font-weight:600;font-size:.9rem}
+.result{font-family:Charter,Georgia,serif;font-size:1.3rem;font-weight:600;margin:4px 0}
+
+.sort{background:var(--panel);border-radius:14px;padding:14px}
+.sort .scen{font-size:1rem;margin:4px 0 10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.two button{font:inherit;padding:11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.two button.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.two button.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.prog{font-size:.85rem;color:var(--muted)}
+.next{font:inherit;margin-top:10px;padding:9px 14px;border-radius:10px;border:none;background:var(--ink);color:var(--bg);cursor:pointer}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 22 of 22</p>
+  <h1>Pediatric neuro-ophthalmology</h1>
+  <p class="sub">How children differ, and how to separate the benign from the dangerous: optic nerve disorders, strabismus, nystagmus, pupils and higher visual dysfunction. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="sort" aria-selected="true">Benign or worrying?</button>
+    <button role="tab" data-tab="topics" aria-selected="false">Topics</button>
+    <button role="tab" data-tab="diff" aria-selected="false">How kids differ</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and sources</button>
+  </nav>
+
+  <section class="tab on" id="tab-sort">
+    <h2>Benign or needs workup?</h2>
+    <p class="sub">Read each scenario and decide. Twelve common pediatric presentations, in random order.</p>
+    <div class="sort" id="sortBox"></div>
+  </section>
+
+  <section class="tab" id="tab-topics">
+    <h2>Pediatric topics</h2>
+    <div class="chips" id="tChips"></div>
+    <div class="card accent" id="tCard"></div>
+  </section>
+
+  <section class="tab" id="tab-diff">
+    <h2>How children differ from adults</h2>
+    <div class="card"><dl>
+      <dt>History comes from others</dt><dd>Parents notice behavior (bumping into things, head tilts, eye rubbing, sitting close to the TV), not symptoms. Young children rarely complain of vision loss, even when it's severe in one eye.</dd>
+      <dt>Exam is adapted</dt><dd>Fixation and following, preferential looking (Teller cards), optotypes matched to age, cover tests with toys, quick confrontation fields with targets; OCT and ERG under sedation when needed.</dd>
+      <dt>Disease spectrum differs</dt><dd>Optic neuritis in children is more often bilateral with disc swelling and MOG antibodies, and may follow infection or ADEM. Tumors (optic pathway glioma, craniopharyngioma, medulloblastoma) and hydrocephalus are leading causes of optic atrophy and papilledema.</dd>
+      <dt>Raised pressure looks different</dt><dd>Infants with open sutures may not develop papilledema; pediatric IIH uses a higher opening pressure threshold (280 mm CSF, or 250 if not sedated and not obese).</dd>
+      <dt>The visual system is still developing</dt><dd>Unequal input causes amblyopia; strabismus and ptosis can be vision-threatening; early treatment matters.</dd>
+      <dt>Nystagmus and abnormal eye movements are clues</dt><dd>Infantile nystagmus often points to an afferent disorder; acquired nystagmus, monocular nystagmus or opsoclonus points to the brain or a tumor.</dd>
+    </dl></div>
+  </section>
+
+  <section class="tab" id="tab-cases"><h2>Case vignettes</h2><p class="sub">Work each question before revealing the answer.</p><div id="caseList"></div></section>
+  <section class="tab" id="tab-pearls"><h2>Clinical pearls</h2><div id="pearlList"></div></section>
+  <section class="tab" id="tab-quiz"><h2>Self-quiz</h2><p class="sub">Ten questions. Tap an answer to see the explanation.</p><div id="quizList"></div><p class="score" id="score" aria-live="polite"></p><button class="reveal" id="resetQuiz">Reset quiz</button></section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Recognize differences in pediatric presentations</label>
+      <label><input type="checkbox"> Identify pathologic cases from benign ones</label>
+      <label><input type="checkbox"> Evaluate and manage pediatric neuro-ophthalmic cases</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="src">
+      <li><b>Pediatric opening pressure threshold (280 mm CSF; 250 if not sedated and not obese):</b> Friedman DI, Liu GT, Digre KB. Revised diagnostic criteria for the pseudotumor cerebri syndrome in adults and children. <i>Neurology.</i> 2013;81(13):1159-1165.</li>
+      <li><b>NF1 criteria and optic pathway glioma screening:</b> Legius E, et al. <i>Genet Med.</i> 2021;23(8):1506-1513 (Module 14).</li>
+      <li><b>MOGAD criteria:</b> Banwell B, et al. <i>Lancet Neurol.</i> 2023;22(3):268-282 (Module 4).</li>
+      <li>Other content reflects standard teaching in the curriculum textbooks.</li>
+    </ul></div>
+    <h3>Core reading (from the program curriculum)</h3>
+    <div class="card"><ul class="refs">
+      <li>Heidary G, Phillips PH, eds. <i>Fundamentals of Pediatric Neuro-Ophthalmology: A Practical, Case-Based Approach to Diagnosis and Management.</i> Springer; 2023.</li>
+      <li>Gold D. <i>Neuro-Ophthalmology and Neuro-Otology: A Case-Based Guide for Clinicians and Scientists.</i> Springer Nature; 2022.</li>
+    </ul></div>
+  </section>
+
+  <p class="foot">Teaching tool. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick,init=0){host.innerHTML="";items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});if(init!==null)host.children[init].click();}
+
+/* ---------- sorter ---------- */
+const SC=[
+ {s:"A 9-month-old 'looks cross-eyed' in photos. Wide nasal bridge and epicanthal folds; corneal light reflexes are centered and cover test shows no movement.",a:0,e:"Pseudoesotropia: benign. Reassure, and recheck if parents still see turning."},
+ {s:"A 6-year-old has new esotropia worse at distance and has been waking with headaches and vomiting.",a:1,e:"Acquired CN VI palsy with signs of raised pressure: examine the discs and image urgently (posterior fossa tumor, hydrocephalus)."},
+ {s:"A 4-month-old with horizontal pendular nystagmus that dampens with convergence, light irides, iris transillumination and foveal hypoplasia on OCT.",a:1,e:"Infantile nystagmus from albinism: the nystagmus is developmental, but albinism needs diagnosis, genetic counseling and, for some types, systemic evaluation (bleeding or immune problems)."},
+ {s:"An 8-month-old with small, asymmetric, shimmering nystagmus, head nodding and a head tilt that began at 6 months.",a:1,e:"Looks like spasmus nutans, which is usually benign, but it can be mimicked by an optic pathway glioma or other chiasmal lesion: MRI is needed."},
+ {s:"A 5-year-old's parents noticed one pupil looks slightly bigger in photos. Difference is 0.5 mm in light and dark, brisk reactions, no ptosis; old photos show the same.",a:0,e:"Physiologic anisocoria: benign."},
+ {s:"A 7-month-old with a smaller right pupil (more obvious in dim light), mild right ptosis and new onset in the past month.",a:1,e:"Acquired Horner syndrome in an infant: evaluate for neuroblastoma (exam, urine catecholamines, imaging of head, neck and chest)."},
+ {s:"A 10-year-old referred for 'swollen discs' with no symptoms; discs have lumpy margins, no cup and visible vessels; EDI-OCT shows buried drusen.",a:0,e:"Pseudopapilledema from optic disc drusen: benign, though monitor fields over time."},
+ {s:"A 13-year-old girl with obesity has daily headaches, pulsatile tinnitus and bilateral grade 3 disc swelling.",a:1,e:"Papilledema: MRI with venography, then LP with opening pressure (pediatric threshold 280 mm CSF, or 250 if not sedated and not obese)."},
+ {s:"A 3-month-old born at term doesn't seem to fix or follow; eye exam, pupils and fundi are normal; development is otherwise normal; by 5 months she's fixing well.",a:0,e:"Delayed visual maturation: benign when vision improves and the exam is normal, but persistent poor vision needs ERG and neuroimaging."},
+ {s:"A 2-month-old with roving eye movements, poor visual behavior, sluggish pupils and eye poking; fundi look nearly normal.",a:1,e:"Suggests a retinal dystrophy such as Leber congenital amaurosis (eye poking: oculodigital sign): ERG and genetic testing; also consider optic nerve hypoplasia."},
+ {s:"A 4-year-old has an intermittent outward drift of one eye when tired or daydreaming, with good control most of the day and normal vision.",a:0,e:"Intermittent exotropia: usually managed by observation or nonsurgical treatment with pediatric ophthalmology; not a neurologic emergency."},
+ {s:"A 3-year-old with sudden chaotic, multidirectional eye movements, jerky limbs and irritability after a cold.",a:1,e:"Opsoclonus-myoclonus: search for neuroblastoma urgently."}
+];
+let order=[],idx=0,score=0,done=false;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function startSort(){order=shuffle([...SC.keys()]);idx=0;score=0;showS();}
+function showS(){done=false;const x=SC[order[idx]];
+  document.getElementById("sortBox").innerHTML=`<p class="prog">Scenario ${idx+1} of ${SC.length}. Score: ${score}</p><p class="scen">${x.s}</p><div class="two"><button data-j="0">Benign</button><button data-j="1">Needs workup</button></div><p class="expl"></p>`;}
+document.getElementById("sortBox").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-j]");
+  if(b&&!done){done=true;const x=SC[order[idx]],j=+b.dataset.j;if(j===x.a)score++;
+    document.querySelectorAll("#sortBox button[data-j]").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+    const ex=document.querySelector("#sortBox .expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+    document.querySelector("#sortBox .prog").textContent=`Scenario ${idx+1} of ${SC.length}. Score: ${score}`;
+    const nb=document.createElement("button");nb.className="next";nb.textContent=idx<SC.length-1?"Next scenario":"Start over";
+    nb.addEventListener("click",()=>{if(idx<SC.length-1){idx++;showS()}else startSort()});document.getElementById("sortBox").appendChild(nb);}
+});
+startSort();
+
+/* ---------- topics ---------- */
+const TP=[
+ {n:"Optic nerve hypoplasia",f:"Small disc with double ring sign; nystagmus when bilateral; variable vision.",w:"MRI brain (septo-optic dysplasia, pituitary abnormalities); endocrine evaluation including cortisol, growth and thyroid.",p:"Hypocortisolism can cause life-threatening crises with illness; check endocrine function in every child with bilateral hypoplasia."},
+ {n:"Optic nerve edema",f:"Papilledema (IIH, tumors, hydrocephalus, venous sinus thrombosis), infiltration (leukemia), inflammation, and pseudopapilledema (drusen).",w:"MRI with venography; LP with opening pressure (pediatric thresholds); EDI-OCT for drusen.",p:"Leukemic infiltration of the optic nerve is an emergency; check a blood count in unexplained disc swelling."},
+ {n:"Optic neuritis",f:"Often bilateral, with disc swelling and severe acute loss; MOG antibodies are common; may follow infection or occur with ADEM.",w:"MRI brain, orbits and spine; MOG and AQP4 antibodies by cell-based assay.",p:"Recovery is usually good, but MOGAD can relapse as steroids taper."},
+ {n:"Optic nerve tumors",f:"Optic pathway gliomas (often NF1, often indolent); sporadic gliomas; craniopharyngioma compressing the chiasm (inferior bitemporal loss, growth failure, diabetes insipidus).",w:"MRI with contrast; endocrine evaluation for chiasmal and hypothalamic tumors.",p:"Treat NF1 gliomas for visual decline or progression, usually with chemotherapy or MEK inhibitors rather than radiation."},
+ {n:"Optic atrophy",f:"From hydrocephalus, tumors, perinatal injury, hereditary disease (DOA, LHON, Wolfram) or prior inflammation.",w:"MRI; genetic testing when hereditary; ask about family history and hearing loss and diabetes (Wolfram syndrome).",p:"Optic atrophy in a child always deserves an explanation; image if no clear cause."},
+ {n:"Strabismus and extraocular muscle disorders",f:"Infantile and accommodative esotropia, intermittent exotropia, acquired CN III, IV and VI palsies, Duane, Brown, Möbius syndrome, congenital fibrosis of the extraocular muscles, myasthenia.",w:"Cycloplegic refraction; neuroimaging for acquired paralytic strabismus.",p:"New-onset paralytic strabismus in a child needs imaging; congenital CN IV palsy often presents later with a long-standing head tilt."},
+ {n:"Nystagmus",f:"Infantile (often sensory: albinism, retinal dystrophy, optic nerve hypoplasia), latent, spasmus nutans, and acquired (tumor, Chiari, drugs).",w:"ERG and OCT for sensory causes; MRI for acquired, monocular, vertical or asymmetric nystagmus.",p:"Monocular or asymmetric shimmering nystagmus can be an optic pathway glioma."},
+ {n:"Pupil abnormalities",f:"Congenital Horner (heterochromia), acquired Horner (neuroblastoma), tonic pupils, CN III palsy, light-near dissociation (dorsal midbrain tumors such as pinealoma), aniridia.",w:"Pharmacologic testing (avoid apraclonidine in infants); imaging as indicated.",p:"Aniridia: screen for WT1 deletion (WAGR) and Wilms tumor."},
+ {n:"Higher order visual dysfunction",f:"Cerebral visual impairment (prematurity, hypoxic-ischemic injury, periventricular leukomalacia), visual processing and attention deficits, delayed visual maturation.",w:"Functional vision assessment; MRI; ERG to exclude retinal disease.",p:"Children with CVI often see better with simplified, high-contrast, uncluttered displays."}
+];
+chips(document.getElementById("tChips"),TP.map(x=>x.n),i=>{const x=TP[i];document.getElementById("tCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Features</dt><dd>${x.f}</dd><dt>Workup</dt><dd>${x.w}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: Short and squinting",stem:"An 11-year-old boy has fallen off the growth chart, drinks large amounts of water, and fails a school vision screen. Acuity 20/60 OU with inferior bitemporal field loss.",
+  steps:[
+   {q:"Localization and likely lesion?",a:"Chiasm compressed from above: craniopharyngioma (with diabetes insipidus and growth hormone deficiency)."},
+   {q:"Workup?",a:"MRI with contrast (cystic, calcified suprasellar mass), endocrine testing (sodium, urine osmolality, cortisol, growth factors)."},
+   {q:"Long-term follow-up?",a:"Serial fields and OCT for recurrence and treatment effects; lifelong endocrine care."}
+  ]},
+ {t:"Case 2: Both eyes at once",stem:"A 7-year-old has painful vision loss in both eyes over 4 days after a viral illness. Acuity count fingers OU, marked bilateral disc swelling.",
+  steps:[
+   {q:"Most likely diagnosis?",a:"Bilateral optic neuritis, likely MOG antibody-associated disease."},
+   {q:"Tests?",a:"MRI brain, orbits and spine; MOG and AQP4 antibodies by cell-based assay; LP if encephalopathy suggests ADEM or infection."},
+   {q:"Treatment and outlook?",a:"High-dose IV steroids with a slow taper; recovery is usually good, but relapses can occur."}
+  ]},
+ {t:"Case 3: Eye poking and wandering eyes",stem:"A 3-month-old doesn't fix or follow, presses on her eyes, and has roving horizontal eye movements. Pupils react sluggishly; fundi look nearly normal.",
+  steps:[
+   {q:"Leading concern?",a:"Leber congenital amaurosis or another early-onset retinal dystrophy; optic nerve hypoplasia is also possible."},
+   {q:"Key test?",a:"Full-field ERG (markedly reduced or extinguished in LCA), then genetic testing."},
+   {q:"Why does genetic diagnosis matter?",a:"Gene therapy is available for RPE65-related disease, and diagnosis guides counseling and low vision services."}
+  ]},
+ {t:"Case 4: The head tilt in old photos",stem:"A 9-year-old has new vertical diplopia when reading. Right hypertropia worse on left gaze and right tilt; large vertical fusional amplitudes; baby photos show a left head tilt.",
+  steps:[
+   {q:"Diagnosis?",a:"Decompensated congenital right CN IV palsy."},
+   {q:"Does he need an MRI?",a:"Usually not when the history and exam clearly fit a long-standing congenital palsy (old photos, large fusional amplitudes, no other signs)."},
+   {q:"Management?",a:"Prisms or strabismus surgery with pediatric ophthalmology."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{const d=document.createElement("div");d.className="card";d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map(s=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");caseList.appendChild(d);});
+caseList.addEventListener("click",e=>{if(!e.target.classList.contains("reveal"))return;const a=e.target.nextElementSibling,on=!a.classList.contains("on");a.classList.toggle("on",on);e.target.setAttribute("aria-expanded",String(on));e.target.textContent=on?"Hide answer":"Reveal answer";});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "Children rarely report vision loss; ask about behavior and look for nystagmus, head tilts and strabismus.",
+ "Bilateral optic nerve hypoplasia: check pituitary function, especially cortisol.",
+ "Pediatric optic neuritis is often bilateral with disc swelling; test MOG antibodies.",
+ "New paralytic strabismus in a child needs imaging; check the discs.",
+ "Spasmus nutans is a diagnosis of exclusion; image to rule out chiasmal glioma.",
+ "Monocular or asymmetric nystagmus in a child suggests an optic pathway lesion.",
+ "Acquired Horner syndrome or opsoclonus in a young child: search for neuroblastoma.",
+ "Eye poking with poor vision and near-normal fundi suggests a retinal dystrophy; get an ERG.",
+ "Infants may not develop papilledema because their sutures are open.",
+ "Delayed visual maturation is benign only if vision improves and the exam stays normal."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"Pediatric opening pressure threshold for pseudotumor cerebri (sedated or obese child):",o:["200 mm CSF","250 mm CSF","280 mm CSF","350 mm CSF"],a:2,e:"280 mm CSF; 250 if not sedated and not obese."},
+ {q:"Bilateral optic nerve hypoplasia should prompt testing for:",o:["Syphilis","Pituitary hormone deficiency","Lead","Thyroid eye disease"],a:1,e:"Septo-optic dysplasia and hypopituitarism."},
+ {q:"Pediatric optic neuritis compared with adult MS optic neuritis is more often:",o:["Unilateral and retrobulbar","Bilateral with disc swelling","Painless","Associated with MS"],a:1,e:"MOGAD is common in children."},
+ {q:"Inferior bitemporal loss with growth failure and polyuria suggests:",o:["Pituitary adenoma","Craniopharyngioma","Optic neuritis","Glaucoma"],a:1,e:"Compression from above plus hypothalamic-pituitary dysfunction."},
+ {q:"Spasmus nutans requires:",o:["No workup","MRI to exclude a chiasmal or hypothalamic tumor","Muscle biopsy","EEG only"],a:1,e:"Mimicked by optic pathway glioma."},
+ {q:"Eye poking (oculodigital sign) in a poorly sighted infant suggests:",o:["Cortical blindness","Retinal dystrophy such as Leber congenital amaurosis","Amblyopia","Normal behavior"],a:1,e:"Confirm with ERG."},
+ {q:"Aniridia should prompt screening for:",o:["Neuroblastoma","Wilms tumor (WT1 deletion)","Retinoblastoma","Leukemia"],a:1,e:"WAGR syndrome."},
+ {q:"Which pupil test should be avoided in infants?",o:["Cocaine","Apraclonidine","Pilocarpine 1%","Swinging flashlight"],a:1,e:"Systemic side effects in young children."},
+ {q:"The leading cause of pediatric visual impairment in many developed countries is:",o:["Cataract","Cerebral visual impairment","Glaucoma","Myopia"],a:1,e:"Often from prematurity or hypoxic-ischemic injury."},
+ {q:"Light-near dissociation with upgaze palsy in a teenager suggests:",o:["Adie pupil","Pineal region tumor (dorsal midbrain)","Myasthenia","Migraine"],a:1,e:"Parinaud syndrome; image urgently."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 8: Motility disorders</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.cmp{display:grid;gap:6px}
+.cmprow{background:var(--panel);border-radius:12px;padding:8px 10px}
+.cmprow h4{margin:0 0 6px;font-size:.84rem;color:var(--muted);font-weight:600}
+.cmpcells{display:grid;gap:8px}
+.cmpcells div{font-size:.88rem;border-left:3px solid var(--stem);padding-left:7px}
+.cmpcells b{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.fundus{background:#000;border-radius:14px;padding:8px;display:flex;justify-content:center}
+.fundus svg{max-width:300px}
+
+.slider{width:100%;accent-color:var(--hot);margin:10px 0 2px}
+.gl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.ladder li{margin:8px 0}
+
+.vfwrap{background:var(--panel);border-radius:14px;padding:10px}
+.prog{font-size:.85rem;color:var(--muted);margin:4px 0 0}
+.next{font:inherit;margin-top:10px;padding:9px 14px;border-radius:10px;border:none;background:var(--ink);color:var(--bg);cursor:pointer}
+.brain svg .rg{cursor:pointer}
+.brain svg .rg:focus-visible{outline:none;stroke:var(--inter);stroke-width:3}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.read{display:flex;justify-content:space-around;font-size:.9rem;margin-top:4px}
+.read b{font-family:Charter,Georgia,serif;font-size:1.05rem}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.9rem;margin:6px 0}
+.toggle input{width:20px;height:20px;accent-color:var(--inter)}
+ol.algo li{margin:8px 0}
+
+.nine{background:var(--panel);border-radius:14px;padding:8px}
+.step3{margin:8px 0}
+.step3 p{margin:4px 0;font-weight:600;font-size:.9rem}
+.result{font-family:Charter,Georgia,serif;font-size:1.3rem;font-weight:600;margin:4px 0}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 8 of 22</p>
+  <h1>Motility disorders</h1>
+  <p class="sub">Ocular motor nerve palsies, mechanical and congenital strabismus, and eyelid disorders. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="nine" aria-selected="true">Nine gazes</button>
+    <button role="tab" data-tab="three" aria-selected="false">Parks 3-step</button>
+    <button role="tab" data-tab="lids" aria-selected="false">Lids</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and sources</button>
+  </nav>
+
+  <section class="tab on" id="tab-nine">
+    <h2>Nine positions of gaze</h2>
+    <p class="sub">Arranged as you face the patient: the patient's right gaze is on your left, and the patient's right eye is the left eye in each pair.</p>
+    <div class="chips" id="cond"></div>
+    <div class="nine"><svg id="grid" viewBox="0 0 330 210" role="img" aria-label="Nine gaze positions"></svg></div>
+    <div class="card accent" id="nineCard"></div>
+  </section>
+
+  <section class="tab" id="tab-three">
+    <h2>Parks 3-step test</h2>
+    <p class="sub">Answer each step to isolate the weak cyclovertical muscle. Then remember the fourth step.</p>
+    <div class="card">
+      <div class="step3"><p>1. Which eye is higher in primary gaze?</p><div class="chips" id="s1"></div></div>
+      <div class="step3"><p>2. The hypertropia is worse looking to the:</p><div class="chips" id="s2"></div></div>
+      <div class="step3"><p>3. The hypertropia is worse with head tilt to the:</p><div class="chips" id="s3"></div></div>
+    </div>
+    <div class="card accent" id="threeOut"></div>
+  </section>
+
+  <section class="tab" id="tab-lids">
+    <h2>Eyelid disorders</h2>
+    <p class="sub">Tap a lid problem for the key signs and the test that sorts it out.</p>
+    <div class="chips" id="lidChips"></div>
+    <div class="card accent" id="lidCard"></div>
+  </section>
+
+  <section class="tab" id="tab-cases"><h2>Case vignettes</h2><p class="sub">Work each question before revealing the answer.</p><div id="caseList"></div></section>
+  <section class="tab" id="tab-pearls"><h2>Clinical pearls</h2><div id="pearlList"></div></section>
+  <section class="tab" id="tab-quiz"><h2>Self-quiz</h2><p class="sub">Ten questions. Tap an answer to see the explanation.</p><div id="quizList"></div><p class="score" id="score" aria-live="polite"></p><button class="reveal" id="resetQuiz">Reset quiz</button></section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Differentiate cranial neuropathies</label>
+      <label><input type="checkbox"> Recognize mechanical vs neurogenic strabismus</label>
+      <label><input type="checkbox"> Outline management options</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="src">
+      <li><b>In 109 patients aged 50 or older with acute isolated CN III, IV or VI palsy, MRI and workup found a cause other than presumed microvascular ischemia in 16.5%; 10% among those with vascular risk factors only; 4.7% for isolated CN IV and VI palsies after excluding CN III palsy and GCA:</b> Tamhankar MA, Biousse V, Ying GS, et al. Isolated third, fourth, and sixth cranial nerve palsies from presumed microvascular versus other causes: a prospective study. <i>Ophthalmology.</i> 2013;120(11):2264-2269.</li>
+      <li><b>Sagging eye syndrome: age-related connective tissue involution (lateral rectus to superior rectus band) causing small-angle esotropia and hypertropia in older adults:</b> Chaudhuri Z, Demer JL. Sagging eye syndrome: connective tissue involution as a cause of horizontal and vertical strabismus in older patients. <i>JAMA Ophthalmol.</i> 2013;131(5):619-625. doi:10.1001/jamaophthalmol.2013.783.</li>
+      <li><b>Only 36% of acute third nerve palsies received timely arterial imaging:</b> Chung JE, et al. <i>J Neuroophthalmol.</i> 2021. doi:10.1097/WNO.0000000000001337.</li>
+      <li>Gaze diagrams are schematic. Other content reflects standard teaching in the core texts.</li>
+    </ul></div>
+    <h3>Core reading (from the program curriculum)</h3>
+    <div class="card"><ul class="refs">
+      <li>Vegunta S, ed. Cranial nerve 3 palsies. <i>Neuro-Ophthalmology</i>, Moran CORE, University of Utah.</li>
+      <li>American Academy of Ophthalmology. <i>Basic and Clinical Science Course, Section 5: Neuro-Ophthalmology.</i> AAO; 2025.</li>
+      <li>EyeRounds.org, University of Iowa: ocular motility and strabismus cases.</li>
+    </ul></div>
+  </section>
+
+  <p class="foot">Schematic diagrams for teaching. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick,init=0){host.innerHTML="";items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});if(init!==null)host.children[init].click();}
+
+/* ---------- nine gazes ---------- */
+// gx: +1 = patient's right, gy: +1 = up. Returns {R:[x,y], L:[x,y], lidR, lidL} with x positive toward patient's right.
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const COND={
+ "Normal":{f:(gx,gy)=>({R:[gx,gy],L:[gx,gy]}),
+  d:"Both eyes move fully and together in every direction.",t:"Compare ductions (one eye) with versions (both eyes).",m:"Full versions don't exclude a small phoria or subtle paresis; measure with prisms."},
+ "Right CN VI palsy":{f:(gx,gy)=>({R:[gx>0?-0.15:clamp(gx-0.15,-1,1),gy],L:[gx,gy]}),
+  d:"Right esotropia worse in right gaze and at distance; the right eye fails to abduct.",t:"Check for papilledema, other cranial nerves and long-tract signs. Distinguish from Duane (no diplopia, globe retraction) and myasthenia (variable).",m:"Bilateral CN VI palsy, papilledema, age under 50 or any other sign: image urgently. Consider GCA in older patients."},
+ "Right CN III palsy":{f:(gx,gy)=>({R:[clamp(0.55+0.3*Math.max(gx,0),-1,1),-0.35+(gy<0?-0.15:0)],L:[gx,gy],lidR:1.7}),
+  d:"Right ptosis, eye down and out, limited adduction, elevation and depression; pupil may be dilated.",t:"Check the pupil, look for aberrant regeneration, and test CN IV (intorsion on attempted downgaze).",m:"Pupil-involving or partial palsy, or aberrant regeneration: emergent CTA or MRA for aneurysm or compressive lesion."},
+ "Right CN IV palsy":{f:(gx,gy)=>{const h=0.12+(gx<0?0.18:0)+(gx<0&&gy<0?0.1:0);return {R:[gx,gy+h],L:[gx,gy]};},
+  d:"Right hypertropia worse in left gaze, especially down and left, and with right head tilt. Patient tilts the head to the left.",t:"Parks 3-step, double Maddox rod for excyclotorsion, upright-supine test to exclude skew; check old photos for a long-standing head tilt.",m:"More than about 10 degrees of excyclotorsion or a V-pattern suggests bilateral palsy, typically after head trauma."},
+ "Left Duane syndrome, type 1":{f:(gx,gy)=>({R:[gx,gy],L:[gx<0?-0.05:gx,gy],lidL:gx>0?1.2:0}),
+  d:"Left eye can't abduct; on adduction the globe retracts and the palpebral fissure narrows. Usually little or no diplopia and a face turn.",t:"Look for fissure narrowing and up- or downshoots in adduction. Congenital and often isolated.",m:"Congenital cranial dysinnervation: absent CN VI nucleus with misdirected CN III innervation. Don't image as an acquired CN VI palsy if the story and signs fit."},
+ "Right Brown syndrome":{f:(gx,gy)=>({R:[gx,(gx<0&&gy>0)?-0.05:gy],L:[gx,gy]}),
+  d:"The right eye can't elevate in adduction (up and to the left); elevation in abduction is nearly normal.",t:"Forced ductions show restriction to elevation in adduction. May have a click.",m:"Acquired Brown syndrome can follow trauma, sinus surgery or inflammation (rheumatoid arthritis); the congenital form is from a tight superior oblique tendon."},
+ "Thyroid eye disease (right IR)":{f:(gx,gy)=>({R:[gx,Math.min(gy,0.05)-0.08],L:[gx,gy],lidR:-1}),
+  d:"Right eye restricted in upgaze from a tight inferior rectus, with lid retraction.",t:"Forced ductions, intraocular pressure rise on upgaze, orbit imaging showing muscle bellies enlarged with tendon sparing.",m:"Check for compressive optic neuropathy (acuity, color, RAPD, fields) at every visit."},
+ "Myasthenia gravis":{f:(gx,gy)=>({R:[gx>0?0.5*gx:gx,gy],L:[gx,gy>0?0.45*gy:gy],lidL:1.4}),
+  d:"Variable ptosis and ophthalmoparesis that don't fit one nerve; pupils always spared. Shown here: left ptosis, limited right abduction and left elevation.",t:"Sustained upgaze, ice test, rest test, Cogan lid twitch; AChR and MuSK antibodies; repetitive stimulation or single-fiber EMG.",m:"Ask about swallowing, breathing and limb weakness: generalized disease and crisis risk."},
+ "Sagging eye syndrome":{f:(gx,gy)=>({R:[gx-0.07,gy-0.05],L:[gx+0.07,gy]}),
+  d:"Small-angle esotropia worse at distance, small hypotropia, with aponeurotic ptosis, high lid creases and deep superior sulci in an older adult.",t:"Normal ductions, normal neuro exam; orbit MRI (if done) shows inferior displacement of the lateral rectus.",m:"Recognizing it can spare neurologic workup, but rule out CN VI palsy, myasthenia and divergence insufficiency from neurologic disease if anything is atypical."}
+};
+const names=Object.keys(COND);
+function eye(cx,cy,pos,lid){
+  const ix=cx-pos[0]*13, iy=cy-pos[1]*6.5, top=cy-11+(lid>0?lid*5:0), ret=lid<0;
+  return `<clipPath id="c${cx}_${cy}"><ellipse cx="${cx}" cy="${cy}" rx="20" ry="11"/></clipPath>
+  <ellipse cx="${cx}" cy="${cy}" rx="20" ry="11" fill="#FBF8F3" stroke="var(--stemline)"/>
+  <g clip-path="url(#c${cx}_${cy})"><circle cx="${ix}" cy="${iy}" r="8" fill="#5E7F94"/><circle cx="${ix}" cy="${iy}" r="3.4" fill="#0A0F14"/>
+  ${lid>0?`<rect x="${cx-22}" y="${cy-14}" width="44" height="${top-cy+14+3}" fill="#E8D3C2"/>`:""}</g>
+  <path d="M${cx-21},${cy+(ret?-1:0)} Q${cx},${(lid>0?top:cy-(ret?17:13))-4} ${cx+21},${cy+(ret?-1:0)}" stroke="#8C6E5A" stroke-width="1.8" fill="none"/>`;
+}
+function drawNine(name){
+  const C=COND[name]; let s="";
+  const cols=[1,0,-1], rows=[1,0,-1];
+  rows.forEach((gy,r)=>cols.forEach((gx,c)=>{
+    const o=C.f(gx,gy), x0=12+c*106, y0=10+r*66;
+    s+=`<rect x="${x0}" y="${y0}" width="100" height="58" rx="8" fill="var(--bg)"/>`;
+    s+=eye(x0+28,y0+29,o.R,o.lidR||0)+eye(x0+72,y0+29,o.L,o.lidL||0);
+  }));
+  document.getElementById("grid").innerHTML=s;
+  document.getElementById("nineCard").innerHTML=`<h3 style="margin-top:0">${name}</h3><dl><dt>What you see</dt><dd>${C.d}</dd><dt>Key tests</dt><dd>${C.t}</dd></dl><dl class="miss"><dt>Don't miss</dt><dd>${C.m}</dd></dl>`;
+}
+chips(document.getElementById("cond"),names,i=>drawNine(names[i]));
+
+/* ---------- 3-step ---------- */
+let a1=null,a2=null,a3=null;
+const MAP={"R-L-R":"Right superior oblique","R-L-L":"Left superior rectus","R-R-R":"Left inferior oblique","R-R-L":"Right inferior rectus",
+           "L-R-L":"Left superior oblique","L-R-R":"Right superior rectus","L-L-L":"Right inferior oblique","L-L-R":"Left inferior rectus"};
+function show3(){
+  const out=document.getElementById("threeOut");
+  if(!a1||!a2||!a3){out.innerHTML=`<p>Answer all three steps.</p>`;return;}
+  const m=MAP[`${a1}-${a2}-${a3}`];
+  const so=m.includes("superior oblique");
+  out.innerHTML=`<p class="kicker">Weak muscle</p><p class="result">${m}</p>
+  <dl><dt>Why</dt><dd>Step 1 narrows to the depressors of the higher eye or the elevators of the lower eye. Step 2 keeps the two that act most in that gaze. Step 3 picks the one whose torsional partner is stimulated by that tilt.</dd>
+  ${so?`<dt>Next</dt><dd>Measure torsion: a superior oblique palsy causes excyclotorsion of the higher eye. Check old photos for a long-standing head tilt.</dd>`:`<dt>Next</dt><dd>An isolated palsy of this muscle is uncommon. Think about restriction, myasthenia, skew deviation or a partial CN III palsy.</dd>`}</dl>
+  <dl class="miss"><dt>The fourth step</dt><dd>Repeat the measurement supine. A drop of 50% or more favors skew deviation, which can mimic any 3-step result.</dd></dl>`;
+}
+chips(document.getElementById("s1"),["Right eye","Left eye"],i=>{a1=i?"L":"R";show3()},null);
+chips(document.getElementById("s2"),["Patient's right","Patient's left"],i=>{a2=i?"L":"R";show3()},null);
+chips(document.getElementById("s3"),["Right shoulder","Left shoulder"],i=>{a3=i?"L":"R";show3()},null);
+show3();
+
+/* ---------- lids ---------- */
+const LIDS=[
+ {n:"Aponeurotic ptosis",s:"Older adult, good levator function, high or absent lid crease, deep superior sulcus.",t:"Measure MRD1 and levator function (normal is about 15 mm).",p:"Common after cataract surgery and contact lens wear; surgical repair if visually significant."},
+ {n:"Congenital ptosis",s:"Present from birth, poor levator function, lid lag on downgaze.",t:"Check vision and refraction for amblyopia from occlusion or astigmatism.",p:"Marcus Gunn jaw-winking: lid elevates with chewing or jaw movement."},
+ {n:"Myasthenic ptosis",s:"Variable, fatigable, often asymmetric; may shift sides.",t:"Sustained upgaze, ice test, Cogan lid twitch, rest test; antibodies and EMG.",p:"Pupils are never involved. Ask about bulbar and limb symptoms."},
+ {n:"Horner ptosis",s:"Mild (1 to 2 mm) with lower-lid elevation and miosis.",t:"Dim-light anisocoria and apraclonidine testing (Module 7).",p:"Acute painful Horner needs emergent vascular imaging."},
+ {n:"CN III ptosis",s:"Often complete, with ophthalmoplegia and possibly a dilated pupil.",t:"Motility and pupil exam.",p:"Pupil-involving: emergent vascular imaging."},
+ {n:"Myopathic ptosis",s:"Bilateral, slowly progressive, often with limited motility but little diplopia.",t:"Consider CPEO (mitochondrial; check ECG for heart block in Kearns-Sayre), oculopharyngeal and myotonic dystrophy.",p:"Kearns-Sayre: CPEO, pigmentary retinopathy and heart block; refer to cardiology."},
+ {n:"Pseudoptosis",s:"Looks like ptosis but levator works: dermatochalasis, brow ptosis, hypotropia, enophthalmos, or contralateral lid retraction.",t:"Lift the brow, cover the other eye, check for hypotropia, and look for retraction on the other side.",p:"Unilateral lid retraction from TED often makes the normal side look ptotic."},
+ {n:"Lid retraction",s:"Sclera visible above the limbus, lid lag on downgaze.",t:"Thyroid function and antibodies; consider dorsal midbrain (Collier sign) if TED is absent.",p:"TED is the most common cause of both unilateral and bilateral lid retraction."},
+ {n:"Blepharospasm and hemifacial spasm",s:"Blepharospasm: bilateral involuntary closure. Hemifacial spasm: one side, including lower face.",t:"Hemifacial spasm needs MRI to look for vascular compression of CN VII.",p:"Both respond well to botulinum toxin injections."},
+ {n:"Lagophthalmos",s:"Incomplete lid closure, exposure keratopathy.",t:"Check CN VII function and Bell phenomenon.",p:"Protect the cornea: lubrication, taping, moisture chamber, lid weight."}
+];
+chips(document.getElementById("lidChips"),LIDS.map(x=>x.n),i=>{const x=LIDS[i];document.getElementById("lidCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Signs</dt><dd>${x.s}</dd><dt>Key test</dt><dd>${x.t}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: Seeing double down the hallway",stem:"A 71-year-old man with diabetes and hypertension has 5 days of horizontal diplopia worse at distance and looking right. Right abduction is limited; the rest of the exam is normal.",
+  steps:[
+   {q:"Diagnosis?",a:"Isolated right CN VI palsy, likely microvascular, but not proven."},
+   {q:"Does he need an MRI?",a:"Many neuro-ophthalmologists image early. In a prospective study of patients 50 or older, MRI and workup found another cause in 16.5% overall and 10% of those with vascular risk factors only, including tumors, midbrain infarcts and GCA (Tamhankar 2013)."},
+   {q:"What else must you check today?",a:"ESR, CRP and GCA symptoms; discs for papilledema; and other cranial nerves. Expect microvascular palsies to improve over weeks to about 3 months; failure to improve demands imaging."}
+  ]},
+ {t:"Case 2: Droopy lid that lifts when looking down",stem:"A 59-year-old woman has a right CN III palsy that began gradually months ago. Her right lid elevates when she looks down.",
+  steps:[
+   {q:"What's the lid sign called and what does it mean?",a:"Aberrant regeneration (oculomotor synkinesis). It follows compression or trauma, not microvascular ischemia."},
+   {q:"Next step?",a:"MRI with contrast and vascular imaging: aberrant regeneration without a prior acute palsy suggests a slowly growing lesion such as a cavernous sinus meningioma or aneurysm."},
+   {q:"Why does that matter for workup?",a:"A vasculopathic patient with aberrant regeneration still needs imaging; the sign rules out a purely microvascular cause."}
+  ]},
+ {t:"Case 3: After the bike crash",stem:"An 18-year-old had a concussion in a bike accident. He now sees images tilted and doubled when reading. Small right hypertropia in right gaze, left hypertropia in left gaze; double Maddox rod shows 14 degrees of excyclotorsion.",
+  steps:[
+   {q:"Diagnosis?",a:"Bilateral CN IV palsies: reversing hypertropia on side gaze and large excyclotorsion."},
+   {q:"What other finding fits?",a:"A V-pattern esotropia (more esotropia in downgaze), and symptoms worst in downgaze when reading."},
+   {q:"Why are the nerves vulnerable here?",a:"They exit dorsally and decussate in the anterior medullary velum, where they're easily contused against the tentorium."}
+  ]},
+ {t:"Case 4: Double at distance, fine up close",stem:"A 76-year-old woman has a year of horizontal double vision at distance only. Small esotropia at distance, minimal at near, full ductions, bilateral ptosis with high lid creases and deep sulci. Neuro exam normal.",
+  steps:[
+   {q:"Most likely diagnosis?",a:"Sagging eye syndrome (age-related distance esotropia), from involution of orbital connective tissue."},
+   {q:"What should you still exclude?",a:"Myasthenia (fatigability, ice test, antibodies), bilateral partial CN VI palsy, and neurologic divergence insufficiency (headache, papilledema, other signs)."},
+   {q:"Management?",a:"Base-out prism for distance; strabismus surgery if needed. Recognizing it may spare a neurologic workup."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{const d=document.createElement("div");d.className="card";d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map(s=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");caseList.appendChild(d);});
+caseList.addEventListener("click",e=>{if(!e.target.classList.contains("reveal"))return;const a=e.target.nextElementSibling,on=!a.classList.contains("on");a.classList.toggle("on",on);e.target.setAttribute("aria-expanded",String(on));e.target.textContent=on?"Hide answer":"Reveal answer";});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "A pupil-involving CN III palsy is an aneurysm until proven otherwise; get emergent vascular imaging.",
+ "Aberrant regeneration of CN III never follows microvascular ischemia; image for compression.",
+ "Even with vascular risk factors, about 1 in 10 older patients with an isolated ocular motor palsy had another cause on MRI and workup (Tamhankar 2013).",
+ "Microvascular palsies should improve within about 3 months; if not, or if they worsen or spread, image.",
+ "Always ask about GCA symptoms and check ESR and CRP in older patients with diplopia.",
+ "CN VI palsy can be a false localizing sign of raised intracranial pressure; look at the discs.",
+ "Duane syndrome: abduction deficit with little diplopia and fissure narrowing on adduction. Don't work it up as an acquired CN VI palsy.",
+ "Myasthenia can mimic any pupil-sparing motility pattern; check fatigability and lids.",
+ "Thyroid eye disease is the most common cause of both lid retraction and restrictive strabismus in adults.",
+ "The 3-step test identifies a pattern, not a diagnosis: restriction, myasthenia and skew can all produce a 'superior oblique' result."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"Right hypertropia, worse in left gaze, worse with right head tilt. Weak muscle?",o:["Right inferior rectus","Right superior oblique","Left superior rectus","Left inferior oblique"],a:1,e:"Classic right superior oblique palsy."},
+ {q:"Left hypertropia, worse in right gaze, worse with right head tilt. Weak muscle?",o:["Left superior oblique","Right superior rectus","Right inferior oblique","Left inferior rectus"],a:1,e:"The right superior rectus elevates in abduction (right gaze) and intorts with right tilt; if weak, the left eye appears higher."},
+ {q:"In Tamhankar 2013, a non-microvascular cause was found in what share of older patients with isolated ocular motor palsy?",o:["2%","16.5%","40%","60%"],a:1,e:"16.5% overall, including tumors, midbrain infarcts and GCA."},
+ {q:"Lid elevation on downgaze in a CN III palsy indicates:",o:["Microvascular ischemia","Aberrant regeneration from compression or trauma","Myasthenia","Horner syndrome"],a:1,e:"Aberrant regeneration rules out a purely microvascular cause."},
+ {q:"Limited abduction, fissure narrowing on adduction and no diplopia since childhood:",o:["CN VI palsy","Duane syndrome","Brown syndrome","Myasthenia"],a:1,e:"Duane syndrome type 1."},
+ {q:"Limited elevation only in adduction with positive forced ductions:",o:["Inferior oblique palsy","Brown syndrome","Superior rectus palsy","CN III palsy"],a:1,e:"Brown syndrome: restricted superior oblique tendon."},
+ {q:"Which finding is NEVER part of myasthenic ophthalmoparesis?",o:["Ptosis","Variable diplopia","Pupil involvement","Cogan lid twitch"],a:2,e:"Myasthenia spares the pupil."},
+ {q:"More than about 10 degrees of excyclotorsion suggests:",o:["Unilateral CN IV palsy","Bilateral CN IV palsy","Skew deviation","Brown syndrome"],a:1,e:"Large excyclotorsion is typical of bilateral superior oblique palsy."},
+ {q:"Small distance esotropia in an older adult with deep superior sulci and full ductions suggests:",o:["Bilateral CN VI palsy","Sagging eye syndrome","Duane syndrome","Thyroid eye disease"],a:1,e:"Sagging eye syndrome, from orbital connective tissue involution."},
+ {q:"Hemifacial spasm needs which test?",o:["Ice test","MRI for vascular compression of CN VII","Edrophonium test","Forced ductions"],a:1,e:"Vascular compression at the CN VII root exit zone is the usual cause; tumors must be excluded."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 13: Vascular disorders</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.cmp{display:grid;gap:6px}
+.cmprow{background:var(--panel);border-radius:12px;padding:8px 10px}
+.cmprow h4{margin:0 0 6px;font-size:.84rem;color:var(--muted);font-weight:600}
+.cmpcells{display:grid;gap:8px}
+.cmpcells div{font-size:.88rem;border-left:3px solid var(--stem);padding-left:7px}
+.cmpcells b{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.fundus{background:#000;border-radius:14px;padding:8px;display:flex;justify-content:center}
+.fundus svg{max-width:300px}
+
+.slider{width:100%;accent-color:var(--hot);margin:10px 0 2px}
+.gl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.ladder li{margin:8px 0}
+
+.vfwrap{background:var(--panel);border-radius:14px;padding:10px}
+.prog{font-size:.85rem;color:var(--muted);margin:4px 0 0}
+.next{font:inherit;margin-top:10px;padding:9px 14px;border-radius:10px;border:none;background:var(--ink);color:var(--bg);cursor:pointer}
+.brain svg .rg{cursor:pointer}
+.brain svg .rg:focus-visible{outline:none;stroke:var(--inter);stroke-width:3}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.read{display:flex;justify-content:space-around;font-size:.9rem;margin-top:4px}
+.read b{font-family:Charter,Georgia,serif;font-size:1.05rem}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.9rem;margin:6px 0}
+.toggle input{width:20px;height:20px;accent-color:var(--inter)}
+ol.algo li{margin:8px 0}
+
+.nine{background:var(--panel);border-radius:14px;padding:8px}
+.step3{margin:8px 0}
+.step3 p{margin:4px 0;font-weight:600;font-size:.9rem}
+.result{font-family:Charter,Georgia,serif;font-size:1.3rem;font-weight:600;margin:4px 0}
+
+.flow{background:var(--panel);border-radius:14px;padding:12px}
+.flow .node{border-left:4px solid var(--inter);padding:6px 10px;margin:8px 0}
+.flow .node.end{border-left-color:var(--hot);background:color-mix(in srgb,var(--hot) 10%,transparent);border-radius:0 8px 8px 0}
+.flow .opts{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.flow .opts button{font:inherit;font-size:.86rem;padding:8px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.tree svg .nd{cursor:pointer}
+.tree svg .nd:focus-visible{outline:none}
+.tree svg .nd:focus-visible circle{stroke:var(--inter);stroke-width:3}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 13 of 22</p>
+  <h1>Vascular disorders</h1>
+  <p class="sub">Retinal and cerebral ischemia, hemorrhage, PRES, venous thrombosis, vascular malformations, fistulas and ocular ischemic syndrome. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="flow" aria-selected="true">Eye stroke pathway</button>
+    <button role="tab" data-tab="tree" aria-selected="false">Vascular map</button>
+    <button role="tab" data-tab="retina" aria-selected="false">Retinal vascular</button>
+    <button role="tab" data-tab="mal" aria-selected="false">Malformations and more</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and sources</button>
+  </nav>
+
+  <section class="tab on" id="tab-flow">
+    <h2>Sudden painless monocular vision loss</h2>
+    <p class="sub">Walk through the decisions. Each answer opens the next step.</p>
+    <div class="flow" id="flow"></div>
+    <button class="reveal" id="restart">Start over</button>
+  </section>
+
+  <section class="tab" id="tab-tree">
+    <h2>Which vessel, which deficit?</h2>
+    <p class="sub">Tap a vessel to see what goes wrong when it fails, bleeds or balloons.</p>
+    <div class="tree card"><svg id="treeSvg" viewBox="0 0 330 300" role="img" aria-label="Schematic arterial supply to the visual system"></svg></div>
+    <div class="card accent" id="treeCard"><p>Tap a circle on the diagram.</p></div>
+  </section>
+
+  <section class="tab" id="tab-retina">
+    <h2>Retinal vascular disease</h2>
+    <div class="chips" id="retChips"></div>
+    <div class="card accent" id="retCard"></div>
+  </section>
+
+  <section class="tab" id="tab-mal">
+    <h2>Hemorrhage, PRES, venous disease and malformations</h2>
+    <div class="chips" id="malChips"></div>
+    <div class="card accent" id="malCard"></div>
+  </section>
+
+  <section class="tab" id="tab-cases"><h2>Case vignettes</h2><p class="sub">Work each question before revealing the answer.</p><div id="caseList"></div></section>
+  <section class="tab" id="tab-pearls"><h2>Clinical pearls</h2><div id="pearlList"></div></section>
+  <section class="tab" id="tab-quiz"><h2>Self-quiz</h2><p class="sub">Ten questions. Tap an answer to see the explanation.</p><div id="quizList"></div><p class="score" id="score" aria-live="polite"></p><button class="reveal" id="resetQuiz">Reset quiz</button></section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Recognize acute vs chronic lesions</label>
+      <label><input type="checkbox"> Identify vascular malformations</label>
+      <label><input type="checkbox"> Understand urgent management</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="src">
+      <li><b>CRAO is a form of acute ischemic stroke; fewer than 20% regain functional acuity; about 95% nonarteritic and 5% arteritic; conservative treatments (ocular massage, paracentesis, hemodilution) unproven and possibly harmful:</b> Mac Grory B, Schrag M, Biousse V, et al. Management of central retinal artery occlusion: a scientific statement from the American Heart Association. <i>Stroke.</i> 2021;52:e282-e294. doi:10.1161/STR.0000000000000366. <i>Note: the AHA's requested citation gives pages e282-e294; please check the page numbers listed in the curriculum outline.</i></li>
+      <li><b>THEIA: IV alteplase vs aspirin within 4.5 hours (70 patients); improvement of at least 0.3 logMAR in 66% vs 48%, not statistically significant; likely underpowered; no symptomatic hemorrhage:</b> Préterre C, Gaultier A, Obadia M, et al. <i>Lancet Neurol.</i> 2025;24(11):909-919. doi:10.1016/S1474-4422(25)00308-4.</li>
+      <li><b>TenCRAOS: IV tenecteplase vs aspirin within 4.5 hours (78 patients); vision recovery at 30 days in 20% vs 24% (P = 0.69); more adverse events with tenecteplase, including one fatal intracranial hemorrhage; authors do not support routine thrombolysis:</b> Ryan SJ, Jørstad ØK, Skjelland M, et al. A randomized trial of tenecteplase in acute central retinal artery occlusion. <i>N Engl J Med.</i> 2026;394(5):442-450. doi:10.1056/NEJMoa2508515.</li>
+      <li><b>Ongoing:</b> REVISION (IV alteplase vs placebo, NCT04965038) and a planned individual participant data meta-analysis (Mac Grory et al. <i>PLoS One.</i> 2026;21(3):e0342739). Check for updates; this evidence is changing quickly.</li>
+      <li>Other content reflects standard teaching in the core texts and curriculum readings.</li>
+    </ul></div>
+    <h3>Core reading (from the program curriculum)</h3>
+    <div class="card"><ul class="refs">
+      <li>Mac Grory B, et al. Management of central retinal artery occlusion: AHA scientific statement. <i>Stroke.</i> 2021.</li>
+      <li>Dinkin M, Patsalides A, Ertel M. Diagnosis and management of cerebral venous diseases in neuro-ophthalmology: ongoing controversies. <i>Asia Pac J Ophthalmol.</i> 2019;8(1):73-85.</li>
+      <li>Sabayan B, Lineback C, Viswanathan A, Leslie-Mazwi TM, Shaibani A. Central nervous system vascular malformations: a clinical review. <i>Ann Clin Transl Neurol.</i> 2021;8(2):504-522.</li>
+    </ul></div>
+  </section>
+
+  <p class="foot">Schematic diagrams for teaching. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick,init=0){host.innerHTML="";items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});if(init!==null)host.children[init].click();}
+
+/* ---------- eye stroke flow ---------- */
+const FLOW={
+ start:{q:"A patient reports sudden, painless vision loss in one eye. Is it still present?",o:[["Resolved (transient)","tmvl"],["Still present","exam"]]},
+ tmvl:{end:true,t:"Transient monocular vision loss",b:"This is a retinal TIA until proven otherwise. Send to an emergency department or stroke center the same day for MRI with DWI, vascular imaging of the head and neck, and cardiac evaluation. Over 50: ESR, CRP and platelets for giant cell arteritis."},
+ exam:{q:"Exam shows retinal whitening, a cherry-red spot, attenuated arteries or boxcarring, and an RAPD. Patient is over 50. Any GCA symptoms (headache, jaw claudication, scalp tenderness, PMR, weight loss) or a pale swollen disc?",o:[["Yes, or can't exclude","gca"],["No","time"]]},
+ gca:{end:true,t:"Possible arteritic CRAO",b:"Draw ESR, CRP and platelets and start high-dose steroids immediately (Module 4). Arteritic disease makes up about 5% of CRAO; missing it risks the other eye. Thrombolysis has no role in arteritic occlusion."},
+ time:{q:"How long since onset (last known normal vision)?",o:[["Within 4.5 hours","early"],["More than 4.5 hours","late"]]},
+ early:{end:true,t:"Nonarteritic CRAO, early",b:"Treat as an acute stroke: emergency department and stroke team now. Two randomized trials did not show benefit of IV thrombolysis over aspirin (THEIA, alteplase: 66% vs 48% improvement, not significant; TenCRAOS, tenecteplase: 20% vs 24% recovery, with a fatal intracranial hemorrhage). Thrombolysis is not routine; any use should follow an institutional protocol or trial with informed discussion. Avoid ocular massage, paracentesis and hemodilution, which are unproven and possibly harmful. Complete the stroke workup."},
+ late:{end:true,t:"Nonarteritic CRAO, later presentation",b:"Still a stroke: same-day emergency evaluation with MRI DWI (silent brain infarcts are common), carotid and cardiac workup, and secondary prevention (antiplatelet, statin, risk factors). Follow for neovascularization (iris, angle, disc) over the next weeks."}
+};
+function renderFlow(path){
+  const host=document.getElementById("flow"); host.innerHTML="";
+  path.forEach((k,idx)=>{const n=FLOW[k],d=document.createElement("div");d.className="node"+(n.end?" end":"");
+    if(n.end){d.innerHTML=`<h3 style="margin:0 0 4px">${n.t}</h3><p style="margin:0">${n.b}</p>`;}
+    else{d.innerHTML=`<p class="q" style="margin:0">${n.q}</p><div class="opts">${n.o.map(([l,nx])=>`<button data-nx="${nx}" ${idx<path.length-1?'disabled':''}>${l}</button>`).join("")}</div>`;}
+    host.appendChild(d);});
+  host.querySelectorAll("button[data-nx]:not([disabled])").forEach(b=>b.addEventListener("click",()=>renderFlow([...path,b.dataset.nx])));
+}
+renderFlow(["start"]);
+document.getElementById("restart").addEventListener("click",()=>renderFlow(["start"]));
+
+/* ---------- vascular map ---------- */
+const NODES=[
+ {id:"ica",x:70,y:270,lx:86,ly:274,an:"start",sh:"Cervical ICA",l:"Cervical ICA",d:"Atherosclerosis or dissection.",f:"Transient monocular vision loss, CRAO or BRAO from emboli, ocular ischemic syndrome with severe stenosis; painful Horner with dissection.",p:"Image from the aortic arch to the skull base."},
+ {id:"cav",x:70,y:210,lx:86,ly:214,an:"start",sh:"Cavernous ICA",l:"Cavernous ICA",d:"Aneurysm or carotid-cavernous fistula.",f:"CN VI palsy first (it floats next to the ICA), then III, IV, V1; postganglionic Horner. Fistula: proptosis, chemosis, arterialized conjunctival vessels, bruit, raised IOP.",p:"CN VI palsy plus Horner localizes to the cavernous sinus."},
+ {id:"oph",x:40,y:140,lx:40,ly:122,an:"middle",sh:"Ophthalmic",l:"Ophthalmic artery",d:"Embolism, dissection, aneurysm, GCA.",f:"Branches to the central retinal artery (inner retina) and posterior ciliary arteries (optic disc, choroid). Ophthalmic artery occlusion causes severe loss with a less prominent cherry-red spot. Ophthalmic segment aneurysms compress the optic nerve.",p:"Posterior ciliary artery occlusion in GCA causes arteritic AION."},
+ {id:"pcom",x:130,y:110,lx:130,ly:92,an:"middle",sh:"PComm",l:"Posterior communicating",d:"Aneurysm at the ICA-PComm junction.",f:"Pupil-involving CN III palsy, often with headache.",p:"Emergent CTA or MRA."},
+ {id:"ach",x:160,y:170,lx:160,ly:194,an:"middle",sh:"Ant. choroidal",l:"Anterior choroidal",d:"Small-vessel stroke.",f:"Arises from the supraclinoid ICA. Optic tract and LGN: homonymous hemianopia or quadruple sectoranopia (upper and lower sectors lost, horizontal zone spared), with hemiparesis and hemisensory loss.",p:"Sectoranopia points to the LGN."},
+ {id:"mca",x:270,y:210,lx:270,ly:234,an:"middle",sh:"MCA",l:"MCA",d:"Embolic or atherosclerotic stroke.",f:"Optic radiations (parietal and temporal): quadrantanopia or hemianopia with neglect, aphasia or hemiparesis; acute gaze deviation toward the lesion (frontal eye field).",p:"Homonymous defect plus cortical signs suggests MCA territory."},
+ {id:"pca",x:230,y:110,lx:230,ly:92,an:"middle",sh:"PCA",l:"PCA",d:"Embolic stroke (often cardioembolic), PRES.",f:"Occipital cortex: congruous homonymous hemianopia, often macular sparing; bilateral causes cortical blindness; left PCA with splenium causes alexia without agraphia.",p:"Acute hemianopia is a stroke until proven otherwise."},
+ {id:"bas",x:275,y:45,lx:258,ly:49,an:"end",sh:"Basilar",l:"Basilar and its branches",d:"Thrombosis, embolism, aneurysm.",f:"Brainstem ocular motor syndromes: INO, gaze palsies, skew, nystagmus; top-of-basilar syndrome with vertical gaze palsy and bilateral PCA infarcts.",p:"Fluctuating diplopia, dysarthria and drowsiness can herald basilar occlusion: emergency."}
+];
+const EDGES=[["ica","cav"],["cav","oph"],["cav","pcom"],["cav","ach"],["cav","mca"],["pcom","pca"],["pca","bas"]];
+(function(){
+  const svg=document.getElementById("treeSvg"),NS="http://www.w3.org/2000/svg",P=Object.fromEntries(NODES.map(n=>[n.id,n]));
+  let s="";EDGES.forEach(([a,b])=>{s+=`<line x1="${P[a].x}" y1="${P[a].y}" x2="${P[b].x}" y2="${P[b].y}" stroke="var(--hot)" stroke-width="4" stroke-linecap="round" opacity=".55"/>`;});
+  svg.innerHTML=s+`<text x="10" y="290" class="lvl">neck</text><text x="300" y="20" class="lvl" text-anchor="end">brainstem</text>`;
+  NODES.forEach(n=>{const g=document.createElementNS(NS,"g");g.setAttribute("class","nd");g.setAttribute("tabindex","0");g.setAttribute("role","button");g.setAttribute("aria-label",n.l);
+    g.innerHTML=`<circle cx="${n.x}" cy="${n.y}" r="11" fill="var(--panel)" stroke="var(--hot)" stroke-width="2.5"/><text x="${n.lx}" y="${n.ly}" class="lbl" text-anchor="${n.an}">${n.sh}</text>`;
+    const go=()=>{svg.querySelectorAll(".nd circle").forEach(c=>c.setAttribute("fill","var(--panel)"));g.querySelector("circle").setAttribute("fill","var(--hot)");
+      document.getElementById("treeCard").innerHTML=`<h3 style="margin-top:0">${n.l}</h3><dl><dt>What goes wrong</dt><dd>${n.d}</dd><dt>Neuro-ophthalmic picture</dt><dd>${n.f}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${n.p}</dd></dl>`;};
+    g.addEventListener("click",go);g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}});svg.appendChild(g);});
+})();
+
+/* ---------- retinal vascular ---------- */
+const RET=[
+ {n:"Central retinal artery occlusion",f:"Sudden severe painless loss, RAPD, retinal whitening, cherry-red spot, boxcarring; a spared cilioretinal artery preserves central vision.",w:"Stroke workup the same day; GCA screen if over 50.",p:"It's a stroke of the eye; send to the emergency department."},
+ {n:"Branch retinal artery occlusion",f:"Sectoral whitening with a field defect respecting the horizontal meridian; visible embolus (Hollenhorst, calcific, fibrin-platelet).",w:"Same stroke workup as CRAO. Multiple BRAOs in a young patient with hearing loss and encephalopathy: think Susac syndrome.",p:"A Hollenhorst plaque means carotid evaluation."},
+ {n:"Central retinal vein occlusion",f:"Tortuous dilated veins, hemorrhages in all quadrants, disc edema, cotton wool spots.",w:"Blood pressure, glucose, lipids; thrombophilia testing in young patients; check IOP (glaucoma is a risk factor).",p:"Monitor for macular edema and neovascular glaucoma (the '90-day glaucoma')."},
+ {n:"Ocular ischemic syndrome",f:"Dilated but not tortuous veins, mid-peripheral dot-blot hemorrhages, iris neovascularization, anterior chamber cells, eye pain, slow recovery after light exposure.",w:"Carotid imaging: usually severe ipsilateral carotid stenosis or occlusion.",p:"Hemorrhages in the mid-periphery rather than the posterior pole help distinguish it from CRVO and diabetic retinopathy."},
+ {n:"Hypertensive retinopathy and optic neuropathy",f:"Arteriolar narrowing, AV nicking, flame hemorrhages, cotton wool spots, bilateral disc edema and macular star in malignant hypertension.",w:"Check blood pressure in every patient with bilateral disc edema.",p:"Malignant hypertension can mimic papilledema; lower blood pressure carefully to avoid ischemic optic neuropathy."},
+ {n:"Diabetic papillopathy",f:"Unilateral or bilateral disc swelling with telangiectatic surface vessels and mild or no vision loss in a patient with diabetes.",w:"Diagnosis of exclusion; rule out papilledema and NAION.",p:"Usually resolves over months; may follow rapid glucose lowering."}
+];
+chips(document.getElementById("retChips"),RET.map(x=>x.n),i=>{const x=RET[i];document.getElementById("retCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Findings</dt><dd>${x.f}</dd><dt>Workup</dt><dd>${x.w}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- malformations ---------- */
+const MAL=[
+ {n:"Intracranial hemorrhage",f:"Field defects, gaze deviation, papilledema from raised pressure; Terson syndrome (vitreous or retinal hemorrhage) with subarachnoid hemorrhage.",w:"Noncontrast CT first; CTA for aneurysm or AVM.",p:"Dilate patients with subarachnoid hemorrhage to look for Terson syndrome."},
+ {n:"PRES",f:"Headache, seizures, encephalopathy and cortical vision loss (often bilateral homonymous or cortical blindness) with severe hypertension, eclampsia, renal failure or immunosuppressants.",w:"MRI with posterior white matter vasogenic edema (FLAIR bright, usually not restricted).",p:"Usually reversible with blood pressure control and removing the trigger; delay can cause infarction."},
+ {n:"Cerebral venous sinus thrombosis",f:"Headache, papilledema, CN VI palsy, seizures, focal deficits; risk with pregnancy, postpartum, estrogen, thrombophilia, infection, dehydration.",w:"MRI with MRV or CT venography; a normal noncontrast CT does not exclude it.",p:"Treat with anticoagulation even if there's hemorrhage; protect vision from raised pressure."},
+ {n:"Aneurysm",f:"PComm: pupil-involving CN III. Cavernous: CN VI first, then III, IV, V1. Ophthalmic or supraclinoid: optic nerve or chiasm compression.",w:"CTA or MRA; catheter angiography if suspicion stays high.",p:"Sudden worst headache with a CN III palsy is aneurysmal rupture until proven otherwise."},
+ {n:"Arteriovenous malformation",f:"Occipital AVMs cause visual auras that are usually stereotyped and may be on the same side every time, homonymous field loss, or hemorrhage.",w:"MRI with MRA, then catheter angiography.",p:"Migraine-like aura that is always on the same side deserves imaging."},
+ {n:"Dural arteriovenous fistula",f:"Pulsatile tinnitus, headache, papilledema from venous hypertension; cavernous sinus dural fistulas cause red eye, mild proptosis and diplopia.",w:"MRI or CTA may miss it; catheter angiography is the gold standard.",p:"Unexplained papilledema with pulsatile tinnitus and normal MRV may still be a dural fistula."},
+ {n:"Carotid-cavernous fistula",f:"Direct (high flow, often after trauma): sudden proptosis, chemosis, bruit, corkscrew vessels, raised IOP, CN VI palsy. Indirect (dural, low flow, older women): chronic red eye mistaken for conjunctivitis, mild proptosis, elevated IOP.",w:"CTA or MRA showing a dilated superior ophthalmic vein; catheter angiography for treatment.",p:"A 'chronic conjunctivitis' with corkscrew vessels and raised IOP in one eye: think indirect fistula."},
+ {n:"Cavernous malformation",f:"Brainstem cavernomas cause ocular motor syndromes and skew with hemorrhage; supratentorial ones cause seizures.",w:"MRI with SWI or GRE showing a 'popcorn' lesion with a hemosiderin rim.",p:"Often associated with a developmental venous anomaly; familial forms have multiple lesions."},
+ {n:"Orbital vascular malformations",f:"Venous malformations (orbital varix) enlarge with Valsalva or head-down position; venous-lymphatic malformations bleed (chocolate cysts) causing sudden proptosis; cavernous venous malformation (formerly cavernous hemangioma) is a slow-growing intraconal mass in adults.",w:"MRI with and without Valsalva or dynamic imaging; ultrasound.",p:"Proptosis that increases with bending over: orbital varix."}
+];
+chips(document.getElementById("malChips"),MAL.map(x=>x.n),i=>{const x=MAL[i];document.getElementById("malCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Neuro-ophthalmic features</dt><dd>${x.f}</dd><dt>Workup</dt><dd>${x.w}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: The curtain that didn't lift",stem:"A 69-year-old man with atrial fibrillation (off anticoagulation) lost vision in his left eye 2 hours ago. Count fingers OS, left RAPD, retinal whitening with a cherry-red spot. No GCA symptoms; ESR and CRP pending.",
+  steps:[
+   {q:"What's the diagnosis and where should he go?",a:"Nonarteritic CRAO: an acute ischemic stroke. Emergency department and stroke team now."},
+   {q:"Should he receive thrombolysis?",a:"The evidence doesn't support routine use. THEIA (alteplase) found no significant benefit over aspirin, and TenCRAOS (tenecteplase) found 20% vs 24% recovery with more adverse events, including a fatal hemorrhage. Use only within an institutional protocol or trial with informed discussion."},
+   {q:"What does the rest of his care involve?",a:"MRI with DWI, vascular imaging, cardiac evaluation, anticoagulation decisions with neurology, and follow-up for ocular neovascularization."}
+  ]},
+ {t:"Case 2: The red eye that wouldn't clear",stem:"A 66-year-old woman has 3 months of a red right eye treated as conjunctivitis. Corkscrew episcleral vessels, IOP 29 OD vs 15 OS, mild proptosis, intermittent diplopia from a right CN VI palsy.",
+  steps:[
+   {q:"Diagnosis?",a:"Indirect (dural) carotid-cavernous fistula."},
+   {q:"How do you confirm it?",a:"CTA or MRA showing an enlarged superior ophthalmic vein and asymmetric cavernous sinus; catheter angiography defines the fistula and allows treatment."},
+   {q:"Why is the IOP high?",a:"Raised episcleral venous pressure from arterialized venous outflow."}
+  ]},
+ {t:"Case 3: Blind after delivery",stem:"A 27-year-old woman, 2 days postpartum, has a severe headache, a seizure, blood pressure 190/115, and can't see. Pupils react normally; fundi are normal.",
+  steps:[
+   {q:"What's the visual problem and why are pupils normal?",a:"Cortical vision loss: the lesion is behind the LGN, so the pupillary light reflex is intact."},
+   {q:"Most likely diagnosis and confirming test?",a:"PRES with postpartum eclampsia; MRI shows posterior vasogenic edema on FLAIR."},
+   {q:"Management and prognosis?",a:"Control blood pressure, treat seizures (magnesium in eclampsia), and remove triggers. Vision usually recovers if treated promptly. Also exclude venous sinus thrombosis."}
+  ]},
+ {t:"Case 4: Aching eye, slow to recover from light",stem:"A 72-year-old man who smokes has a dull ache around his left eye and dimming of vision after looking at bright light. Mid-peripheral dot-blot hemorrhages, dilated non-tortuous veins, and early iris neovascularization OS.",
+  steps:[
+   {q:"Diagnosis?",a:"Ocular ischemic syndrome."},
+   {q:"Key test?",a:"Carotid imaging: expect severe ipsilateral stenosis or occlusion."},
+   {q:"Management?",a:"Vascular surgery referral for revascularization if appropriate, stroke risk factor control, and panretinal photocoagulation or anti-VEGF for neovascularization."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{const d=document.createElement("div");d.className="card";d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map(s=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");caseList.appendChild(d);});
+caseList.addEventListener("click",e=>{if(!e.target.classList.contains("reveal"))return;const a=e.target.nextElementSibling,on=!a.classList.contains("on");a.classList.toggle("on",on);e.target.setAttribute("aria-expanded",String(on));e.target.textContent=on?"Hide answer":"Reveal answer";});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "CRAO and transient monocular vision loss are strokes; send them to the emergency department the same day.",
+ "Screen everyone over 50 with CRAO for giant cell arteritis; arteritic cases make up about 5%.",
+ "Two randomized trials (THEIA, TenCRAOS) did not show benefit of IV thrombolysis for CRAO; it isn't routine care.",
+ "Ocular massage, paracentesis and hemodilution are unproven and may be harmful in CRAO.",
+ "A visible retinal embolus means carotid and cardiac evaluation.",
+ "Cortical blindness has normal pupils and normal fundi; think PRES, bilateral PCA stroke or top-of-basilar.",
+ "A normal noncontrast CT doesn't exclude venous sinus thrombosis.",
+ "CN VI palsy plus Horner localizes to the cavernous sinus.",
+ "A one-sided chronic red eye with corkscrew vessels and high IOP may be an indirect carotid-cavernous fistula.",
+ "Ocular ischemic syndrome: mid-peripheral hemorrhages, dilated non-tortuous veins and iris neovascularization; image the carotid."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"According to the AHA statement, CRAO is best classified as:",o:["An eye-only disease","A form of acute ischemic stroke","A venous disorder","A migraine variant"],a:1,e:"CRAO with retinal infarction meets the definition of acute ischemic stroke."},
+ {q:"In TenCRAOS, vision recovery at 30 days with tenecteplase vs aspirin was:",o:["60% vs 20%","20% vs 24%","45% vs 10%","90% vs 50%"],a:1,e:"20% vs 24% (P = 0.69), with more adverse events in the tenecteplase group."},
+ {q:"Which acute CRAO treatment is discouraged as unproven and possibly harmful?",o:["Aspirin","Ocular massage and anterior chamber paracentesis","Stroke workup","GCA screening"],a:1,e:"The AHA statement notes conservative treatments haven't been proven effective and may be harmful."},
+ {q:"About what proportion of CRAO is arteritic?",o:["5%","25%","50%","75%"],a:0,e:"About 5% (giant cell arteritis)."},
+ {q:"Pupil-involving CN III palsy most suggests an aneurysm of the:",o:["Basilar tip","Posterior communicating artery","Anterior communicating artery","MCA"],a:1,e:"PComm aneurysms compress the superficial pupillary fibers."},
+ {q:"Cortical blindness with normal pupils after severe hypertension in pregnancy suggests:",o:["CRAO","PRES","NAION","Optic neuritis"],a:1,e:"Posterior reversible encephalopathy syndrome."},
+ {q:"The first nerve typically affected in cavernous sinus disease is:",o:["CN III","CN IV","CN VI","CN V2"],a:2,e:"CN VI floats free next to the ICA."},
+ {q:"An enlarged superior ophthalmic vein on imaging suggests:",o:["TED","Carotid-cavernous fistula","Optic neuritis","Orbital lymphoma"],a:1,e:"Arterialized venous outflow distends the superior ophthalmic vein."},
+ {q:"Mid-peripheral dot-blot hemorrhages with dilated non-tortuous veins suggest:",o:["CRVO","Ocular ischemic syndrome","Diabetic retinopathy","Hypertensive retinopathy"],a:1,e:"Ocular ischemic syndrome; image the carotid."},
+ {q:"Anterior choroidal artery infarction of the LGN produces:",o:["Horizontal wedge sectoranopia","Upper and lower sectors lost, sparing a horizontal wedge","Bitemporal hemianopia","Central scotoma"],a:1,e:"The lateral choroidal artery pattern is the horizontal wedge; anterior choroidal is the mirror image."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>

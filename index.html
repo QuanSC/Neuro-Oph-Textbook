@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology textbook: 22 modules with simulations, cases, pearls and self-quizzes.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Neuro-ophthalmology: an interactive textbook</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.cmp{display:grid;gap:6px}
+.cmprow{background:var(--panel);border-radius:12px;padding:8px 10px}
+.cmprow h4{margin:0 0 6px;font-size:.84rem;color:var(--muted);font-weight:600}
+.cmpcells{display:grid;gap:8px}
+.cmpcells div{font-size:.88rem;border-left:3px solid var(--stem);padding-left:7px}
+.cmpcells b{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.fundus{background:#000;border-radius:14px;padding:8px;display:flex;justify-content:center}
+.fundus svg{max-width:300px}
+
+.slider{width:100%;accent-color:var(--hot);margin:10px 0 2px}
+.gl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.ladder li{margin:8px 0}
+
+.vfwrap{background:var(--panel);border-radius:14px;padding:10px}
+.prog{font-size:.85rem;color:var(--muted);margin:4px 0 0}
+.next{font:inherit;margin-top:10px;padding:9px 14px;border-radius:10px;border:none;background:var(--ink);color:var(--bg);cursor:pointer}
+.brain svg .rg{cursor:pointer}
+.brain svg .rg:focus-visible{outline:none;stroke:var(--inter);stroke-width:3}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.read{display:flex;justify-content:space-around;font-size:.9rem;margin-top:4px}
+.read b{font-family:Charter,Georgia,serif;font-size:1.05rem}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.9rem;margin:6px 0}
+.toggle input{width:20px;height:20px;accent-color:var(--inter)}
+ol.algo li{margin:8px 0}
+
+.nine{background:var(--panel);border-radius:14px;padding:8px}
+.step3{margin:8px 0}
+.step3 p{margin:4px 0;font-weight:600;font-size:.9rem}
+.result{font-family:Charter,Georgia,serif;font-size:1.3rem;font-weight:600;margin:4px 0}
+
+.mod{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:start;background:var(--panel);border-radius:14px;padding:12px 14px;margin-top:8px;text-decoration:none;color:var(--ink);border:1.5px solid transparent}
+.mod:hover,.mod:focus-visible{border-color:var(--inter);outline:none}
+.mod .num{font-family:Charter,Georgia,serif;font-size:1.3rem;font-weight:600;color:var(--inter);text-align:center}
+.mod h3{margin:0 0 2px;font-size:1rem}
+.mod p{margin:0;font-size:.86rem;color:var(--muted)}
+.search{width:100%;font:inherit;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);margin:6px 0}
+.vl li{margin:6px 0;font-size:.9rem}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Steven C. Quan, OD, FAAO</p>
+  <h1>Neuro-ophthalmology: an interactive textbook</h1>
+  <p class="sub">Twenty-two interactive study modules for residents and clinicians, each with an interactive tool, case vignettes, clinical pearls, a self-quiz and traceable sources.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="mods" aria-selected="true">Modules</button>
+    <button role="tab" data-tab="tools" aria-selected="false">Extra tools</button>
+    <button role="tab" data-tab="verify" aria-selected="false">Verify before formal use</button>
+    <button role="tab" data-tab="about" aria-selected="false">How to use</button>
+  </nav>
+
+  <section class="tab on" id="tab-mods">
+    <input class="search" id="q" type="search" placeholder="Search modules (for example, pupil, IIH, trials)" aria-label="Search modules">
+    <div id="list"><a class="mod" href="module_01_foundations.html" data-k="foundations: anatomy and physiology visual pathway lesion map with live field defects; cn ii, iii, iv, vi and sympathetic routes"><span class="num">01</span><span><h3>Foundations: anatomy and physiology</h3><p>Visual pathway lesion map with live field defects; CN II, III, IV, VI and sympathetic routes</p></span></a>
+<a class="mod" href="module_02_evaluation.html" data-k="ocular and neurologic evaluation swinging flashlight simulator; exam toolkit; history decoders"><span class="num">02</span><span><h3>Ocular and neurologic evaluation</h3><p>Swinging flashlight simulator; exam toolkit; history decoders</p></span></a>
+<a class="mod" href="module_03_neuroimaging.html" data-k="neuroimaging mri and ct sequence explorer with lesions; what to order"><span class="num">03</span><span><h3>Neuroimaging</h3><p>MRI and CT sequence explorer with lesions; what to order</p></span></a>
+<a class="mod" href="module_04_optic_neuropathies.html" data-k="optic neuropathies side-by-side comparison of 9 optic neuropathies; disc atlas"><span class="num">04</span><span><h3>Optic neuropathies</h3><p>Side-by-side comparison of 9 optic neuropathies; disc atlas</p></span></a>
+<a class="mod" href="module_05_disc_swelling_iih.html" data-k="optic disc swelling and iih frisén grade slider; iih criteria checker; treatment ladder"><span class="num">05</span><span><h3>Optic disc swelling and IIH</h3><p>Frisén grade slider; IIH criteria checker; treatment ladder</p></span></a>
+<a class="mod" href="module_06_visual_fields.html" data-k="visual field defects 15-field reading trainer; higher visual streams; non-organic testing"><span class="num">06</span><span><h3>Visual field defects</h3><p>15-field reading trainer; higher visual streams; non-organic testing</p></span></a>
+<a class="mod" href="module_07_anisocoria.html" data-k="anisocoria pupil lab with lighting, drops and mystery patients"><span class="num">07</span><span><h3>Anisocoria</h3><p>Pupil lab with lighting, drops and mystery patients</p></span></a>
+<a class="mod" href="module_08_motility.html" data-k="motility disorders nine-gaze diagrams; parks 3-step solver; lid disorders"><span class="num">08</span><span><h3>Motility disorders</h3><p>Nine-gaze diagrams; Parks 3-step solver; lid disorders</p></span></a>
+<a class="mod" href="module_09_supranuclear.html" data-k="supranuclear and internuclear disorders brainstem map with syndromes; gaze deviation decoder; facial nerve"><span class="num">09</span><span><h3>Supranuclear and internuclear disorders</h3><p>Brainstem map with syndromes; gaze deviation decoder; facial nerve</p></span></a>
+<a class="mod" href="module_10_nystagmus.html" data-k="nystagmus animated waveform viewer with live traces for 13 types"><span class="num">10</span><span><h3>Nystagmus</h3><p>Animated waveform viewer with live traces for 13 types</p></span></a>
+<a class="mod" href="module_11_inflammation_orbit.html" data-k="inflammation and orbital disease coronal orbit sorter; clinical activity score calculator"><span class="num">11</span><span><h3>Inflammation and orbital disease</h3><p>Coronal orbit sorter; Clinical Activity Score calculator</p></span></a>
+<a class="mod" href="module_12_neurological.html" data-k="neurological disorders ptosis lab (upgaze, ice, rest, cogan twitch, enhancement)"><span class="num">12</span><span><h3>Neurological disorders</h3><p>Ptosis lab (upgaze, ice, rest, Cogan twitch, enhancement)</p></span></a>
+<a class="mod" href="module_13_vascular.html" data-k="vascular disorders eye stroke decision pathway with 2025 to 2026 trials; vascular map"><span class="num">13</span><span><h3>Vascular disorders</h3><p>Eye stroke decision pathway with 2025 to 2026 trials; vascular map</p></span></a>
+<a class="mod" href="module_14_developmental_genetic.html" data-k="developmental and genetic disorders nf1 criteria checker; inheritance pedigrees; neurocutaneous syndromes"><span class="num">14</span><span><h3>Developmental and genetic disorders</h3><p>NF1 criteria checker; inheritance pedigrees; neurocutaneous syndromes</p></span></a>
+<a class="mod" href="module_15_infectious.html" data-k="infectious disease csf decoder; chandler staging; zoster and arn"><span class="num">15</span><span><h3>Infectious disease</h3><p>CSF decoder; Chandler staging; zoster and ARN</p></span></a>
+<a class="mod" href="module_16_trauma.html" data-k="trauma trauma triage pathway; ton evidence; orbital trauma and concussion"><span class="num">16</span><span><h3>Trauma</h3><p>Trauma triage pathway; TON evidence; orbital trauma and concussion</p></span></a>
+<a class="mod" href="module_17_systemic.html" data-k="other systemic conditions hydroxychloroquine dose and screening calculator; drug toxicities"><span class="num">17</span><span><h3>Other systemic conditions</h3><p>Hydroxychloroquine dose and screening calculator; drug toxicities</p></span></a>
+<a class="mod" href="module_18_headache.html" data-k="headaches and pain red flag checker; aura checker; tac duration timeline"><span class="num">18</span><span><h3>Headaches and pain</h3><p>Red flag checker; aura checker; TAC duration timeline</p></span></a>
+<a class="mod" href="module_19_major_studies.html" data-k="major studies searchable explorer of 19 trials; critical appraisal examples"><span class="num">19</span><span><h3>Major studies</h3><p>Searchable explorer of 19 trials; critical appraisal examples</p></span></a>
+<a class="mod" href="module_20_procedures.html" data-k="procedures temporal artery biopsy stepper; guide to 14 procedures"><span class="num">20</span><span><h3>Procedures</h3><p>Temporal artery biopsy stepper; guide to 14 procedures</p></span></a>
+<a class="mod" href="module_21_vestibular.html" data-k="vestibular disorders timing and triggers; dix-hallpike and epley stepper"><span class="num">21</span><span><h3>Vestibular disorders</h3><p>Timing and triggers; Dix-Hallpike and Epley stepper</p></span></a>
+<a class="mod" href="module_22_pediatric.html" data-k="pediatric neuro-ophthalmology benign-or-worrying sorting game; pediatric topics"><span class="num">22</span><span><h3>Pediatric neuro-ophthalmology</h3><p>Benign-or-worrying sorting game; pediatric topics</p></span></a></div>
+  </section>
+
+  <section class="tab" id="tab-tools">
+    <h2>Extra tools</h2>
+    <a class="mod" href="eye_movement_localizer.html"><span class="num">+</span><span><h3>Eye movement localizer</h3><p>Brainstem map of supranuclear, internuclear and infranuclear pathways with syndromes (also built into Module 9)</p></span></a>
+    <a class="mod" href="brainstem_ocular_motor_map.html"><span class="num">+</span><span><h3>Brainstem ocular motor map</h3><p>Original schematic of the tilt wire and horizontal gaze circuit</p></span></a>
+  </section>
+
+  <section class="tab" id="tab-verify">
+    <h2>Citations and figures to verify</h2>
+    <p class="sub">All flagged citations have now been verified against primary sources. One action item remains for the author.</p>
+    <div class="card"><ul class="vl">
+      
+      
+      <li><b>Module 13 (author action: correct the curriculum outline):</b> the AHA CRAO scientific statement is cited by the AHA as Stroke. 2021;52:e282-e294; the outline lists e343-e358.</li>
+      
+      
+      
+      
+      
+      
+      
+    </ul></div>
+    <h3>Resolved</h3>
+    <div class="card"><ul class="vl">
+      <li><b>Modules 4 and 19 (verified October 2026):</b> ONTT treatment trial, Beck RW, et al. N Engl J Med. 1992;326(9):581-588, doi:10.1056/NEJM199202273260901 (457 patients). IONDT, JAMA. 1995;273(8):625-632, doi:10.1001/jama.273.8.625 (258 randomized).</li>
+      <li><b>Module 5 (verified October 2026):</b> Frisén L. Swelling of the optic nerve head: a staging scheme. J Neurol Neurosurg Psychiatry. 1982;45(1):13-18, doi:10.1136/jnnp.45.1.13.</li>
+      <li><b>Module 14 (verified October 2026):</b> OPG frequency 15% to 20% (Listernick R, et al. Ann Neurol. 2007;61(3):189-198) and surveillance schedule (Carton C, et al. EClinicalMedicine. 2023;56:101818).</li>
+      <li><b>Module 15 (verified October 2026):</b> Chandler JR, Langenbrunner DJ, Stevens ER. Laryngoscope. 1970;80(9):1414-1428, doi:10.1288/00005537-197009000-00007.</li>
+      <li><b>Module 17 (verified October 2026):</b> Marmor MF, et al. Special AAO report: recommendations on screening for hydroxychloroquine retinopathy (2025 revision). Ophthalmology. 2026;133(4):439-450, doi:10.1016/j.ophtha.2025.11.001. Also corrected the 2016 author list.</li>
+      <li><b>Module 18 (verified October 2026):</b> Do TP, et al. SNNOOP10. Neurology. 2019;92(3):134-144, doi:10.1212/WNL.0000000000006697. Checklist expanded to include painful eye with autonomic features, post-traumatic onset and medication overuse.</li>
+      <li><b>Module 19 (verified October 2026):</b> GiACTA randomized 251 patients (2:1:1:1); NEJM. 2017;377(4):317-328.</li>
+      <li><b>Module 21 (verified October 2026):</b> Lopez-Escamez JA, et al. J Vestib Res. 2015;25(1):1-7 (Ménière); Staab JP, et al. J Vestib Res. 2017;27(4):191-208 (PPPD).</li>
+      <li><b>Module 1 (verified October 2026):</b> CN II segment lengths (StatPearls); LGN sectoranopias (Frisén 1978, 1979). Module 13 anterior choroidal wording corrected.</li>
+    </ul></div>
+    <h3>Evidence that's changing</h3>
+    <div class="card"><ul class="vl">
+      <li><b>CRAO thrombolysis:</b> THEIA (2025) and TenCRAOS (2026) showed no benefit; REVISION and an individual participant data meta-analysis are pending (Module 13).</li>
+      <li><b>GLP-1 receptor agonists:</b> NAION safety signal (EMA 2025; NANOS and AAO 2026) and emerging use in IIH (Modules 4 and 5).</li>
+      <li><b>Hydroxychloroquine screening:</b> AAO 2025 revision (published 2026) shifts primary screening to OCT and wide-pattern autofluorescence; correspondence is debating blood-level monitoring (Module 17).</li>
+    </ul></div>
+  </section>
+
+  <section class="tab" id="tab-about">
+    <h2>How to use these modules</h2>
+    <div class="card"><dl>
+      <dt>Keep the files together</dt><dd>Links work when all module files are saved in the same folder (or uploaded together to a shared drive or learning management system).</dd>
+      <dt>Suggested flow per module</dt><dd>Start with the interactive tool, work the cases before revealing answers, review the pearls, then take the self-quiz. Use the goals tab checklist to track progress.</dd>
+      <dt>For faculty</dt><dd>Each module's sources tab lists where every number came from, so content can be updated as evidence changes.</dd>
+      <dt>How to cite</dt><dd>Quan SC. <i>Neuro-Ophthalmology: An Interactive Textbook.</i> Version 1.0. 2026. Available at: [your GitHub Pages address].</dd>
+      <dt>Device support</dt><dd>Built for phones and desktops, with light and dark mode.</dd>
+    </dl></div>
+  </section>
+
+  
+
+  <footer class="credit">
+    
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+}));
+document.getElementById("q").addEventListener("input",e=>{const q=e.target.value.toLowerCase();
+  document.querySelectorAll("#list .mod").forEach(a=>a.style.display=a.dataset.k.includes(q)?"":"none");});
+</script>
+</body>
+</html>

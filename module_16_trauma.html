@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 16: Trauma</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.cmp{display:grid;gap:6px}
+.cmprow{background:var(--panel);border-radius:12px;padding:8px 10px}
+.cmprow h4{margin:0 0 6px;font-size:.84rem;color:var(--muted);font-weight:600}
+.cmpcells{display:grid;gap:8px}
+.cmpcells div{font-size:.88rem;border-left:3px solid var(--stem);padding-left:7px}
+.cmpcells b{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.fundus{background:#000;border-radius:14px;padding:8px;display:flex;justify-content:center}
+.fundus svg{max-width:300px}
+
+.slider{width:100%;accent-color:var(--hot);margin:10px 0 2px}
+.gl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.ladder li{margin:8px 0}
+
+.vfwrap{background:var(--panel);border-radius:14px;padding:10px}
+.prog{font-size:.85rem;color:var(--muted);margin:4px 0 0}
+.next{font:inherit;margin-top:10px;padding:9px 14px;border-radius:10px;border:none;background:var(--ink);color:var(--bg);cursor:pointer}
+.brain svg .rg{cursor:pointer}
+.brain svg .rg:focus-visible{outline:none;stroke:var(--inter);stroke-width:3}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.read{display:flex;justify-content:space-around;font-size:.9rem;margin-top:4px}
+.read b{font-family:Charter,Georgia,serif;font-size:1.05rem}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.9rem;margin:6px 0}
+.toggle input{width:20px;height:20px;accent-color:var(--inter)}
+ol.algo li{margin:8px 0}
+
+.nine{background:var(--panel);border-radius:14px;padding:8px}
+.step3{margin:8px 0}
+.step3 p{margin:4px 0;font-weight:600;font-size:.9rem}
+.result{font-family:Charter,Georgia,serif;font-size:1.3rem;font-weight:600;margin:4px 0}
+
+.flow{background:var(--panel);border-radius:14px;padding:12px}
+.flow .node{border-left:4px solid var(--inter);padding:6px 10px;margin:8px 0}
+.flow .node.end{border-left-color:var(--hot);background:color-mix(in srgb,var(--hot) 10%,transparent);border-radius:0 8px 8px 0}
+.flow .opts{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.flow .opts button{font:inherit;font-size:.86rem;padding:8px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.tree svg .nd{cursor:pointer}
+.tree svg .nd:focus-visible{outline:none}
+.tree svg .nd:focus-visible circle{stroke:var(--inter);stroke-width:3}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 16 of 22</p>
+  <h1>Trauma</h1>
+  <p class="sub">Traumatic brain injury and concussion, orbital and facial trauma, traumatic optic neuropathy and entrapment. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="flow" aria-selected="true">Trauma triage</button>
+    <button role="tab" data-tab="ton" aria-selected="false">Traumatic optic neuropathy</button>
+    <button role="tab" data-tab="orbit" aria-selected="false">Orbital trauma</button>
+    <button role="tab" data-tab="tbi" aria-selected="false">TBI and concussion</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and sources</button>
+  </nav>
+
+  <section class="tab on" id="tab-flow">
+    <h2>Vision loss after facial or head trauma</h2>
+    <p class="sub">Walk through the decisions. Each answer opens the next step.</p>
+    <div class="flow" id="flow"></div>
+    <button class="reveal" id="restart">Start over</button>
+  </section>
+
+  <section class="tab" id="tab-ton">
+    <h2>Traumatic optic neuropathy</h2>
+    <div class="card">
+      <dl><dt>Mechanisms</dt><dd><b>Direct:</b> penetrating injury, bone fragment or hematoma compressing or transecting the nerve; optic nerve avulsion. <b>Indirect:</b> force transmitted to the nerve, most often in the optic canal where it's tethered to bone, typically after a blow to the brow.</dd>
+      <dt>Diagnosis</dt><dd>Reduced acuity, color and field with an RAPD after trauma; the disc usually looks normal at first and turns pale over weeks. CT with thin cuts through the optic canal looks for fractures and fragments.</dd>
+      <dt>What the evidence says</dt><dd>The International Optic Nerve Trauma Study (nonrandomized, 133 patients) found no clear benefit of corticosteroids or optic canal decompression over observation: 3 or more lines of improvement occurred in 57% untreated, 52% with steroids and 32% with surgery, after adjusting for baseline acuity. The CRASH trial of high-dose methylprednisolone in significant head injury found higher mortality with steroids (21% vs 18%).</dd></dl>
+      <dl class="miss"><dt>Practical bottom line</dt><dd>Neither steroids nor canal surgery is standard of care for indirect TON; observation is reasonable, and high-dose steroids should be avoided in patients with significant head injury. Surgery may be considered for a compressive bone fragment or hematoma, individualized with the trauma and skull base teams.</dd></dl>
+    </div>
+  </section>
+
+  <section class="tab" id="tab-orbit">
+    <h2>Orbital and facial trauma</h2>
+    <div class="chips" id="orbChips"></div>
+    <div class="card accent" id="orbCard"></div>
+  </section>
+
+  <section class="tab" id="tab-tbi">
+    <h2>Traumatic brain injury and concussion</h2>
+    <div class="chips" id="tbiChips"></div>
+    <div class="card accent" id="tbiCard"></div>
+  </section>
+
+  <section class="tab" id="tab-cases"><h2>Case vignettes</h2><p class="sub">Work each question before revealing the answer.</p><div id="caseList"></div></section>
+  <section class="tab" id="tab-pearls"><h2>Clinical pearls</h2><div id="pearlList"></div></section>
+  <section class="tab" id="tab-quiz"><h2>Self-quiz</h2><p class="sub">Ten questions. Tap an answer to see the explanation.</p><div id="quizList"></div><p class="score" id="score" aria-live="polite"></p><button class="reveal" id="resetQuiz">Reset quiz</button></section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Identify traumatic optic neuropathy</label>
+      <label><input type="checkbox"> Recognize entrapment syndromes</label>
+      <label><input type="checkbox"> Evaluate and manage ocular trauma</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="src">
+      <li><b>IONTS: 133 patients with indirect TON (nonrandomized); no significant difference in final acuity between observation, steroids and optic canal decompression after adjusting for baseline; neither treatment considered standard of care:</b> Levin LA, Beck RW, Joseph MP, Seiff S, Kraker R. The treatment of traumatic optic neuropathy: the International Optic Nerve Trauma Study. <i>Ophthalmology.</i> 1999;106(7):1268-1277. doi:10.1016/S0161-6420(99)00707-1. Improvement rates (57%, 52%, 32%) as summarized in Yu-Wai-Man P, Griffiths PG. Steroids for traumatic optic neuropathy. <i>Cochrane Database Syst Rev.</i> 2013;(6):CD006032.</li>
+      <li><b>CRASH: high-dose methylprednisolone within 8 hours of significant head injury (10,008 adults) increased 2-week mortality (21% vs 18%):</b> CRASH trial collaborators. Effect of intravenous corticosteroids on death within 14 days in 10008 adults with clinically significant head injury (MRC CRASH trial). <i>Lancet.</i> 2004;364(9442):1321-1328.</li>
+      <li>Fracture repair timing and retrobulbar hemorrhage management reflect standard teaching; follow institutional trauma and oculoplastic protocols.</li>
+    </ul></div>
+    <h3>Core reading (from the program curriculum)</h3>
+    <div class="card"><ul class="refs">
+      <li>Ventura RE, Balcer LJ, Galetta SL. The neuro-ophthalmology of head trauma. <i>Lancet Neurol.</i> 2014;13(10):1006-1016. doi:10.1016/S1474-4422(14)70111-5.</li>
+      <li>American Academy of Ophthalmology. <i>Basic and Clinical Science Course, Section 5: Neuro-Ophthalmology.</i> AAO; 2025.</li>
+    </ul></div>
+  </section>
+
+  <p class="foot">Teaching tool; follow institutional trauma protocols. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick,init=0){host.innerHTML="";items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});if(init!==null)host.children[init].click();}
+
+/* ---------- triage flow ---------- */
+const FLOW={
+ start:{q:"After facial trauma, is there a possible open globe (full-thickness laceration, peaked or irregular pupil, uveal prolapse, 360-degree bullous subconjunctival hemorrhage, or a penetrating mechanism)?",o:[["Yes or suspected","globe"],["No","orbit"]]},
+ globe:{end:true,t:"Suspected open globe",b:"Shield the eye (no pressure), no drops or IOP checks, nothing by mouth, antiemetics, tetanus and IV antibiotics; CT orbits for foreign body (no MRI until metal is excluded); urgent ophthalmic surgery."},
+ orbit:{q:"Is the orbit tense with proptosis, resistance to retropulsion, high IOP and reduced vision or an RAPD?",o:[["Yes","obc"],["No","rapd"]]},
+ obc:{end:true,t:"Orbital compartment syndrome (retrobulbar hemorrhage)",b:"Clinical diagnosis: perform lateral canthotomy and inferior cantholysis immediately at the bedside. Don't wait for imaging. Recheck IOP and vision after release; extend to superior cantholysis if still tight."},
+ rapd:{q:"Is there reduced vision with an RAPD but a normal-looking globe and fundus?",o:[["Yes","ton"],["No","motility"]]},
+ ton:{end:true,t:"Traumatic optic neuropathy",b:"CT with thin cuts through the optic canal. Observation is reasonable (IONTS showed no clear benefit of steroids or surgery). Avoid high-dose steroids with significant head injury (CRASH mortality). Consider decompression only for a compressive fragment or hematoma, individualized."},
+ motility:{q:"Is there restricted eye movement, especially vertical, after an orbital blow?",o:[["Yes, in a child with nausea, bradycardia or a white quiet eye","trap"],["Yes, adult or no oculocardiac signs","floor"],["No","other"]]},
+ trap:{end:true,t:"Trapdoor (white-eyed blowout) fracture",b:"A child's elastic floor snaps back and traps the inferior rectus; the eye looks deceptively quiet. Nausea, vomiting and bradycardia (oculocardiac reflex) mean urgent surgical release, ideally the same day, to prevent muscle ischemia."},
+ floor:{end:true,t:"Orbital floor fracture",b:"CT orbits (coronal). Many patients improve as swelling resolves. Repair is considered for persistent diplopia in primary or reading gaze, early enophthalmos, or a large floor defect, usually within about 2 weeks; urgent if true muscle entrapment."},
+ other:{end:true,t:"Other injuries to look for",b:"Ocular motor nerve palsies (CN IV most vulnerable), chiasmal or retrochiasmal field loss, traumatic carotid-cavernous fistula (pulsatile proptosis, bruit, chemosis), and Terson syndrome with subarachnoid hemorrhage."}
+};
+function renderFlow(path){
+  const host=document.getElementById("flow"); host.innerHTML="";
+  path.forEach((k,idx)=>{const n=FLOW[k],d=document.createElement("div");d.className="node"+(n.end?" end":"");
+    if(n.end){d.innerHTML=`<h3 style="margin:0 0 4px">${n.t}</h3><p style="margin:0">${n.b}</p>`;}
+    else{d.innerHTML=`<p class="q" style="margin:0">${n.q}</p><div class="opts">${n.o.map(([l,nx])=>`<button data-nx="${nx}" ${idx<path.length-1?'disabled':''}>${l}</button>`).join("")}</div>`;}
+    host.appendChild(d);});
+  host.querySelectorAll("button[data-nx]:not([disabled])").forEach(b=>b.addEventListener("click",()=>renderFlow([...path,b.dataset.nx])));
+}
+renderFlow(["start"]);
+document.getElementById("restart").addEventListener("click",()=>renderFlow(["start"]));
+
+/* ---------- orbital trauma ---------- */
+const ORB=[
+ {n:"Orbital floor fracture",f:"Periorbital bruising, infraorbital numbness (V2), vertical diplopia, enophthalmos once swelling settles.",m:"CT orbits; nose-blowing precautions; repair for persistent diplopia, early enophthalmos or large defects, usually within about 2 weeks.",p:"Infraorbital numbness is a clue to a floor fracture."},
+ {n:"Trapdoor fracture in children",f:"Marked restriction of upgaze with a quiet 'white' eye, nausea, vomiting, bradycardia; CT can look minimal.",m:"Urgent surgical release.",p:"Don't be reassured by a normal-looking eye or minimal CT findings in a vomiting child after orbital trauma."},
+ {n:"Medial wall fracture",f:"Horizontal diplopia, limited abduction or adduction from medial rectus involvement; orbital emphysema after nose blowing.",m:"CT; repair if entrapment or significant enophthalmos.",p:"Orbital emphysema means a sinus wall is broken."},
+ {n:"Retrobulbar hemorrhage",f:"Painful proptosis, tense orbit, high IOP, reduced vision and RAPD, often after trauma, surgery or anticoagulation.",m:"Lateral canthotomy and cantholysis immediately; imaging after.",p:"Minutes matter; treat clinically, not radiographically."},
+ {n:"Orbital apex and canal fractures",f:"Optic neuropathy with ophthalmoplegia (apex) or isolated optic neuropathy (canal).",m:"Thin-cut CT; multidisciplinary decision on decompression for compressive fragments.",p:"Look for associated carotid injury on CTA with skull base fractures."},
+ {n:"Traumatic carotid-cavernous fistula",f:"Days to weeks after trauma: pulsatile proptosis, bruit, chemosis, corkscrew vessels, raised IOP, CN VI palsy.",m:"CTA or MRA, then catheter angiography and endovascular treatment.",p:"Ask about a 'whooshing' sound in the head after a skull base fracture."},
+ {n:"Optic nerve avulsion",f:"Sudden severe loss after a twisting or digital injury; a ring-shaped hole or hemorrhage at the disc.",m:"No effective treatment; document and protect the other eye.",p:"Often from a finger or object forced between globe and orbital wall."}
+];
+chips(document.getElementById("orbChips"),ORB.map(x=>x.n),i=>{const x=ORB[i];document.getElementById("orbCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Findings</dt><dd>${x.f}</dd><dt>Management</dt><dd>${x.m}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- TBI ---------- */
+const TBI=[
+ {n:"Ocular motor nerve palsies",f:"CN IV is most vulnerable (long dorsal course; often bilateral), then CN VI and CN III. A CN III palsy after minor trauma suggests an underlying lesion.",m:"Measure, prisms or occlusion; most recover partially over 6 to 12 months; strabismus surgery after stability.",p:"CN III palsy after trivial head trauma: image for a tumor or aneurysm."},
+ {n:"Chiasmal and retrochiasmal injury",f:"Traumatic chiasmal syndrome (bitemporal loss, often with skull base fractures and diabetes insipidus); homonymous defects from contusions or hemorrhage.",m:"Formal fields, MRI; endocrine evaluation for chiasmal injury.",p:"Check urine output and sodium in traumatic chiasmal syndrome."},
+ {n:"Convergence and accommodative insufficiency",f:"Reading discomfort, blur and diplopia at near after concussion.",m:"Near point of convergence, accommodative amplitudes; vision therapy, base-in prisms or reading glasses.",p:"Common and treatable; ask every concussed patient about reading."},
+ {n:"Saccadic and pursuit dysfunction",f:"Slowed reading, visual motion sensitivity, dizziness in busy environments.",m:"Rapid number-naming tests (such as King-Devick) can screen for concussion; vestibular-ocular rehabilitation.",p:"A worse score than baseline on a rapid number-naming test supports concussion."},
+ {n:"Photophobia and post-concussion syndrome",f:"Light sensitivity, headache, visual fatigue persisting beyond expected recovery.",m:"Graded return to activity, tinted lenses (avoid dark glasses indoors), headache management, multidisciplinary care.",p:"Persistent symptoms deserve evaluation for treatable vision problems before attributing everything to post-concussion syndrome."},
+ {n:"Cortical visual impairment and neglect",f:"Bilateral occipital injury, hemianopia, visual agnosias; neglect with parietal injury.",m:"Low vision rehabilitation, scanning training, prisms for hemianopia.",p:"Normal pupils and fundi with poor vision after TBI: think cortical."}
+];
+chips(document.getElementById("tbiChips"),TBI.map(x=>x.n),i=>{const x=TBI[i];document.getElementById("tbiCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Findings</dt><dd>${x.f}</dd><dt>Management</dt><dd>${x.m}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: Rising pressure after a fall",stem:"An 81-year-old woman on apixaban fell onto her right face an hour ago. Right proptosis, tense orbit, IOP 52, count fingers vision, right RAPD.",
+  steps:[
+   {q:"Diagnosis?",a:"Orbital compartment syndrome from retrobulbar hemorrhage."},
+   {q:"Next step: CT first or treat first?",a:"Treat first: bedside lateral canthotomy and inferior cantholysis now. Imaging and anticoagulation decisions follow."},
+   {q:"How do you know release was adequate?",a:"IOP falls, the orbit softens, and vision and the RAPD improve; if not, extend to superior cantholysis and call oculoplastics."}
+  ]},
+ {t:"Case 2: A quiet eye in a vomiting child",stem:"A 10-year-old was hit by a soccer ball. The right eye looks almost normal, but he can't look up, is vomiting, and his heart rate is 48. CT shows a small floor crack with minimal displacement.",
+  steps:[
+   {q:"Diagnosis?",a:"Trapdoor (white-eyed) orbital floor fracture with inferior rectus entrapment and oculocardiac reflex."},
+   {q:"How urgent is repair?",a:"Urgent, ideally the same day, to release the muscle before ischemic damage."},
+   {q:"Why is the CT reassuring but misleading?",a:"Children's elastic bones snap back, so the fracture can look minimal while the muscle is trapped."}
+  ]},
+ {t:"Case 3: Blow to the brow",stem:"A 24-year-old cyclist struck his left brow in a crash. Hand motions vision OS, left RAPD, normal fundus. CT shows no canal fracture. He also has a significant head injury.",
+  steps:[
+   {q:"Diagnosis?",a:"Indirect traumatic optic neuropathy."},
+   {q:"Should he get megadose steroids?",a:"No. The IONTS showed no clear benefit of steroids or surgery over observation, and the CRASH trial found higher mortality with high-dose steroids in head injury."},
+   {q:"What do you tell him about prognosis?",a:"Some patients improve spontaneously (more than half of observed patients gained 3 lines in IONTS); the disc will become pale over weeks; follow fields and OCT."}
+  ]},
+ {t:"Case 4: Can't read after the hit",stem:"A 16-year-old football player had a concussion 6 weeks ago. Headaches, words swimming on the page, and eye strain with homework. Near point of convergence 18 cm.",
+  steps:[
+   {q:"What's the main eye finding?",a:"Convergence insufficiency after concussion."},
+   {q:"Other things to test?",a:"Accommodative amplitude, saccades and pursuit, and a rapid number-naming test compared with baseline if available."},
+   {q:"Management?",a:"Office-based vergence therapy or home exercises, temporary reading glasses or base-in prisms, school accommodations and graded return to activity."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{const d=document.createElement("div");d.className="card";d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map(s=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");caseList.appendChild(d);});
+caseList.addEventListener("click",e=>{if(!e.target.classList.contains("reveal"))return;const a=e.target.nextElementSibling,on=!a.classList.contains("on");a.classList.toggle("on",on);e.target.setAttribute("aria-expanded",String(on));e.target.textContent=on?"Hide answer":"Reveal answer";});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "Retrobulbar hemorrhage with vision loss is a clinical diagnosis: canthotomy and cantholysis before imaging.",
+ "A quiet white eye with vomiting and bradycardia in a child after orbital trauma is a trapdoor fracture: operate urgently.",
+ "Shield a suspected open globe, avoid pressure and drops, and get CT; no MRI until metal is excluded.",
+ "Indirect TON usually shows a normal disc at first and an RAPD; pallor follows weeks later.",
+ "Neither steroids nor optic canal surgery is standard of care for indirect TON (IONTS).",
+ "Avoid high-dose steroids in significant head injury; they increased mortality in CRASH.",
+ "CN IV is the most commonly injured ocular motor nerve in head trauma, often bilaterally.",
+ "A CN III palsy after trivial trauma suggests an underlying lesion; image it.",
+ "Pulsatile proptosis and a bruit days after a skull base fracture: traumatic carotid-cavernous fistula.",
+ "Ask every concussed patient about reading; convergence insufficiency is common and treatable."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"First step for traumatic proptosis, tense orbit, IOP 50 and an RAPD:",o:["CT orbits","Lateral canthotomy and cantholysis","IV steroids","Observe"],a:1,e:"Orbital compartment syndrome is treated immediately; imaging follows."},
+ {q:"In IONTS, improvement of 3 or more lines in untreated indirect TON occurred in about:",o:["10%","32%","57%","90%"],a:2,e:"57% untreated vs 52% steroids and 32% surgery (no significant difference after adjustment)."},
+ {q:"The CRASH trial showed high-dose methylprednisolone in head injury:",o:["Reduced mortality","Increased mortality","Improved vision","Had no effect"],a:1,e:"21% vs 18% mortality at 2 weeks."},
+ {q:"A child with upgaze restriction, vomiting and bradycardia after orbital trauma needs:",o:["Observation for 2 weeks","Urgent fracture repair","Oral steroids only","MRI"],a:1,e:"Trapdoor fracture with entrapment and oculocardiac reflex."},
+ {q:"Infraorbital numbness after facial trauma suggests a fracture of the:",o:["Medial wall","Orbital floor","Roof","Lateral wall"],a:1,e:"The infraorbital nerve runs in the floor."},
+ {q:"The ocular motor nerve most often injured in head trauma is:",o:["CN III","CN IV","CN VI","CN VII"],a:1,e:"Its long, thin dorsal course makes it vulnerable."},
+ {q:"With a suspected open globe, you should avoid:",o:["Shield","CT","IOP measurement and eye pressure","Tetanus prophylaxis"],a:2,e:"Pressure can extrude intraocular contents."},
+ {q:"Pulsatile proptosis with a bruit after a skull base fracture suggests:",o:["Orbital cellulitis","Traumatic carotid-cavernous fistula","Floor fracture","TON"],a:1,e:"Confirm with vascular imaging and angiography."},
+ {q:"Traumatic chiasmal syndrome may come with:",o:["Hypothyroidism","Diabetes insipidus","Horner syndrome","Bell palsy"],a:1,e:"Hypothalamic-pituitary injury is common."},
+ {q:"Reading trouble 6 weeks after concussion with a near point of convergence of 18 cm suggests:",o:["Malingering","Convergence insufficiency","Optic neuropathy","Retinal detachment"],a:1,e:"Treatable with vergence therapy and prisms."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>

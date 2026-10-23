@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 17: Other systemic conditions</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.cmp{display:grid;gap:6px}
+.cmprow{background:var(--panel);border-radius:12px;padding:8px 10px}
+.cmprow h4{margin:0 0 6px;font-size:.84rem;color:var(--muted);font-weight:600}
+.cmpcells{display:grid;gap:8px}
+.cmpcells div{font-size:.88rem;border-left:3px solid var(--stem);padding-left:7px}
+.cmpcells b{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.fundus{background:#000;border-radius:14px;padding:8px;display:flex;justify-content:center}
+.fundus svg{max-width:300px}
+
+.slider{width:100%;accent-color:var(--hot);margin:10px 0 2px}
+.gl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.ladder li{margin:8px 0}
+
+.vfwrap{background:var(--panel);border-radius:14px;padding:10px}
+.prog{font-size:.85rem;color:var(--muted);margin:4px 0 0}
+.next{font:inherit;margin-top:10px;padding:9px 14px;border-radius:10px;border:none;background:var(--ink);color:var(--bg);cursor:pointer}
+.brain svg .rg{cursor:pointer}
+.brain svg .rg:focus-visible{outline:none;stroke:var(--inter);stroke-width:3}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.read{display:flex;justify-content:space-around;font-size:.9rem;margin-top:4px}
+.read b{font-family:Charter,Georgia,serif;font-size:1.05rem}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.9rem;margin:6px 0}
+.toggle input{width:20px;height:20px;accent-color:var(--inter)}
+ol.algo li{margin:8px 0}
+
+.nine{background:var(--panel);border-radius:14px;padding:8px}
+.step3{margin:8px 0}
+.step3 p{margin:4px 0;font-weight:600;font-size:.9rem}
+.result{font-family:Charter,Georgia,serif;font-size:1.3rem;font-weight:600;margin:4px 0}
+
+.calc{background:var(--panel);border-radius:14px;padding:12px}
+.calc .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.calc label{font-size:.86rem;font-weight:600;display:block}
+.calc input[type=number]{width:100%;font:inherit;padding:8px;border-radius:8px;border:1.5px solid var(--stemline);background:var(--bg);color:var(--ink)}
+.big{font-family:Charter,Georgia,serif;font-size:1.6rem;font-weight:600}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 17 of 22</p>
+  <h1>Other systemic conditions</h1>
+  <p class="sub">Neoplastic, metabolic and nutritional disorders, and iatrogenic complications from radiation, drugs and surgery. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="hcq" aria-selected="true">HCQ calculator</button>
+    <button role="tab" data-tab="drugs" aria-selected="false">Drug toxicity</button>
+    <button role="tab" data-tab="rad" aria-selected="false">Radiation and surgery</button>
+    <button role="tab" data-tab="neo" aria-selected="false">Neoplastic</button>
+    <button role="tab" data-tab="met" aria-selected="false">Metabolic and nutritional</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and sources</button>
+  </nav>
+
+  <section class="tab on" id="tab-hcq">
+    <h2>Hydroxychloroquine dose and screening</h2>
+    <p class="sub">Enter real (actual) body weight and daily dose. Based on the AAO recommendations (2016, updated in the 2025 revision published in <i>Ophthalmology</i>, 2026).</p>
+    <div class="calc">
+      <div class="row">
+        <div><label for="wt">Weight (kg)</label><input type="number" id="wt" value="60" min="20" max="250"></div>
+        <div><label for="dose">Daily dose (mg)</label><input type="number" id="dose" value="400" min="0" max="1200" step="50"></div>
+      </div>
+      <p class="kicker" style="margin-top:10px">Daily dose per kg real weight</p>
+      <div class="big" id="mgkg">-</div>
+      <div class="check" style="margin-top:6px">
+        <label><input type="checkbox" class="rf"> Kidney disease (reduced eGFR)</label>
+        <label><input type="checkbox" class="rf"> Tamoxifen use</label>
+        <label><input type="checkbox" class="rf"> Started HCQ at an older age</label>
+        <label><input type="checkbox" class="rf"> Preexisting macular disease</label>
+        <label><input type="checkbox" id="asian"> East Asian heritage</label>
+      </div>
+    </div>
+    <div class="verdict" id="hcqOut" aria-live="polite"></div>
+    <div class="card accent"><dl><dt>Screening tests (2025 revision)</dt><dd>OCT is the primary tool, with wide-pattern fundus autofluorescence. Visual fields (10-2 for parafoveal disease; 24-2, 30-2 or 24-2C to include pericentral disease) and multifocal ERG are confirmatory. Baseline OCT and FAF near the start of therapy.</dd>
+    <dt>Patterns</dt><dd>Parafoveal damage is typical in patients of European heritage; pericentral damage near the arcades is common in East Asian patients. Screen for both.</dd></dl>
+    <dl class="miss"><dt>Remember</dt><dd>Toxicity is generally not reversible. Mild retinopathy is unlikely to progress after HCQ is stopped, but severe retinopathy may keep worsening for years, which is why early detection matters. Confirm subtle findings with a second test before stopping a valuable medication, and communicate with the prescriber.</dd></dl></div>
+  </section>
+
+  <section class="tab" id="tab-drugs">
+    <h2>Medication toxicity</h2>
+    <div class="chips" id="drugChips"></div>
+    <div class="card accent" id="drugCard"></div>
+  </section>
+
+  <section class="tab" id="tab-rad">
+    <h2>Radiation and surgical complications</h2>
+    <div class="chips" id="radChips"></div>
+    <div class="card accent" id="radCard"></div>
+  </section>
+
+  <section class="tab" id="tab-neo">
+    <h2>Neoplastic disorders</h2>
+    <div class="chips" id="neoChips"></div>
+    <div class="card accent" id="neoCard"></div>
+  </section>
+
+  <section class="tab" id="tab-met">
+    <h2>Metabolic and nutritional disorders</h2>
+    <div class="chips" id="metChips"></div>
+    <div class="card accent" id="metCard"></div>
+  </section>
+
+  <section class="tab" id="tab-cases"><h2>Case vignettes</h2><p class="sub">Work each question before revealing the answer.</p><div id="caseList"></div></section>
+  <section class="tab" id="tab-pearls"><h2>Clinical pearls</h2><div id="pearlList"></div></section>
+  <section class="tab" id="tab-quiz"><h2>Self-quiz</h2><p class="sub">Ten questions. Tap an answer to see the explanation.</p><div id="quizList"></div><p class="score" id="score" aria-live="polite"></p><button class="reveal" id="resetQuiz">Reset quiz</button></section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Recognize iatrogenic neuro-ophthalmic disease</label>
+      <label><input type="checkbox"> Monitor high-risk medications appropriately</label>
+      <label><input type="checkbox"> Identify neoplastic and nutritional causes</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="src">
+      <li><b>HCQ: keep daily dose at or under 5.0 mg/kg real weight; at that dose, toxicity risk is under 1% at 5 years and under 2% at 10 years, rising to almost 20% after 20 years; major risks are high dose, long duration, kidney disease and tamoxifen; annual screening after 5 years if low risk; wider field patterns for Asian patients:</b> Marmor MF, Kellner U, Lai TYY, Mieler WF; American Academy of Ophthalmology. Recommendations on screening for chloroquine and hydroxychloroquine retinopathy (2016 revision). <i>Ophthalmology.</i> 2016;123(6):1386-1394.</li>
+      <li><b>2025 revision: dose unchanged at 5.0 mg/kg real weight or less, under 400 mg/day in severe obesity; OCT plus wide-pattern FAF as primary tests, fields and mfERG as confirmatory; baseline OCT and FAF near initiation; older age at initiation as an added risk; 24-2C fields can cover parafoveal and pericentral regions:</b> Marmor MF, Ahn SJ, Ehlers JP, Melles RB, Mieler WF, Sarraf D, Yusuf IH; American Academy of Ophthalmology. Special AAO report: recommendations on screening for hydroxychloroquine retinopathy (2025 revision). <i>Ophthalmology.</i> 2026;133(4):439-450. doi:10.1016/j.ophtha.2025.11.001.</li>
+      <li>Other content reflects standard teaching in the core texts; dosing thresholds for other drugs are deliberately left qualitative. Verify against current drug labels.</li>
+    </ul></div>
+    <h3>Core reading (from the program curriculum)</h3>
+    <div class="card"><ul class="refs">
+      <li>American Academy of Ophthalmology. <i>Basic and Clinical Science Course, Section 5: Neuro-Ophthalmology.</i> AAO; 2025.</li>
+      <li>Liu GT, Volpe NJ, Galetta SL. <i>Neuro-Ophthalmology: Diagnosis and Management.</i> 2nd ed. Saunders Elsevier; 2010.</li>
+    </ul></div>
+  </section>
+
+  <p class="foot">Teaching tool, not a prescribing aid. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick,init=0){host.innerHTML="";items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});if(init!==null)host.children[init].click();}
+
+/* ---------- HCQ ---------- */
+function hcq(){
+  const w=+document.getElementById("wt").value, d=+document.getElementById("dose").value;
+  const r=[...document.querySelectorAll(".rf")].filter(x=>x.checked).length, asian=document.getElementById("asian").checked;
+  const el=document.getElementById("hcqOut");
+  if(!w||w<=0){document.getElementById("mgkg").textContent="-";el.textContent="Enter a weight.";return;}
+  const mk=d/w; document.getElementById("mgkg").textContent=mk.toFixed(1)+" mg/kg/day";
+  let msg="", ok=true;
+  if(mk>5.0){ok=false;msg+=`Above the recommended maximum of 5.0 mg/kg real weight. A dose of about ${Math.floor(w*5/50)*50} mg/day or less would meet the target; discuss with the prescriber. `;}
+  else msg+="Within the recommended maximum (5.0 mg/kg real weight or less). ";
+  if(d>400 && mk<=5.0){msg+="Note: the 2025 revision advises staying under 400 mg/day in severely obese patients. ";}
+  if(r>0||mk>5.0){ok=false;msg+="Major risk factor present: begin annual screening now rather than waiting 5 years. ";}
+  else msg+="Low risk: baseline exam with OCT and FAF, then annual screening may be deferred until 5 years of use. ";
+  if(asian) msg+="Use wider field patterns (24-2, 30-2 or 24-2C) and look for pericentral damage near the arcades.";
+  el.textContent=msg; el.classList.toggle("no",!ok);
+}
+document.querySelectorAll("#wt,#dose,.rf,#asian").forEach(x=>x.addEventListener("input",hcq));
+hcq();
+
+/* ---------- drugs ---------- */
+const DR=[
+ {n:"Ethambutol",f:"Bilateral, painless, symmetric central or cecocentral loss with color change, usually after months of therapy; risk rises with higher dose and kidney impairment.",w:"Baseline acuity, color, fields and OCT; regular checks during therapy; dose by weight and renal function.",p:"Stop ethambutol at the first sign of toxicity (in coordination with the TB team); recovery is variable and can be incomplete."},
+ {n:"Hydroxychloroquine",f:"Parafoveal or pericentral photoreceptor loss; bull's eye maculopathy only late.",w:"See the calculator tab.",p:"Dose by real weight; screen with OCT and FAF."},
+ {n:"Amiodarone",f:"Vortex keratopathy (common, benign); amiodarone optic neuropathy: insidious, often bilateral disc swelling that can persist for months, milder vision loss than NAION.",w:"Distinguish from NAION (sudden, unilateral, crowded disc); coordinate with cardiology before stopping.",p:"Never stop amiodarone without cardiology input; the arrhythmia can be more dangerous than the optic neuropathy."},
+ {n:"Linezolid",f:"Painless bilateral optic neuropathy with prolonged therapy (often weeks to months); peripheral neuropathy.",w:"Visual monitoring during long courses.",p:"Vision often improves after stopping, unlike many toxic optic neuropathies."},
+ {n:"Vigabatrin",f:"Irreversible bilateral concentric or nasal field constriction.",w:"Baseline and periodic fields (or ERG and OCT in children who can't do fields).",p:"Balance seizure control against field loss with neurology."},
+ {n:"Immune checkpoint inhibitors",f:"Myasthenia gravis (often with myositis and myocarditis), uveitis, optic neuritis, orbital inflammation, hypophysitis with chiasmal or headache symptoms.",w:"Check troponin and CK with any new ptosis or diplopia; MRI; antibody testing.",p:"Checkpoint-inhibitor myasthenia can progress rapidly to respiratory failure and myocarditis: urgent multidisciplinary care."},
+ {n:"MEK and other targeted cancer drugs",f:"MEK inhibitors: transient bilateral serous retinal detachments (MEK-associated retinopathy), retinal vein occlusion.",w:"OCT; usually observe and continue with oncology agreement.",p:"Don't confuse MEK retinopathy with metastatic disease or central serous chorioretinopathy."},
+ {n:"TNF inhibitors and interferons",f:"TNF inhibitors: demyelinating optic neuritis and MS-like disease. Interferon alpha: retinopathy with cotton wool spots, NAION-like events.",w:"MRI for demyelination; fundus exam.",p:"Avoid TNF inhibitors in patients with known demyelinating disease."},
+ {n:"Cyclosporine and tacrolimus",f:"PRES (cortical vision loss, headache, seizures) and, rarely, optic neuropathy.",w:"MRI with FLAIR; drug levels; blood pressure.",p:"Transplant patient with sudden cortical blindness: think PRES and check calcineurin inhibitor levels."},
+ {n:"Drugs causing raised intracranial pressure",f:"Papilledema from tetracyclines, isotretinoin and other retinoids, excess vitamin A, lithium, and steroid withdrawal.",w:"Full IIH workup (Module 5).",p:"Ask about acne treatment in every young patient with papilledema."},
+ {n:"Topiramate and sulfa drugs",f:"Bilateral acute angle closure with myopic shift from ciliary body effusion, usually within the first weeks.",w:"Gonioscopy, UBM or anterior segment OCT.",p:"Stop the drug and use aqueous suppressants and cycloplegics; laser iridotomy doesn't help this mechanism."}
+];
+chips(document.getElementById("drugChips"),DR.map(x=>x.n),i=>{const x=DR[i];document.getElementById("drugCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Eye and neuro findings</dt><dd>${x.f}</dd><dt>Monitoring and workup</dt><dd>${x.w}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- radiation and surgery ---------- */
+const RAD=[
+ {n:"Radiation optic neuropathy",f:"Sudden or rapidly progressive painless vision loss months to years after radiation near the anterior visual pathway; may become bilateral.",w:"MRI with contrast shows enhancement of the affected nerve or chiasm; exclude tumor recurrence.",p:"Treatment options (steroids, bevacizumab, hyperbaric oxygen) have limited evidence; prevention through dose planning matters most."},
+ {n:"Radiation retinopathy",f:"Cotton wool spots, hemorrhages, microaneurysms and capillary nonperfusion resembling diabetic retinopathy, after head, neck or eye radiation.",w:"Fluorescein angiography, OCT.",p:"Anti-VEGF and laser are used as in diabetic retinopathy."},
+ {n:"Perioperative vision loss: spine surgery",f:"Posterior ischemic optic neuropathy after long prone spine surgery with blood loss and hypotension; often bilateral, with normal discs at first.",w:"Exclude CRAO from orbital pressure and cortical blindness; MRI DWI can show nerve infarction.",p:"Risk factors include long prone duration, large blood loss, obesity and Wilson frame use; prevention relies on anesthetic and positioning care."},
+ {n:"Perioperative vision loss: cardiac surgery",f:"Anterior ischemic optic neuropathy, emboli causing retinal artery occlusion, and occipital stroke after bypass or valve surgery.",w:"Fundus exam, fields, MRI.",p:"Document vision promptly after surgery in high-risk patients who report blurring."},
+ {n:"Orbital and sinus surgery complications",f:"Orbital hemorrhage, direct optic nerve injury, medial rectus injury causing exotropia, and CSF leak during endoscopic sinus surgery.",w:"Urgent exam; canthotomy for orbital compartment syndrome; CT.",p:"Sudden proptosis and vision loss after sinus surgery: orbital hemorrhage until proven otherwise."}
+];
+chips(document.getElementById("radChips"),RAD.map(x=>x.n),i=>{const x=RAD[i];document.getElementById("radCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Features</dt><dd>${x.f}</dd><dt>Workup</dt><dd>${x.w}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- neoplastic ---------- */
+const NEO=[
+ {n:"Leptomeningeal metastasis",f:"Multiple cranial neuropathies, papilledema or optic neuropathy, headache; often with known breast cancer, lung cancer, melanoma or lymphoma.",w:"MRI brain and spine with contrast; large-volume CSF cytology, repeated if negative.",p:"New multiple cranial neuropathies in a patient with cancer: leptomeningeal disease until proven otherwise."},
+ {n:"Skull base and cavernous sinus metastasis",f:"Painful ophthalmoplegia, V1 or V2 numbness, Horner; numb chin syndrome (mental nerve) suggests skull base or mandibular metastasis.",w:"MRI with contrast through the skull base; CT for bone.",p:"Numb chin in an adult is a red flag for cancer."},
+ {n:"Orbital and choroidal metastasis",f:"Orbit: proptosis, diplopia, sometimes enophthalmos (scirrhous breast cancer). Choroid: yellow subretinal mass with serous detachment.",w:"Orbital MRI, B-scan, systemic staging.",p:"Enophthalmos with restricted motility in a woman may be metastatic breast cancer."},
+ {n:"Lymphoma",f:"Vitreoretinal lymphoma masquerading as chronic uveitis in older adults; primary CNS lymphoma; orbital lymphoma (Module 11).",w:"Vitreous biopsy (cytology, flow, IL-10 to IL-6 ratio, MYD88), brain MRI and CSF.",p:"'Uveitis' in an older adult that doesn't respond to steroids: think lymphoma."},
+ {n:"Paraneoplastic syndromes",f:"Cancer-associated retinopathy, melanoma-associated retinopathy, paraneoplastic optic neuropathy (CRMP-5), opsoclonus-myoclonus, Lambert-Eaton syndrome.",w:"ERG, paraneoplastic antibody panels, cancer search (CT chest, abdomen, pelvis; PET).",p:"Neuro-ophthalmic findings can precede the cancer diagnosis by months."}
+];
+chips(document.getElementById("neoChips"),NEO.map(x=>x.n),i=>{const x=NEO[i];document.getElementById("neoCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Features</dt><dd>${x.f}</dd><dt>Workup</dt><dd>${x.w}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- metabolic ---------- */
+const MET=[
+ {n:"B12 and folate deficiency",f:"Bilateral symmetric central or cecocentral scotomas and optic atrophy, often with neuropathy or myelopathy.",w:"B12, methylmalonic acid, homocysteine, folate.",p:"Pernicious anemia, metformin, vegan diets and bariatric surgery are common contributors."},
+ {n:"Copper deficiency",f:"Optic neuropathy with myelopathy resembling B12 deficiency.",w:"Serum copper and ceruloplasmin; zinc level.",p:"Excess zinc (supplements, denture cream) and bariatric surgery cause copper deficiency."},
+ {n:"Thiamine deficiency (Wernicke)",f:"Ophthalmoplegia (often bilateral CN VI or gaze palsies), nystagmus (gaze-evoked, upbeat), ataxia, confusion; sometimes disc swelling.",w:"Clinical diagnosis; MRI may show mammillary body and periaqueductal changes.",p:"Give IV thiamine before glucose; don't wait for the full triad, which is often absent."},
+ {n:"Vitamin A deficiency",f:"Night blindness, xerophthalmia and Bitot spots; after bariatric surgery or malabsorption.",w:"Serum retinol; ERG.",p:"Too much vitamin A causes the opposite problem: raised intracranial pressure."},
+ {n:"Diabetes",f:"Diabetic papillopathy, microvascular CN III, IV and VI palsies, NAION risk, diabetic retinopathy.",w:"Glucose control, retinal exam, imaging when palsies are atypical.",p:"A pupil-sparing CN III palsy in a diabetic patient still needs follow-up and imaging if atypical."},
+ {n:"Thyroid disease",f:"Thyroid eye disease (Module 11); myasthenia coexists more often.",w:"TSH, thyroid antibodies.",p:"Check for myasthenia when TED patients have variable ptosis."},
+ {n:"Wilson disease",f:"Kayser-Fleischer rings, sunflower cataract, saccadic abnormalities.",w:"Ceruloplasmin, 24-hour urine copper, slit lamp, genetic testing.",p:"A young patient with a movement disorder or liver disease: look for KF rings."}
+];
+chips(document.getElementById("metChips"),MET.map(x=>x.n),i=>{const x=MET[i];document.getElementById("metCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Features</dt><dd>${x.f}</dd><dt>Workup</dt><dd>${x.w}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: The lupus screening visit",stem:"A 46-year-old woman with lupus weighing 52 kg has taken hydroxychloroquine 400 mg daily for 9 years. Her eGFR is reduced.",
+  steps:[
+   {q:"What's her dose per kg?",a:"400 / 52 = 7.7 mg/kg real weight, above the 5.0 mg/kg maximum."},
+   {q:"How should she be screened?",a:"Annually now (dose and kidney disease are major risk factors), with OCT and wide-pattern FAF, confirmed with fields as needed."},
+   {q:"What do you tell her rheumatologist?",a:"Recommend reducing the dose to about 250 mg/day or less, and report screening results clearly so decisions about continuing HCQ are shared."}
+  ]},
+ {t:"Case 2: Fading colors on TB treatment",stem:"A 63-year-old man with chronic kidney disease has been on ethambutol for 4 months. He reports dim colors; acuity 20/50 OU with bilateral cecocentral scotomas.",
+  steps:[
+   {q:"Diagnosis?",a:"Ethambutol optic neuropathy, with kidney disease increasing exposure."},
+   {q:"Next step?",a:"Contact the TB team to stop ethambutol and substitute another drug; document fields and OCT."},
+   {q:"Prognosis?",a:"Variable; some recover over months, but recovery can be incomplete, especially with delayed detection."}
+  ]},
+ {t:"Case 3: Droopy lids on immunotherapy",stem:"A 70-year-old man on pembrolizumab for melanoma develops ptosis, diplopia and neck weakness 5 weeks after starting treatment.",
+  steps:[
+   {q:"What must you consider?",a:"Immune checkpoint inhibitor-associated myasthenia gravis, often with myositis and myocarditis."},
+   {q:"Urgent tests?",a:"CK, troponin, ECG, AChR antibodies and respiratory assessment."},
+   {q:"Management?",a:"Hold the checkpoint inhibitor, high-dose steroids with IVIG or plasma exchange in coordination with oncology, neurology and cardiology."}
+  ]},
+ {t:"Case 4: Waking up blind after spine surgery",stem:"A 55-year-old man had 9-hour prone lumbar fusion with large blood loss. He wakes with no light perception in both eyes. Pupils are sluggish; discs and retinas look normal.",
+  steps:[
+   {q:"Most likely diagnosis?",a:"Bilateral posterior ischemic optic neuropathy."},
+   {q:"What else must be excluded?",a:"CRAO from orbital pressure (look for periorbital edema and retinal whitening) and cortical blindness from occipital stroke (normal pupils)."},
+   {q:"Prognosis and prevention?",a:"Poor recovery is typical; prevention focuses on positioning, avoiding prolonged hypotension, managing blood loss and staging long procedures."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{const d=document.createElement("div");d.className="card";d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map(s=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");caseList.appendChild(d);});
+caseList.addEventListener("click",e=>{if(!e.target.classList.contains("reveal"))return;const a=e.target.nextElementSibling,on=!a.classList.contains("on");a.classList.toggle("on",on);e.target.setAttribute("aria-expanded",String(on));e.target.textContent=on?"Hide answer":"Reveal answer";});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "Hydroxychloroquine: 5.0 mg/kg real weight or less; screen with OCT and FAF; look for pericentral damage in East Asian patients.",
+ "Toxic and nutritional optic neuropathies are bilateral, symmetric and painless with central or cecocentral scotomas and early color loss.",
+ "Ethambutol toxicity risk rises with dose and kidney impairment; monitor and stop at the first sign.",
+ "Don't stop amiodarone without cardiology; amiodarone optic neuropathy is insidious and often bilateral.",
+ "Checkpoint inhibitor myasthenia often comes with myositis and myocarditis; check troponin.",
+ "Transplant patient with cortical blindness: PRES from calcineurin inhibitors.",
+ "New multiple cranial neuropathies in a cancer patient: leptomeningeal disease; repeat CSF cytology if negative.",
+ "'Uveitis' in an older adult that won't respond to steroids may be vitreoretinal lymphoma.",
+ "Give thiamine before glucose when Wernicke is possible.",
+ "Bilateral vision loss after prone spine surgery with normal fundi suggests posterior ischemic optic neuropathy."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"Maximum recommended hydroxychloroquine dose:",o:["6.5 mg/kg ideal weight","5.0 mg/kg real weight","400 mg for everyone","10 mg/kg"],a:1,e:"Per AAO 2016 and the 2025 revision."},
+ {q:"At recommended HCQ doses, toxicity risk after 20 years is about:",o:["1%","5%","Almost 20%","50%"],a:2,e:"Under 1% at 5 years, under 2% at 10 years, almost 20% after 20 years."},
+ {q:"In the 2025 revision, the primary HCQ screening tools are:",o:["Fundus photos","OCT and wide-pattern FAF","Amsler grid","Color plates"],a:1,e:"Fields and mfERG are confirmatory."},
+ {q:"East Asian patients often show HCQ damage:",o:["Parafoveally","Pericentrally near the arcades","Only at the fovea","In the far periphery only"],a:1,e:"Use wider field patterns."},
+ {q:"Which feature favors amiodarone optic neuropathy over NAION?",o:["Sudden unilateral onset","Insidious, often bilateral, prolonged disc swelling","Altitudinal defect with crowded disc","Pain on eye movement"],a:1,e:"Amiodarone optic neuropathy is slower and more often bilateral."},
+ {q:"Checkpoint inhibitor myasthenia should prompt checking:",o:["Lipase","Troponin and CK","Vitamin D","Ammonia"],a:1,e:"Myositis and myocarditis frequently overlap."},
+ {q:"Topiramate-induced angle closure is treated by:",o:["Laser iridotomy","Stopping the drug, aqueous suppressants and cycloplegics","Pilocarpine","Observation"],a:1,e:"Ciliary body effusion; iridotomy doesn't help."},
+ {q:"Copper deficiency optic neuropathy can be caused by:",o:["Excess zinc","Excess vitamin C","High-protein diet","Statins"],a:0,e:"Zinc blocks copper absorption; also after bariatric surgery."},
+ {q:"Wernicke encephalopathy: what should be given first?",o:["Glucose","IV thiamine","Steroids","Insulin"],a:1,e:"Thiamine before glucose."},
+ {q:"Bilateral vision loss after prone spine surgery with normal fundi suggests:",o:["NAION","Posterior ischemic optic neuropathy","CRAO","Retinal detachment"],a:1,e:"PION; also exclude CRAO and cortical blindness."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>

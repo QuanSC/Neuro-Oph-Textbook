@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 20: Procedures</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.cmp{display:grid;gap:6px}
+.cmprow{background:var(--panel);border-radius:12px;padding:8px 10px}
+.cmprow h4{margin:0 0 6px;font-size:.84rem;color:var(--muted);font-weight:600}
+.cmpcells{display:grid;gap:8px}
+.cmpcells div{font-size:.88rem;border-left:3px solid var(--stem);padding-left:7px}
+.cmpcells b{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.fundus{background:#000;border-radius:14px;padding:8px;display:flex;justify-content:center}
+.fundus svg{max-width:300px}
+
+.slider{width:100%;accent-color:var(--hot);margin:10px 0 2px}
+.gl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.ladder li{margin:8px 0}
+
+.vfwrap{background:var(--panel);border-radius:14px;padding:10px}
+.prog{font-size:.85rem;color:var(--muted);margin:4px 0 0}
+.next{font:inherit;margin-top:10px;padding:9px 14px;border-radius:10px;border:none;background:var(--ink);color:var(--bg);cursor:pointer}
+.brain svg .rg{cursor:pointer}
+.brain svg .rg:focus-visible{outline:none;stroke:var(--inter);stroke-width:3}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.read{display:flex;justify-content:space-around;font-size:.9rem;margin-top:4px}
+.read b{font-family:Charter,Georgia,serif;font-size:1.05rem}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.9rem;margin:6px 0}
+.toggle input{width:20px;height:20px;accent-color:var(--inter)}
+ol.algo li{margin:8px 0}
+
+.nine{background:var(--panel);border-radius:14px;padding:8px}
+.step3{margin:8px 0}
+.step3 p{margin:4px 0;font-weight:600;font-size:.9rem}
+.result{font-family:Charter,Georgia,serif;font-size:1.3rem;font-weight:600;margin:4px 0}
+
+.stepbox{background:var(--panel);border-radius:14px;padding:12px}
+.nav2{display:flex;gap:8px;margin-top:8px}
+.nav2 button{font:inherit;padding:8px 14px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.nav2 button:disabled{opacity:.4;cursor:default}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 20 of 22</p>
+  <h1>Procedures</h1>
+  <p class="sub">What's done, why, what can go wrong, and what the neuro-ophthalmologist monitors: temporal artery biopsy, orbital and strabismus surgery, neurosurgical and interventional procedures, and botulinum toxin. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="tab" aria-selected="true">Temporal artery biopsy</button>
+    <button role="tab" data-tab="pick" aria-selected="false">Procedure guide</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and sources</button>
+  </nav>
+
+  <section class="tab on" id="tab-tab">
+    <h2>Temporal artery biopsy, step by step</h2>
+    <p class="sub">Schematic of the right temple. The shaded band marks the danger zone for the frontal branch of the facial nerve.</p>
+    <div class="stepbox">
+      <svg id="temple" viewBox="0 0 320 220" role="img" aria-label="Schematic temple anatomy"></svg>
+      <div class="card accent" id="stepCard" style="margin-top:6px"></div>
+      <div class="nav2"><button id="prev">Back</button><button id="next">Next step</button></div>
+    </div>
+    <div class="card"><dl><dt>Biopsy or ultrasound?</dt><dd>A 2024 Cochrane review found temporal artery ultrasound moderately sensitive when specificity is good, but couldn't conclude whether it can replace biopsy because evidence was heterogeneous and of very low certainty. Many centers use ultrasound first where expertise exists and biopsy when the diagnosis remains uncertain.</dd>
+    <dt>Timing</dt><dd>Start steroids first when GCA is suspected; biopsy remains informative for days to weeks after treatment begins.</dd></dl></div>
+  </section>
+
+  <section class="tab" id="tab-pick">
+    <h2>Procedure guide</h2>
+    <div class="chips" id="cat"></div>
+    <div class="chips" id="proc"></div>
+    <div class="card accent" id="procCard"></div>
+  </section>
+
+  <section class="tab" id="tab-cases"><h2>Case vignettes</h2><p class="sub">Work each question before revealing the answer.</p><div id="caseList"></div></section>
+  <section class="tab" id="tab-pearls"><h2>Clinical pearls</h2><div id="pearlList"></div></section>
+  <section class="tab" id="tab-quiz"><h2>Self-quiz</h2><p class="sub">Ten questions. Tap an answer to see the explanation.</p><div id="quizList"></div><p class="score" id="score" aria-live="polite"></p><button class="reveal" id="resetQuiz">Reset quiz</button></section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Know procedure indications</label>
+      <label><input type="checkbox"> Recognize complications</label>
+      <label><input type="checkbox"> Coordinate with surgical teams</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="src">
+      <li><b>Temporal artery ultrasound vs biopsy:</b> Pouncey AL, Yeldham G, Magan T, Lucenteforte E, Jaffer U, Virgili G. Halo sign on temporal artery ultrasound versus temporal artery biopsy for giant cell arteritis. <i>Cochrane Database Syst Rev.</i> 2024;2:CD013199. In 11 paired studies, at 0.95 specificity the sensitivity of ultrasound was 0.50 vs 0.80 for biopsy; certainty very low, partly because biopsy is itself part of the ACR 1990 reference standard.</li>
+      <li><b>Temporal artery biopsy technique:</b> Liu GT, Volpe NJ, Galetta SL. <i>Neuro-Ophthalmology: Diagnosis and Management.</i> 2nd ed. 2010, figure 5-52 (locate artery by palpation or Doppler; dissect to the superficial temporal fascia; ligate both ends; excise the segment).</li>
+      <li><b>Visual field recovery after pituitary surgery occurs in stages:</b> Kerrison JB, Lynn MJ, Baer CA, et al. Stages of improvement in visual fields after pituitary tumor resection. <i>Am J Ophthalmol.</i> 2000;130(6):813-820.</li>
+      <li>Other content reflects standard teaching and the curriculum readings; follow institutional protocols for technique and consent.</li>
+    </ul></div>
+    <h3>Core reading (from the program curriculum)</h3>
+    <div class="card"><ul class="refs">
+      <li>Pelz DM, Lownie SP, Mayich MS, Pandey SK, Sharma M. Interventional neuroradiology: a review. <i>Can J Neurol Sci.</i> 2021;48(2):172-188.</li>
+      <li>Scarabosio A, Surico PL, Singh RB, et al. Thyroid eye disease: advancements in orbital and ocular pathology management. <i>J Pers Med.</i> 2024;14(7):776.</li>
+      <li>Leclerc A, Gaberel T, Laville MA, et al. Predictive factors of favorable visual outcomes after surgery of tuberculum sellae meningiomas. <i>World Neurosurg.</i> 2022;164:e557-e567.</li>
+      <li>Kalyvas A, Neromyliotis E, Koutsarnakis C, et al. A systematic review of surgical treatments of idiopathic intracranial hypertension. <i>Neurosurg Rev.</i> 2021;44(2):773-792.</li>
+    </ul></div>
+  </section>
+
+  <p class="foot">Teaching overview, not a surgical manual. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick,init=0){host.innerHTML="";items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});if(init!==null)host.children[init].click();}
+
+/* ---------- TAB stepper ---------- */
+const STEPS=[
+ {t:"1. Decide and consent",b:"Indication: suspected GCA where the result will change management. Discuss risks: bleeding, infection, scar, and injury to the frontal branch of the facial nerve (brow droop). Review anticoagulants."},
+ {t:"2. Locate and mark the artery",b:"Palpate the pulse or use Doppler to trace the frontal (parietal) branch of the superficial temporal artery; mark the course above and behind the danger zone for the facial nerve."},
+ {t:"3. Incise over the artery",b:"Incise skin and subcutaneous tissue directly over the marked artery, staying within the hair-bearing scalp when possible."},
+ {t:"4. Dissect to the superficial temporal fascia",b:"The artery runs within or on the superficial temporal fascia and appears as a purplish ridge. Stay superficial in the danger zone; the frontal branch of the facial nerve runs deep to this fascial layer more anteriorly and inferiorly."},
+ {t:"5. Ligate and excise",b:"Ligate both ends with suture, free the segment by blunt dissection, and excise it. Take an adequately long segment (skip lesions occur); follow local pathology guidance on length."},
+ {t:"6. Close and send",b:"Achieve hemostasis, close in layers, and send the specimen in formalin. Pathology looks for transmural inflammation, internal elastic lamina disruption and giant cells; a negative biopsy doesn't exclude GCA."}
+];
+let si=0;
+function drawTemple(){
+  const hl = i => si===i;
+  let s=`<rect x="0" y="0" width="320" height="220" rx="12" fill="var(--bg)"/>
+  <path d="M40,200 C30,120 70,40 160,30 C240,24 300,70 300,140 L300,200 Z" fill="#EBD5C2" stroke="var(--stemline)"/>
+  <ellipse cx="250" cy="150" rx="14" ry="22" fill="#E2C6AE" stroke="var(--stemline)"/><text x="250" y="186" class="lvl" text-anchor="middle">ear</text>
+  <path d="M74,128 q22,-12 46,0" stroke="#8C6E5A" stroke-width="3" fill="none"/><text x="78" y="120" class="lvl">brow</text>
+  <ellipse cx="96" cy="148" rx="18" ry="8" fill="#FBF8F3" stroke="var(--stemline)"/><circle cx="96" cy="148" r="5" fill="#5E7F94"/><text x="80" y="172" class="lvl">eye</text>
+  <path d="M238,168 L150,92 L118,92 L200,168 Z" fill="var(--hot)" opacity=".16"/><text x="40" y="212" class="lvl">shaded: frontal branch of CN VII danger zone</text>
+  <path d="M244,170 C240,140 236,110 226,90 C218,72 206,60 196,50" stroke="var(--hot)" stroke-width="${si>=1?4:2.5}" fill="none"/>
+  <path d="M226,90 C214,84 190,78 168,70" stroke="var(--hot)" stroke-width="2" fill="none" opacity=".7"/>
+  <text x="300" y="24" class="lbl" text-anchor="end">superficial temporal artery</text>`;
+  if(si>=1) s+=`<path d="M232,112 C228,96 220,82 210,70" stroke="var(--inter)" stroke-width="2" stroke-dasharray="4 3" fill="none"/>`;
+  if(si>=2) s+=`<path d="M234,116 C230,100 222,84 212,72" stroke="var(--ink)" stroke-width="3" fill="none"/>`;
+  if(si>=4) s+=`<circle cx="231" cy="108" r="4" fill="var(--ink)"/><circle cx="213" cy="76" r="4" fill="var(--ink)"/>`;
+  if(si>=5) s+=`<path d="M234,116 C230,100 222,84 212,72" stroke="#6B4F3F" stroke-width="2" stroke-dasharray="2 3" fill="none"/>`;
+  document.getElementById("temple").innerHTML=s;
+  document.getElementById("stepCard").innerHTML=`<h3 style="margin-top:0">${STEPS[si].t}</h3><p>${STEPS[si].b}</p>`;
+  document.getElementById("prev").disabled=si===0; document.getElementById("next").disabled=si===STEPS.length-1;
+}
+document.getElementById("prev").addEventListener("click",()=>{si=Math.max(0,si-1);drawTemple()});
+document.getElementById("next").addEventListener("click",()=>{si=Math.min(STEPS.length-1,si+1);drawTemple()});
+drawTemple();
+
+/* ---------- procedure guide ---------- */
+const P={
+ "Extraocular":[
+  {n:"Strabismus surgery",i:"Stable deviation (often 6 or more months of stable measurements after a palsy), restrictive strabismus (TED), sagging eye syndrome, congenital patterns.",s:"Recession, resection, transposition, adjustable sutures; botulinum toxin as an alternative in some cases.",x:"Over- or undercorrection, slipped muscle, anterior segment ischemia when several rectus muscles are operated on.",r:"Document stability with serial prism measurements; operate on TED only when inactive and after decompression."},
+  {n:"Canthotomy and cantholysis",i:"Orbital compartment syndrome with vision threat (retrobulbar hemorrhage).",s:"Lateral canthotomy, then inferior (and if needed superior) cantholysis at the bedside.",x:"Bleeding, lid malposition (usually minor and repairable).",r:"Recheck IOP and vision; don't wait for imaging."},
+  {n:"Orbital biopsy and tumor surgery",i:"Undiagnosed orbital mass or inflammation not responding as expected; suspected lymphoma, IgG4 disease, metastasis.",s:"Anterior, lateral or transcranial orbitotomy depending on location; endoscopic approaches for medial apex lesions.",x:"Vision loss, diplopia, ptosis, hemorrhage.",r:"Biopsy before steroids when lymphoma is possible; check optic nerve function after surgery."},
+  {n:"Optic nerve sheath fenestration",i:"IIH or other papilledema with progressive vision loss, especially when headache is controlled; fulminant IIH as a rapid option.",s:"Window cut in the optic nerve sheath behind the globe (medial or lateral approach) to drain CSF.",x:"Vision loss from vascular injury, diplopia, pupil dilation, failure over time.",r:"Protects the operated nerve more than headache; the fellow eye sometimes improves too. Compare with shunting and venous sinus stenting."},
+  {n:"Orbital decompression",i:"Dysthyroid optic neuropathy not responding to steroids; disfiguring proptosis or exposure in inactive TED.",s:"Removal of medial wall, floor or lateral wall bone, with or without fat.",x:"New or worsened diplopia (especially medial and floor), infraorbital numbness, CSF leak, vision loss.",r:"Sequence for rehabilitation: decompression, then strabismus surgery, then lids."}
+ ],
+ "Neurosurgical":[
+  {n:"CSF shunting",i:"Hydrocephalus; IIH with vision loss or intractable headache.",s:"Ventriculoperitoneal or lumboperitoneal shunt; lumbar drain as a bridge.",x:"Shunt failure, infection, overdrainage (low-pressure headache), revisions.",r:"New papilledema, CN VI palsy or upgaze limitation in a shunted patient: shunt failure until proven otherwise."},
+  {n:"Transsphenoidal pituitary surgery",i:"Chiasmal compression from adenoma (non-prolactinoma) or other sellar mass; apoplexy with vision loss.",s:"Endoscopic or microscopic transsphenoidal resection.",x:"CSF leak, diabetes insipidus, hypopituitarism, rarely vision loss or carotid injury.",r:"Fields often improve in stages over days to months; preoperative OCT ganglion cell thickness helps predict recovery."},
+  {n:"Venous sinus stenting",i:"IIH with transverse sinus stenosis and a pressure gradient on venography, often when medical therapy fails.",s:"Catheter venography with manometry, then stent placement across the stenosis.",x:"Stent-adjacent stenosis, thrombosis, subdural hematoma; need for antiplatelet therapy.",r:"Watch papilledema and fields; stenosis recurrence can occur next to the stent."}
+ ],
+ "Interventional":[
+  {n:"Cerebral angiography and venography",i:"Aneurysm, AVM, dural fistula, carotid-cavernous fistula, vasculitis, and when noninvasive imaging is inconclusive.",s:"Catheter injection of contrast with digital subtraction imaging.",x:"Stroke (rare), groin or radial access complications, contrast reactions.",r:"Gold standard for dural fistulas and small aneurysms missed on CTA or MRA."},
+  {n:"Aneurysm coiling and clipping",i:"Ruptured or high-risk unruptured aneurysms, including PComm aneurysms with CN III palsy.",s:"Endovascular coiling, stent- or flow diverter-assisted coiling, or surgical clipping.",x:"Rupture, thromboembolism, incomplete occlusion; transient worsening of cranial nerve palsy.",r:"Follow CN III recovery; aberrant regeneration can develop."},
+  {n:"Embolization",i:"Carotid-cavernous fistulas (direct and indirect), dural fistulas, AVMs, preoperative tumor embolization.",s:"Transarterial or transvenous coils, liquid embolics, balloons.",x:"Cranial neuropathies, vision loss from venous thrombosis, stroke.",r:"Monitor IOP, motility and vision after fistula treatment; transient worsening can occur."},
+  {n:"Thrombolysis and thrombectomy",i:"Acute ischemic stroke within time windows; CRAO thrombolysis remains unproven (THEIA, TenCRAOS).",s:"IV thrombolytics; mechanical thrombectomy for large-vessel occlusion.",x:"Intracranial hemorrhage.",r:"Hemianopia and gaze deviation can be stroke presentations that qualify for treatment: activate the stroke team."}
+ ],
+ "Neuromodulation and toxin":[
+  {n:"Botulinum toxin",i:"Blepharospasm, hemifacial spasm, some strabismus (acute CN VI palsy, small deviations), synkinesis, chronic migraine.",s:"Targeted injections repeated about every 3 months.",x:"Ptosis, diplopia, dry eye, lagophthalmos; wears off over weeks.",r:"Avoid in myasthenia; caution with aminoglycosides."},
+  {n:"Neurostimulation and neuroablative procedures",i:"Refractory headache (occipital or sphenopalatine ganglion stimulation), trigeminal neuralgia (microvascular decompression, radiosurgery, rhizotomy), movement disorders (deep brain stimulation).",s:"Device implantation or targeted lesioning.",x:"Facial numbness and corneal anesthesia after trigeminal procedures; eye movement and visual side effects with deep brain stimulation.",r:"Check corneal sensation after trigeminal procedures: neurotrophic keratopathy risk."}
+ ]
+};
+let cat=Object.keys(P)[0];
+chips(document.getElementById("cat"),Object.keys(P),i=>{cat=Object.keys(P)[i];
+  chips(document.getElementById("proc"),P[cat].map(x=>x.n),j=>{const x=P[cat][j];
+    document.getElementById("procCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Indications</dt><dd>${x.i}</dd><dt>What's done</dt><dd>${x.s}</dd><dt>Complications</dt><dd>${x.x}</dd></dl><dl class="miss"><dt>Neuro-ophthalmologist's role</dt><dd>${x.r}</dd></dl>`;});
+});
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: Planning the biopsy",stem:"A 74-year-old woman with jaw claudication and CRP 68 has been on prednisone 60 mg for 3 days. Temporal artery ultrasound at a center with experienced sonographers shows no halo.",
+  steps:[
+   {q:"Does a negative ultrasound rule out GCA?",a:"No. Ultrasound sensitivity varies widely, and a Cochrane review couldn't conclude that it can replace biopsy."},
+   {q:"Is it too late to biopsy?",a:"No. Biopsy remains informative for days to weeks after starting steroids."},
+   {q:"What complication do you counsel about specifically?",a:"Frontal branch facial nerve injury causing brow droop; stay superficial and posterior to the danger zone."}
+  ]},
+ {t:"Case 2: Which surgery for IIH?",stem:"A 29-year-old woman with IIH has worsening fields (MD -12 dB) despite maximal acetazolamide; headaches are mild. MRV shows bilateral transverse sinus stenosis.",
+  steps:[
+   {q:"What are the surgical options?",a:"Optic nerve sheath fenestration, CSF shunting, or venous sinus stenting if venography confirms a pressure gradient."},
+   {q:"Which might suit her vision-predominant presentation?",a:"ONSF is often favored when vision loss dominates and headache is mild; stenting is an option with a significant gradient. Decisions are individualized with neurosurgery and interventional radiology."},
+   {q:"What must happen while waiting?",a:"Close field monitoring; fulminant decline warrants urgent CSF diversion."}
+  ]},
+ {t:"Case 3: After the pituitary operation",stem:"A 55-year-old man had a nonfunctioning macroadenoma resected. Before surgery he had dense bitemporal loss; OCT ganglion cell thickness was near normal.",
+  steps:[
+   {q:"What do you tell him about recovery?",a:"Fields often improve in stages, beginning within days and continuing over months; near-normal preoperative ganglion cell thickness predicts a better recovery."},
+   {q:"What postoperative complications affect him systemically?",a:"Diabetes insipidus and hypopituitarism; endocrinology follows him."},
+   {q:"When do you image again?",a:"Per neurosurgical protocol for residual or recurrent tumor, with fields and OCT at follow-up."}
+  ]},
+ {t:"Case 4: Squeezing eyes shut",stem:"A 63-year-old woman has bilateral forceful involuntary eyelid closure that makes driving unsafe. Exam is otherwise normal.",
+  steps:[
+   {q:"Diagnosis?",a:"Benign essential blepharospasm."},
+   {q:"Treatment?",a:"Botulinum toxin injections into the orbicularis, repeated about every 3 months."},
+   {q:"Side effects to warn about?",a:"Ptosis, diplopia, dry eye and lagophthalmos, all temporary."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{const d=document.createElement("div");d.className="card";d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map(s=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");caseList.appendChild(d);});
+caseList.addEventListener("click",e=>{if(!e.target.classList.contains("reveal"))return;const a=e.target.nextElementSibling,on=!a.classList.contains("on");a.classList.toggle("on",on);e.target.setAttribute("aria-expanded",String(on));e.target.textContent=on?"Hide answer":"Reveal answer";});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "Start steroids before temporal artery biopsy when GCA is suspected; the biopsy stays informative for days to weeks.",
+ "A negative temporal artery biopsy or ultrasound doesn't exclude GCA; skip lesions occur.",
+ "Stay superficial and posterior during temporal artery biopsy to protect the frontal branch of the facial nerve.",
+ "Canthotomy and cantholysis come before imaging in orbital compartment syndrome.",
+ "Biopsy before steroids if orbital lymphoma is possible.",
+ "TED rehabilitation order: decompression, then strabismus surgery, then lids.",
+ "In IIH, ONSF, shunting and venous sinus stenting each have roles; choose based on vision vs headache and venous anatomy.",
+ "New papilledema or CN VI palsy in a shunted patient: shunt failure until proven otherwise.",
+ "Fields after pituitary surgery improve in stages; preoperative ganglion cell thickness predicts recovery.",
+ "Check corneal sensation after trigeminal procedures to prevent neurotrophic keratopathy."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"The nerve most at risk during temporal artery biopsy is:",o:["Trigeminal V1","Frontal branch of the facial nerve","CN III","Greater occipital nerve"],a:1,e:"Injury causes brow droop."},
+ {q:"In the 2024 Cochrane review, at high specificity (0.95), sensitivity was:",o:["Ultrasound 0.80 vs biopsy 0.50","Ultrasound 0.50 vs biopsy 0.80","Both 0.95","Both 0.30"],a:1,e:"Certainty was very low; biopsy is part of the reference standard."},
+ {q:"First step for orbital compartment syndrome with vision loss:",o:["CT","Canthotomy and cantholysis","IV steroids","Observation"],a:1,e:"Treat clinically."},
+ {q:"Correct order of TED rehabilitative surgery:",o:["Lids, strabismus, decompression","Decompression, strabismus, lids","Strabismus, decompression, lids","Any order"],a:1,e:"Each step can change the next."},
+ {q:"Optic nerve sheath fenestration is most suited to IIH patients with:",o:["Severe headache and normal vision","Progressive vision loss with mild headache","No papilledema","Venous sinus thrombosis"],a:1,e:"ONSF protects vision more than it relieves headache."},
+ {q:"Venous sinus stenting requires showing:",o:["Normal venography","Transverse sinus stenosis with a pressure gradient","An aneurysm","A Chiari malformation"],a:1,e:"Manometry during venography."},
+ {q:"New CN VI palsy and papilledema in a patient with a VP shunt suggests:",o:["Migraine","Shunt failure","Myasthenia","Overdrainage"],a:1,e:"Evaluate urgently."},
+ {q:"Botulinum toxin should be avoided in:",o:["Blepharospasm","Myasthenia gravis","Hemifacial spasm","Chronic migraine"],a:1,e:"It can worsen neuromuscular transmission."},
+ {q:"The gold standard for diagnosing a dural arteriovenous fistula is:",o:["CT","Catheter angiography","Ultrasound","MRI alone"],a:1,e:"CTA and MRA can miss them."},
+ {q:"After trigeminal rhizotomy, the eye risk to monitor is:",o:["Angle closure","Neurotrophic keratopathy","Papilledema","Retinal detachment"],a:1,e:"Corneal anesthesia."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>

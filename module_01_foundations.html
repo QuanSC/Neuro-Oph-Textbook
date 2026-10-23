@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 1: Foundations of neuro-ophthalmic anatomy</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 1 of 22</p>
+  <h1>Foundations: anatomy and physiology</h1>
+  <p class="sub">Afferent and efferent pathways, and the courses of CN II, III, IV and VI. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="map" aria-selected="true">Visual pathway</button>
+    <button role="tab" data-tab="routes" aria-selected="false">Nerve routes</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals</button>
+  </nav>
+
+  <!-- VISUAL PATHWAY -->
+  <section class="tab on" id="tab-map">
+    <h2>Where is the lesion?</h2>
+    <p class="sub">Tap a numbered site on the right-sided pathway to see the visual field it produces. Fields are shown as the patient sees them, left eye on the left.</p>
+    <div class="legend">
+      <span><i style="background:var(--inter)"></i>Temporal retina (stays same side)</span>
+      <span><i style="background:var(--supra)"></i>Nasal retina (crosses)</span>
+    </div>
+    <svg id="vp" viewBox="0 0 360 430" role="img" aria-label="Visual pathway from eyes to occipital cortex">
+      <text x="110" y="12" class="lvl" text-anchor="middle">Left eye</text>
+      <text x="250" y="12" class="lvl" text-anchor="middle">Right eye</text>
+      <circle cx="110" cy="40" r="22" fill="var(--stem)" stroke="var(--stemline)"/>
+      <circle cx="250" cy="40" r="22" fill="var(--stem)" stroke="var(--stemline)"/>
+      <!-- left eye fibers -->
+      <path d="M100,60 L168,138 L168,150 L122,212" fill="none" stroke="var(--inter)" stroke-width="2.5"/>
+      <path d="M120,60 L178,138 L188,150 L238,212" fill="none" stroke="var(--supra)" stroke-width="2.5"/>
+      <!-- right eye fibers -->
+      <path d="M260,60 L192,138 L192,150 L238,212" fill="none" stroke="var(--inter)" stroke-width="2.5"/>
+      <path d="M240,60 L182,138 L172,150 L122,212" fill="none" stroke="var(--supra)" stroke-width="2.5"/>
+      <rect x="160" y="132" width="40" height="22" rx="8" fill="var(--stem)" opacity=".55" stroke="var(--stemline)"/>
+      <text x="216" y="146" class="lbl">chiasm</text>
+      <ellipse cx="120" cy="218" rx="16" ry="10" fill="var(--stem)" stroke="var(--stemline)"/>
+      <ellipse cx="240" cy="218" rx="16" ry="10" fill="var(--stem)" stroke="var(--stemline)"/>
+      <text x="262" y="214" class="lbl">LGN</text>
+      <text x="246" y="182" class="lbl">tract</text>
+      <!-- radiations right -->
+      <path d="M248,226 C320,230 330,280 290,300 C260,318 230,350 212,376" fill="none" stroke="var(--neighbor)" stroke-width="2.5"/>
+      <path d="M240,228 C246,280 232,330 212,376" fill="none" stroke="var(--neighbor)" stroke-width="2.5"/>
+      <text x="300" y="250" class="lbl">Meyer loop</text>
+      <text x="300" y="262" class="lbl">(temporal)</text>
+      <text x="246" y="330" class="lbl">parietal</text>
+      <!-- radiations left -->
+      <path d="M112,226 C40,230 30,280 70,300 C100,318 130,350 148,376" fill="none" stroke="var(--neighbor)" stroke-width="2.5"/>
+      <path d="M120,228 C114,280 128,330 148,376" fill="none" stroke="var(--neighbor)" stroke-width="2.5"/>
+      <!-- occipital -->
+      <path d="M130,378 Q180,360 230,378 L230,410 Q180,428 130,410 Z" fill="var(--stem)" stroke="var(--stemline)"/>
+      <line x1="180" y1="370" x2="180" y2="420" stroke="var(--stemline)" stroke-dasharray="3 3"/>
+      <text x="180" y="398" class="lvl" text-anchor="middle">occipital</text>
+      <g id="hotspots"></g>
+    </svg>
+
+    <h3 id="vfTitle">Visual field</h3>
+    <svg id="vf" viewBox="0 0 240 128" role="img" aria-label="Visual fields of left and right eye"></svg>
+    <div class="card accent" id="vpCard">
+      <p>Tap a red numbered site. Sites run front to back: optic nerve, chiasm, tract, LGN, radiations, cortex.</p>
+      <p>Rule of thumb: anything before the chiasm is one eye; the chiasm is both temporal fields; everything after is homonymous. Posterior lesions tend to be more congruous, but congruity is a weak localizer on its own: in a series of 904 homonymous hemianopias, nearly every defect type occurred at every retrochiasmal location (Zhang 2006). Use pupils, discs and imaging too.</p>
+    </div>
+  </section>
+
+  <!-- NERVE ROUTES -->
+  <section class="tab" id="tab-routes">
+    <h2>Follow the nerve</h2>
+    <p class="sub">Pick a pathway, then step along its course. Each stop lists who the neighbors are, because neighbors localize.</p>
+    <div class="chips" id="nerveChips"></div>
+    <div class="route" id="routeBar"></div>
+    <div class="chips" id="segChips"></div>
+    <div class="card accent" id="routeCard"></div>
+  </section>
+
+  <!-- CASES -->
+  <section class="tab" id="tab-cases">
+    <h2>Case vignettes</h2>
+    <p class="sub">Work each question before revealing the answer.</p>
+    <div id="caseList"></div>
+  </section>
+
+  <!-- PEARLS -->
+  <section class="tab" id="tab-pearls">
+    <h2>Clinical pearls</h2>
+    <div id="pearlList"></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="tab" id="tab-quiz">
+    <h2>Self-quiz</h2>
+    <p class="sub">Ten questions. Tap an answer to see the explanation.</p>
+    <div id="quizList"></div>
+    <p class="score" id="score" aria-live="polite"></p>
+    <button class="reveal" id="resetQuiz">Reset quiz</button>
+  </section>
+
+  <!-- GOALS -->
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Label the visual pathways and cranial nerve anatomy</label>
+      <label><input type="checkbox"> Correlate lesion site with clinical deficits</label>
+      <label><input type="checkbox"> Perform a focused neuro-ophthalmic exam</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="refs">
+      <li><b>Congruity as a localizer:</b> Zhang X, Kedar S, Lynn MJ, Newman NJ, Biousse V. Homonymous hemianopias: clinical-anatomic correlations in 904 cases. <i>Neurology.</i> 2006;66(6):906-910. Every type of homonymous defect except temporal crescent loss and sectoranopia occurred at all retrochiasmal locations.</li>
+      <li><b>CN II is about 50 mm long: intraocular about 1 mm, intraorbital about 25 mm, intracanalicular about 9 mm, intracranial about 16 mm (canalicular and intracranial lengths vary between sources):</b> StatPearls, Compressive Optic Neuropathy (NCBI Bookshelf NBK560583, updated 2025). About 53% crossing at the chiasm is standard teaching (BCSC Section 5).</li>
+      <li><b>Wilbrand's knee:</b> presented as debated, because its existence has been questioned in primate studies; the junctional scotoma pattern itself is clinically reliable.</li>
+      <li><b>LGN sectoranopias:</b> horizontal wedge from lateral (posterior) choroidal artery ischemia, and quadruple sectoranopia (upper and lower sectors lost, horizontal zone spared) from distal anterior choroidal artery ischemia. Frisén L, Holmegaard L, Rosencrantz M. <i>J Neurol Neurosurg Psychiatry.</i> 1978;41(4):374-380; Frisén L. <i>J Neurol Neurosurg Psychiatry.</i> 1979;42(7):590-594. Rarely, horizontal sectoranopia comes from optic radiation or occipital lesions.</li>
+    </ul></div>
+    <h3>Core reading</h3>
+    <div class="card">
+      <ul class="refs">
+        <li>American Academy of Ophthalmology. <i>Basic and Clinical Science Course, Section 5: Neuro-Ophthalmology.</i> AAO; 2025.</li>
+        <li>Liu GT, Volpe NJ, Galetta SL. <i>Neuro-Ophthalmology: Diagnosis and Management.</i> 2nd ed. Saunders Elsevier; 2010.</li>
+        <li>Schiefer U, Wilhelm H, Hart W, eds. <i>Clinical Neuro-Ophthalmology: A Practical Guide.</i> Springer; 2007.</li>
+      </ul>
+    </div>
+  </section>
+
+  <p class="foot">Schematic diagrams, not to anatomic scale. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+
+<script>
+/* ---------- tabs ---------- */
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+
+/* ---------- visual field drawing ---------- */
+const NS="http://www.w3.org/2000/svg";
+const el=(n,a)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e};
+const R=46, C=[[60,62],[180,62]]; // OS, OD
+function wedge(cx,cy,r,a,b){ // degrees, math convention, a<b, ccw
+  const p=t=>[cx+r*Math.cos(t*Math.PI/180), cy-r*Math.sin(t*Math.PI/180)];
+  if(b-a>=360) return `M${cx-r},${cy} a${r},${r} 0 1,0 ${2*r},0 a${r},${r} 0 1,0 ${-2*r},0`;
+  const [x1,y1]=p(a),[x2,y2]=p(b);
+  return `M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${b-a>180?1:0},0 ${x2},${y2} Z`;
+}
+function drawVF(spec){
+  const vf=document.getElementById("vf"); vf.innerHTML="";
+  ["Left eye","Right eye"].forEach((t,i)=>{
+    const [cx,cy]=C[i];
+    vf.appendChild(el("circle",{cx,cy,r:R,fill:"var(--panel)",stroke:"var(--stemline)"}));
+    const s=spec[i]||{};
+    (s.shade||[]).forEach(w=>vf.appendChild(el("path",{d:wedge(cx,cy,R*(w[2]||1),w[0],w[1]),fill:"var(--ink)",opacity:".82"})));
+    (s.spare||[]).forEach(rr=>vf.appendChild(el("circle",{cx,cy,r:R*rr,fill:"var(--panel)"})));
+    vf.appendChild(el("line",{x1:cx-R,y1:cy,x2:cx+R,y2:cy,stroke:"var(--stemline)","stroke-width":.8}));
+    vf.appendChild(el("line",{x1:cx,y1:cy-R,x2:cx,y2:cy+R,stroke:"var(--stemline)","stroke-width":.8}));
+    vf.appendChild(el("circle",{cx,cy,r:R,fill:"none",stroke:"var(--stemline)"}));
+    const tx=el("text",{x:cx,y:cy+R+12,class:"lvl","text-anchor":"middle"}); tx.textContent=t; vf.appendChild(tx);
+  });
+}
+drawVF([{},{}]);
+
+/* left half of each chart = 90..270; right half = -90..90 */
+const LES=[
+ {n:1,x:226,y:96,name:"Right optic nerve",vf:[{},{shade:[[0,360,.32]]}],
+  defect:"Monocular defect in the right eye: central scotoma here, but any nerve fiber layer pattern is possible (arcuate, altitudinal, cecocentral).",
+  clues:"Right RAPD, reduced acuity and color, disc swollen or normal acutely, pallor after 4 to 6 weeks.",
+  causes:"Optic neuritis, ischemic optic neuropathy, compression, toxic or hereditary disease.",
+  miss:"An optic neuropathy that keeps progressing past the expected window needs imaging for compression."},
+ {n:2,x:198,y:128,name:"Right junction (nerve meets chiasm)",vf:[{shade:[[90,180]]},{shade:[[0,360,.32]]}],
+  defect:"Junctional scotoma: right central scotoma plus a left superotemporal defect.",
+  clues:"Always check the 'good' eye's superotemporal field in any unexplained optic neuropathy.",
+  causes:"Sellar and parasellar masses: meningioma, pituitary adenoma, aneurysm.",
+  miss:"The classic explanation is Wilbrand's knee (crossing inferonasal fibers looping into the opposite nerve). Its existence is debated, but the field pattern is real and localizes to the junction."},
+ {n:3,x:180,y:143,name:"Chiasm body",vf:[{shade:[[90,270]]},{shade:[[-90,90]]}],
+  defect:"Bitemporal hemianopia respecting the vertical meridian.",
+  clues:"Often no RAPD if symmetric. OCT shows binasal ganglion cell thinning, which can precede field loss. Band (bow-tie) atrophy if chronic.",
+  causes:"Pituitary adenoma (superior fields first, compression from below); craniopharyngioma (inferior fields first, from above); meningioma; aneurysm.",
+  miss:"Sudden headache, vision loss and ophthalmoplegia with a known or suspected adenoma is pituitary apoplexy: same-day imaging and endocrine evaluation."},
+ {n:4,x:214,y:182,name:"Right optic tract",vf:[{shade:[[90,270]]},{shade:[[120,250]]}],
+  defect:"Left homonymous hemianopia, typically incongruous (the two eyes don't match).",
+  clues:"RAPD in the left eye, opposite the lesion, because the left eye loses its larger temporal field. Bow-tie atrophy in the left eye and superotemporal/inferotemporal atrophy in the right eye.",
+  causes:"Compressive masses, demyelination, trauma, stroke (anterior choroidal artery).",
+  miss:"Homonymous hemianopia plus RAPD = optic tract. Cortical lesions never cause an RAPD."},
+ {n:5,x:240,y:218,name:"Right lateral geniculate nucleus",vf:[{shade:[[163,197]]},{shade:[[163,197]]}],
+  defect:"Congruous left sectoranopia: a horizontal wedge (lateral choroidal artery) or its mirror image, loss of upper and lower sectors sparing a horizontal zone (quadruple sectoranopia, distal anterior choroidal artery).",
+  clues:"No RAPD. Field shape reflects the LGN's dual blood supply.",
+  causes:"Infarction of the lateral or anterior choroidal artery territory.",
+  miss:"Wedge-shaped homonymous defects pointing to fixation suggest the LGN."},
+ {n:6,x:302,y:276,name:"Right Meyer loop (temporal lobe)",vf:[{shade:[[90,180]]},{shade:[[90,180]]}],
+  defect:"Left superior homonymous quadrantanopia: \"pie in the sky.\"",
+  clues:"Inferior retinal fibers loop forward around the temporal horn. May come with seizures, aphasia (dominant side) or memory symptoms.",
+  causes:"Temporal lobe tumor, stroke, abscess, anterior temporal lobectomy for epilepsy.",
+  miss:"Ask about driving: a superior quadrantanopia after epilepsy surgery may still disqualify depending on state rules."},
+ {n:7,x:238,y:300,name:"Right parietal radiations",vf:[{shade:[[180,270]]},{shade:[[180,270]]}],
+  defect:"Left inferior homonymous quadrantanopia: \"pie on the floor.\"",
+  clues:"Asymmetric optokinetic nystagmus (weaker when the drum rotates toward the lesion side), left neglect if non-dominant.",
+  causes:"MCA territory stroke, tumor.",
+  miss:"Neglect can make the field test look worse or inconsistent; test with the patient's attention cued."},
+ {n:8,x:212,y:386,name:"Right occipital cortex",vf:[{shade:[[90,270]],spare:[.2]},{shade:[[90,270]],spare:[.2]}],
+  defect:"Left congruous homonymous hemianopia, often with macular sparing.",
+  clues:"Normal discs, no RAPD, acuity usually normal if one side is involved. Patients often bump into things or lose their place reading.",
+  causes:"PCA territory stroke (most common), tumor, PRES, trauma.",
+  miss:"Acute homonymous hemianopia is a stroke until proven otherwise: same-day stroke pathway. Macular sparing reflects dual MCA/PCA supply of the occipital pole and its large cortical representation."},
+ {n:9,x:192,y:412,name:"Right occipital tip",vf:[{shade:[[90,270,.32]]},{shade:[[90,270,.32]]}],
+  defect:"Left congruous homonymous paracentral scotomas.",
+  clues:"Can be missed on a 24-2; use a 10-2. Acuity may be normal.",
+  causes:"Watershed infarct, trauma to the occipital pole.",
+  miss:"Small homonymous scotomas respect the vertical meridian on both eyes; look closely at the central points."},
+ {n:10,x:236,y:368,name:"Right anterior calcarine cortex",vf:[{shade:[[90,270]],spare:[.7]},{}],
+  defect:"Left temporal crescent: a monocular defect in the far temporal field of the left eye.",
+  clues:"The only retrochiasmal lesion that causes a monocular field defect. Needs kinetic perimetry beyond 60 degrees.",
+  causes:"Anterior calcarine infarct or lesion.",
+  miss:"The flip side: an occipital hemianopia that spares the temporal crescent localizes to the occipital lobe."}
+];
+const hsG=document.getElementById("hotspots"), vpCard=document.getElementById("vpCard");
+LES.forEach(L=>{
+  const g=el("g",{class:"hs","data-n":L.n});
+  g.appendChild(el("circle",{class:"ring",cx:L.x,cy:L.y,r:9}));
+  const t=el("text",{x:L.x,y:L.y}); t.textContent=L.n; g.appendChild(t);
+  const hit=el("circle",{class:"hit",cx:L.x,cy:L.y,r:15,tabindex:0,role:"button","aria-label":L.n+". "+L.name});
+  const go=()=>{
+    document.querySelectorAll(".hs").forEach(h=>h.classList.toggle("sel",+h.dataset.n===L.n));
+    drawVF(L.vf);
+    document.getElementById("vfTitle").textContent="Visual field: "+L.name;
+    vpCard.innerHTML=`<dl><dt>Field defect</dt><dd>${L.defect}</dd><dt>Clinical clues</dt><dd>${L.clues}</dd><dt>Common causes</dt><dd>${L.causes}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${L.miss}</dd></dl>`;
+  };
+  hit.addEventListener("click",go);
+  hit.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}});
+  g.appendChild(hit); hsG.appendChild(g);
+});
+
+/* ---------- nerve routes ---------- */
+const ROUTES={
+ "CN II":[
+  {s:"Intraocular",len:"about 1 mm",nb:"Optic disc, lamina cribrosa, central retinal vessels.",what:"Disc edema, drusen, cupping and pallor are all visible here.",syn:"Papilledema, NAION, anterior optic neuritis, buried drusen.",pearl:"Small crowded discs (disc at risk) predispose to NAION."},
+  {s:"Intraorbital",len:"about 25 mm",nb:"Extraocular muscle cone, ophthalmic artery, ciliary ganglion.",what:"Extra slack (S-shape) lets the eye move and protects against stretch.",syn:"Retrobulbar optic neuritis, optic nerve sheath meningioma, glioma, thyroid compressive optic neuropathy at the apex.",pearl:"Orbital apex syndrome = CN II plus III, IV, V1 and VI."},
+  {s:"Intracanalicular",len:"about 9 mm",nb:"Sphenoid and ethmoid sinuses, ophthalmic artery beneath.",what:"The nerve is tethered to bone here, so it's most vulnerable to shearing.",syn:"Traumatic optic neuropathy, sinus disease, canal meningioma.",pearl:"Brow trauma with an RAPD and a normal-looking disc points to the canal."},
+  {s:"Intracranial",len:"about 10 to 16 mm",nb:"Supraclinoid ICA, ophthalmic artery origin, pituitary below, frontal lobe above.",what:"Runs to the chiasm, above the sella.",syn:"ICA or ophthalmic aneurysm, pituitary macroadenoma, meningioma.",pearl:"Ophthalmic segment aneurysms can cause a slowly progressive unilateral optic neuropathy."}
+ ],
+ "CN III":[
+  {s:"Nucleus and fascicle (midbrain)",nb:"Red nucleus, cerebral peduncle, superior cerebellar peduncle.",what:"Nuclear lesions give bilateral ptosis and contralateral superior rectus weakness.",syn:"Weber (III plus contralateral hemiparesis); Benedikt (III plus contralateral tremor); Claude (III plus contralateral ataxia).",pearl:"A CN III palsy with any long-tract sign is brainstem, not microvascular."},
+  {s:"Subarachnoid space",nb:"Posterior communicating artery, PCA, SCA, uncus of the temporal lobe.",what:"Pupillomotor fibers ride superficially (superomedially), so compression hits the pupil early.",syn:"PComm aneurysm, uncal herniation (Hutchinson pupil), meningitis.",pearl:"Pupil-involving CN III palsy = aneurysm until proven otherwise: emergent CTA or MRA."},
+  {s:"Cavernous sinus",nb:"Lateral wall with CN IV, V1 and V2; CN VI and sympathetics beside the ICA.",what:"Multiple cranial neuropathies, often with pain or V1 numbness.",syn:"Tumor, carotid-cavernous fistula, thrombosis, Tolosa-Hunt, pituitary apoplexy.",pearl:"Aberrant regeneration without a prior acute palsy suggests a slowly growing cavernous sinus mass."},
+  {s:"Superior orbital fissure and orbit",nb:"Inside the annulus of Zinn; divides into superior (SR, levator) and inferior (MR, IR, IO, pupil) divisions.",what:"Divisional palsies are possible.",syn:"Orbital apex syndrome, orbital inflammation, tumor.",pearl:"Divisional palsy is classically orbital or anterior cavernous sinus, but can occur from more proximal lesions."}
+ ],
+ "CN IV":[
+  {s:"Nucleus (caudal midbrain)",nb:"Descending sympathetic fibers, MLF, dorsal midbrain.",what:"Fibers cross in the anterior medullary velum, so a nuclear lesion weakens the opposite superior oblique.",syn:"Nuclear or fascicular lesion with a central Horner on the side opposite the superior oblique palsy.",pearl:"Horner and CN IV palsy on opposite sides localizes to the midbrain."},
+  {s:"Subarachnoid space",nb:"Tentorial edge, the midbrain surface.",what:"The longest and thinnest intracranial course, the only nerve exiting dorsally.",syn:"Head trauma (often bilateral), tentorial meningioma.",pearl:"Bilateral CN IV palsy: large excyclotorsion, V-pattern, reversing hypertropia on side gaze."},
+  {s:"Cavernous sinus",nb:"Lateral wall with CN III, V1, V2.",what:"Rarely isolated here.",syn:"Cavernous sinus syndromes.",pearl:"Test CN IV in a CN III palsy: look for intorsion on attempted downgaze in abduction."},
+  {s:"Superior orbital fissure and orbit",nb:"Enters outside the annulus of Zinn.",what:"Can be spared by orbital processes inside the cone.",syn:"Brown syndrome mimics, trochlear trauma.",pearl:"Because CN IV sits outside the annulus, it may keep working after a retrobulbar block."}
+ ],
+ "CN VI":[
+  {s:"Nucleus (pons)",nb:"CN VII genu (facial colliculus), PPRF, MLF.",what:"Nuclear lesions cause a horizontal gaze palsy, not isolated abduction weakness.",syn:"Facial colliculus syndrome; one-and-a-half syndrome.",pearl:"Gaze palsy plus same-side facial weakness = dorsal pontine lesion."},
+  {s:"Fascicle (ventral pons)",nb:"Corticospinal tract, CN VII fascicle.",what:"Abduction weakness with long-tract signs.",syn:"Millard-Gubler (VI and VII plus contralateral hemiparesis).",pearl:"Ask about limb weakness in every 'isolated' CN VI palsy."},
+  {s:"Subarachnoid space and clivus",nb:"Clivus, Dorello canal, petrous apex.",what:"Long climb over the petrous apex makes it vulnerable to stretch.",syn:"Raised or low ICP (false localizing), clival chordoma, Gradenigo syndrome (VI plus facial pain from petrous apicitis).",pearl:"Check for papilledema in every CN VI palsy."},
+  {s:"Cavernous sinus",nb:"Floats free next to the ICA, joined briefly by sympathetic fibers.",what:"Often the first nerve affected by cavernous sinus disease.",syn:"Carotid-cavernous fistula, ICA aneurysm, tumor.",pearl:"CN VI palsy plus Horner on the same side localizes to the cavernous sinus."},
+  {s:"Orbit",nb:"Inside the annulus of Zinn to the lateral rectus.",what:"Part of the orbital apex picture.",syn:"Orbital apex syndrome.",pearl:"With proptosis or chemosis, think orbit or fistula rather than nerve."}
+ ],
+ "Sympathetic":[
+  {s:"First order (central)",nb:"Hypothalamus, lateral brainstem, cervical cord to C8 to T2 (ciliospinal center of Budge).",what:"Horner with anhidrosis of the whole half of the body.",syn:"Wallenberg syndrome, brainstem or cord lesions.",pearl:"Look for other brainstem signs: vertigo, ataxia, crossed sensory loss."},
+  {s:"Second order (preganglionic)",nb:"Lung apex, subclavian artery, brachial plexus, thyroid.",what:"Horner with facial anhidrosis.",syn:"Pancoast tumor, neck or chest surgery, trauma, neuroblastoma in children.",pearl:"New Horner in a smoker with shoulder pain: image the lung apex."},
+  {s:"Third order (postganglionic)",nb:"Internal carotid artery, cavernous sinus (with CN VI, then V1).",what:"Horner with little or no anhidrosis. Hydroxyamphetamine fails to dilate the pupil.",syn:"Carotid dissection, cluster headache, cavernous sinus lesions.",pearl:"Acute painful Horner = carotid dissection until proven otherwise: emergent CTA or MRA of head and neck."}
+ ]
+};
+const nerveChips=document.getElementById("nerveChips"), segChips=document.getElementById("segChips"), routeBar=document.getElementById("routeBar"), routeCard=document.getElementById("routeCard");
+let curN="CN II";
+function renderSeg(i){
+  const segs=ROUTES[curN], s=segs[i];
+  segChips.querySelectorAll("button").forEach((b,j)=>b.setAttribute("aria-pressed",String(j===i)));
+  routeBar.querySelectorAll("div").forEach((d,j)=>d.classList.toggle("on",j===i));
+  routeCard.innerHTML=`<h3 style="margin-top:0">${curN}: ${s.s}</h3>${s.len?`<p class="kicker">Length ${s.len}</p>`:""}<dl><dt>Neighbors</dt><dd>${s.nb}</dd><dt>What happens here</dt><dd>${s.what}</dd><dt>Classic syndromes</dt><dd>${s.syn}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${s.pearl}</dd></dl>`;
+}
+function renderNerve(n){
+  curN=n;
+  nerveChips.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.textContent===n)));
+  segChips.innerHTML=""; routeBar.innerHTML="";
+  ROUTES[n].forEach((s,i)=>{
+    const b=document.createElement("button"); b.textContent=s.s; b.addEventListener("click",()=>renderSeg(i)); segChips.appendChild(b);
+    routeBar.appendChild(document.createElement("div"));
+  });
+  renderSeg(0);
+}
+Object.keys(ROUTES).forEach(n=>{const b=document.createElement("button");b.textContent=n;b.addEventListener("click",()=>renderNerve(n));nerveChips.appendChild(b)});
+renderNerve("CN II");
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: Bumping into door frames",stem:"A 54-year-old man has months of mild headaches and keeps clipping door frames on both sides. Acuity 20/25 OU, no RAPD, discs look normal.",
+  steps:[
+   {q:"What field pattern do you expect, and where is the lesion?",a:"Bitemporal hemianopia from a chiasmal lesion. Bumping into things on both sides is a classic history for bitemporal loss."},
+   {q:"The defect is denser superiorly. What does that suggest?",a:"Compression from below, favoring a pituitary macroadenoma. Craniopharyngiomas press from above and tend to hit the inferior fields first."},
+   {q:"What would OCT show, and why does it matter?",a:"Binasal (nasal hemiretina) ganglion cell thinning and band atrophy if chronic. Ganglion cell loss before surgery predicts poorer visual recovery."},
+   {q:"What symptoms would make this an emergency?",a:"Sudden severe headache, rapid vision loss, ophthalmoplegia or altered consciousness suggest pituitary apoplexy: same-day imaging, endocrine labs and neurosurgery."}
+  ]},
+ {t:"Case 2: Can't find the start of the line",stem:"A 68-year-old woman with atrial fibrillation noticed yesterday that she loses the beginning of each line when reading. Acuity 20/20 OU, pupils normal, discs normal.",
+  steps:[
+   {q:"Which side is the field defect on, and why?",a:"A left homonymous defect. Left-to-right readers lose the start of the line with a left hemianopia; a right hemianopia makes it hard to read ahead."},
+   {q:"Fields show a congruous left homonymous hemianopia with macular sparing. Where is the lesion?",a:"Right occipital cortex. Macular sparing and the absence of an RAPD (which rules out the tract) point to the occipital lobe; high congruity supports it, though congruity alone is a weak localizer."},
+   {q:"What's the next step today?",a:"Same-day stroke evaluation (emergency department) with MRI including DWI, vascular imaging and cardiac workup. Acute hemianopia is a stroke until proven otherwise."},
+   {q:"What practical issue should you raise before she leaves?",a:"Driving. A complete homonymous hemianopia usually fails state visual field requirements; document and counsel."}
+  ]},
+ {t:"Case 3: Droopy lid after a neck crack",stem:"A 41-year-old man had chiropractic neck manipulation 3 days ago and now has right neck and face pain. His wife noticed a droopy right eyelid. The right pupil is smaller, more obvious in dim light.",
+  steps:[
+   {q:"What's the syndrome, and which neuron is involved?",a:"Right Horner syndrome, most likely third-order (postganglionic), given neck pain and the carotid course of these fibers."},
+   {q:"Which pharmacologic test confirms Horner, and which localizes it?",a:"Apraclonidine reverses the anisocoria (denervation supersensitivity) and confirms Horner; it can be falsely negative in the first days. Hydroxyamphetamine fails to dilate a third-order Horner pupil."},
+   {q:"Should testing delay imaging?",a:"No. Acute painful Horner is carotid dissection until proven otherwise: emergent CTA or MRA of head and neck. Pharmacologic testing should never delay it."},
+   {q:"What other finding would strengthen the localization?",a:"A same-side CN VI palsy would point to the cavernous sinus, where the sympathetic fibers briefly join CN VI."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{
+  const d=document.createElement("div"); d.className="card";
+  d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map((s,i)=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");
+  caseList.appendChild(d);
+});
+caseList.addEventListener("click",e=>{
+  if(!e.target.classList.contains("reveal")) return;
+  const a=e.target.nextElementSibling, on=!a.classList.contains("on");
+  a.classList.toggle("on",on); e.target.setAttribute("aria-expanded",String(on)); e.target.textContent=on?"Hide answer":"Reveal answer";
+});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "About 53% of fibers cross at the chiasm, which is why an optic tract lesion causes an RAPD in the eye opposite the lesion.",
+ "Before the chiasm: one eye. Chiasm: both temporal fields. After the chiasm: homonymous. Posterior lesions tend to be more congruous, but congruity alone is a weak localizer; the RAPD, disc appearance and imaging decide.",
+ "Homonymous hemianopia plus RAPD is optic tract. Homonymous hemianopia with normal pupils and discs is retrogeniculate.",
+ "Always test the fellow eye's superotemporal field in an unexplained optic neuropathy to catch a junctional scotoma.",
+ "OCT ganglion cell analysis respects the vertical meridian in chiasmal and tract lesions and can show damage before fields do.",
+ "Pupil fibers lie on the outside of CN III, so compressive lesions involve the pupil early; microvascular ischemia hits the nerve's core and often spares it.",
+ "CN VI floats free in the cavernous sinus; the others sit in its lateral wall. CN VI is often hit first.",
+ "CN IV is the only nerve that exits dorsally and crosses; its long, thin course explains its vulnerability to trauma.",
+ "Three-neuron rule for Horner: central, preganglionic (over the lung apex), postganglionic (along the carotid). Acute painful Horner needs emergent vascular imaging.",
+ "Neighbors localize: a cranial nerve palsy plus a long-tract sign is brainstem; multiple ocular motor nerves plus V1 or V2 is cavernous sinus; add CN II and it's the orbital apex."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"A right optic tract lesion produces an RAPD in which eye?",o:["Right eye","Left eye","Neither eye","Both eyes equally"],a:1,e:"The left eye loses its temporal field, carried by crossed nasal fibers (about 53% of input), so the left eye has the RAPD."},
+ {q:"A right central scotoma with a left superotemporal defect localizes to:",o:["Right optic nerve only","Chiasm body","Right junction of optic nerve and chiasm","Right optic tract"],a:2,e:"This is a junctional scotoma: an anterior chiasmal lesion affecting the right nerve and crossing fibers from the left eye."},
+ {q:"\"Pie in the sky\" homonymous quadrantanopia localizes to:",o:["Parietal radiations","Meyer loop in the temporal lobe","LGN","Occipital tip"],a:1,e:"Inferior retinal fibers loop forward in the temporal lobe (Meyer loop) and represent the superior field."},
+ {q:"Which feature most strongly points to an occipital cortex lesion?",o:["Incongruous hemianopia","RAPD","Macular sparing with high congruity","Bow-tie atrophy"],a:2,e:"Macular sparing reflects dual blood supply and large cortical representation of the macula; high congruity supports an occipital lesion, though congruity alone is a weak localizer (Zhang 2006)."},
+ {q:"A homonymous horizontal wedge-shaped defect suggests infarction of the:",o:["Anterior choroidal artery","Lateral choroidal artery","Posterior cerebral artery","Ophthalmic artery"],a:1,e:"Lateral choroidal artery infarction of the LGN produces a horizontal sectoranopia; the anterior choroidal pattern is the mirror image, sparing the horizontal."},
+ {q:"In the subarachnoid space, pupillomotor fibers on CN III lie:",o:["Centrally","Superficially, superomedially","Inferolaterally, deep","Only within the cavernous sinus"],a:1,e:"Their superficial position explains early pupil involvement with compressive lesions such as a PComm aneurysm."},
+ {q:"Which nerve lies free within the cavernous sinus rather than in its lateral wall?",o:["CN III","CN IV","CN V1","CN VI"],a:3,e:"CN VI runs beside the ICA within the sinus, which is why it is often the first nerve affected."},
+ {q:"A left Horner syndrome with a right superior oblique palsy localizes to:",o:["Left cavernous sinus","Right orbit","Left dorsal midbrain (CN IV nucleus or fascicle)","Right lung apex"],a:2,e:"Trochlear fibers cross, so a left nuclear or fascicular lesion weakens the right superior oblique, while the nearby left descending sympathetics cause a left central Horner."},
+ {q:"Hydroxyamphetamine fails to dilate a Horner pupil. Which neuron is affected?",o:["First order","Second order","Third order","Cannot be determined"],a:2,e:"Hydroxyamphetamine releases norepinephrine from intact postganglionic terminals; if the third-order neuron is damaged, the pupil won't dilate."},
+ {q:"Orbital apex syndrome differs from superior orbital fissure syndrome by adding:",o:["CN VII","CN II","CN V3","Horner syndrome"],a:1,e:"The optic nerve enters through the optic canal at the apex, so apex lesions add optic neuropathy to the SOF findings."}
+];
+const quizList=document.getElementById("quizList"); let answered={};
+function renderQuiz(){
+  answered={};
+  quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");
+  document.getElementById("score").textContent="";
+}
+quizList.addEventListener("click",e=>{
+  const b=e.target.closest(".opt"); if(!b) return;
+  const card=b.closest(".card"), i=+card.dataset.q; if(answered[i]!==undefined) return;
+  const j=+b.dataset.j, x=QUIZ[i]; answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j; if(k===x.a)o.classList.add("right"); else if(k===j)o.classList.add("wrong"); o.disabled=true;});
+  const ex=card.querySelector(".expl"); ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e; ex.classList.add("on");
+  const n=Object.keys(answered).length, c=Object.values(answered).filter(Boolean).length;
+  document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");
+});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);
+renderQuiz();
+</script>
+</body>
+</html>

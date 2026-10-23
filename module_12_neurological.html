@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 12: Neurological disorders</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.cmp{display:grid;gap:6px}
+.cmprow{background:var(--panel);border-radius:12px;padding:8px 10px}
+.cmprow h4{margin:0 0 6px;font-size:.84rem;color:var(--muted);font-weight:600}
+.cmpcells{display:grid;gap:8px}
+.cmpcells div{font-size:.88rem;border-left:3px solid var(--stem);padding-left:7px}
+.cmpcells b{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.fundus{background:#000;border-radius:14px;padding:8px;display:flex;justify-content:center}
+.fundus svg{max-width:300px}
+
+.slider{width:100%;accent-color:var(--hot);margin:10px 0 2px}
+.gl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.ladder li{margin:8px 0}
+
+.vfwrap{background:var(--panel);border-radius:14px;padding:10px}
+.prog{font-size:.85rem;color:var(--muted);margin:4px 0 0}
+.next{font:inherit;margin-top:10px;padding:9px 14px;border-radius:10px;border:none;background:var(--ink);color:var(--bg);cursor:pointer}
+.brain svg .rg{cursor:pointer}
+.brain svg .rg:focus-visible{outline:none;stroke:var(--inter);stroke-width:3}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.read{display:flex;justify-content:space-around;font-size:.9rem;margin-top:4px}
+.read b{font-family:Charter,Georgia,serif;font-size:1.05rem}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.9rem;margin:6px 0}
+.toggle input{width:20px;height:20px;accent-color:var(--inter)}
+ol.algo li{margin:8px 0}
+
+.nine{background:var(--panel);border-radius:14px;padding:8px}
+.step3{margin:8px 0}
+.step3 p{margin:4px 0;font-weight:600;font-size:.9rem}
+.result{font-family:Charter,Georgia,serif;font-size:1.3rem;font-weight:600;margin:4px 0}
+
+.lab{background:var(--panel);border-radius:14px;padding:12px}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.acts button{font:inherit;font-size:.86rem;padding:9px 6px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.acts button.wide{grid-column:1/-1}
+.read{display:flex;justify-content:space-around;font-size:.9rem;margin-top:4px}
+.read b{font-family:Charter,Georgia,serif;font-size:1.05rem}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 12 of 22</p>
+  <h1>Neurological disorders</h1>
+  <p class="sub">Myasthenia and other neuromuscular junction disorders, myopathies, neurodegenerative disease, ALS, abnormal intracranial pressure and epilepsy. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="lab" aria-selected="true">Ptosis lab</button>
+    <button role="tab" data-tab="nmj" aria-selected="false">Myasthenia and NMJ</button>
+    <button role="tab" data-tab="neuro" aria-selected="false">Neurodegenerative</button>
+    <button role="tab" data-tab="myo" aria-selected="false">Myopathies</button>
+    <button role="tab" data-tab="icp" aria-selected="false">ICP and epilepsy</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and sources</button>
+  </nav>
+
+  <section class="tab on" id="tab-lab">
+    <h2>Bedside tests for myasthenic ptosis</h2>
+    <p class="sub">Pick a patient, then run each test. MRD1 (lid margin to corneal light reflex) updates live. The patient's right eye is on your left. Time is compressed.</p>
+    <div class="chips" id="pt"></div>
+    <div class="lab">
+      <svg id="face" viewBox="0 0 300 120" role="img" aria-label="Patient's eyes"></svg>
+      <div class="read"><span>Right MRD1 <b id="mR">-</b> mm</span><span>Left MRD1 <b id="mL">-</b> mm</span></div>
+      <div class="acts">
+        <button data-act="upgaze">Sustained upgaze (60 s)</button>
+        <button data-act="ice">Ice pack (2 min)</button>
+        <button data-act="rest">Rest test (eyes closed)</button>
+        <button data-act="twitch">Cogan lid twitch</button>
+        <button data-act="lift" class="wide">Lift the droopy lid (enhancement)</button>
+        <button data-act="reset" class="wide">Reset</button>
+      </div>
+    </div>
+    <div class="card accent" id="labCard"><p>Run a test to see the result and how to interpret it.</p></div>
+  </section>
+
+  <section class="tab" id="tab-nmj">
+    <h2>Myasthenia gravis and other NMJ disorders</h2>
+    <div class="chips" id="nmjChips"></div>
+    <div class="card accent" id="nmjCard"></div>
+  </section>
+
+  <section class="tab" id="tab-neuro">
+    <h2>Neurodegenerative disease</h2>
+    <div class="chips" id="ndChips"></div>
+    <div class="card accent" id="ndCard"></div>
+  </section>
+
+  <section class="tab" id="tab-myo">
+    <h2>Myopathies with eye findings</h2>
+    <div class="chips" id="myoChips"></div>
+    <div class="card accent" id="myoCard"></div>
+  </section>
+
+  <section class="tab" id="tab-icp">
+    <h2>Intracranial pressure and epilepsy</h2>
+    <div class="chips" id="icpChips"></div>
+    <div class="card accent" id="icpCard"></div>
+  </section>
+
+  <section class="tab" id="tab-cases"><h2>Case vignettes</h2><p class="sub">Work each question before revealing the answer.</p><div id="caseList"></div></section>
+  <section class="tab" id="tab-pearls"><h2>Clinical pearls</h2><div id="pearlList"></div></section>
+  <section class="tab" id="tab-quiz"><h2>Self-quiz</h2><p class="sub">Ten questions. Tap an answer to see the explanation.</p><div id="quizList"></div><p class="score" id="score" aria-live="polite"></p><button class="reveal" id="resetQuiz">Reset quiz</button></section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Identify ocular signs of systemic neurologic disease</label>
+      <label><input type="checkbox"> Recognize emergency features (for example, myasthenic crisis)</label>
+      <label><input type="checkbox"> Coordinate multidisciplinary care</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="src">
+      <li><b>Ice pack test: 16 of 20 (80%) patients with myasthenic ptosis improved by 2 mm or more after 2 minutes of ice:</b> Golnik KC, Pena R, Lee AG, Eggenberger ER. An ice test for the diagnosis of myasthenia gravis. <i>Ophthalmology.</i> 1999;106(7):1282-1286. Later studies report variable sensitivity, especially with mild ptosis, and higher yield with repeated testing (Park JY, Yang HK, Hwang JM. <i>PLoS One.</i> 2017;12:e0177078).</li>
+      <li><b>Thymectomy plus prednisone improved Quantitative MG score and lowered prednisone requirements over 3 years vs prednisone alone in generalized, nonthymomatous, AChR-positive MG (ages 18 to 65):</b> Wolfe GI, Kaminski HJ, Aban IB, et al. Randomized trial of thymectomy in myasthenia gravis. <i>N Engl J Med.</i> 2016;375(6):511-522.</li>
+      <li>Simulated lid positions are illustrative. Other content reflects standard teaching in the core texts and curriculum readings.</li>
+    </ul></div>
+    <h3>Core reading (from the program curriculum)</h3>
+    <div class="card"><ul class="refs">
+      <li>Binks SNM, Morse IM, Ashraghi M, Vincent A, Waters P, Leite MI. Myasthenia gravis in 2025: five new things and four hopes for the future. <i>J Neurol.</i> 2025;272(3):226. doi:10.1007/s00415-025-12922-7.</li>
+      <li>Ekker MS, Janssen S, Seppi K, et al. Ocular and visual disorders in Parkinson's disease: common but frequently overlooked. <i>Parkinsonism Relat Disord.</i> 2021;82:23-29.</li>
+      <li>Malloy KA, Draper EM, Maglione AK, Zeng T, Marunde E. An update on neurodegenerative disease for eye care providers. <i>Adv Ophthalmol Optom.</i> 2021;6:13-38.</li>
+      <li>Draper E, Kuc C. Neurodegenerative disease: uncovering the ocular connection. <i>Rev Optom.</i> October 15, 2024.</li>
+    </ul></div>
+  </section>
+
+  <p class="foot">Simulations for teaching, not a clinical device. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick,init=0){host.innerHTML="";items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});if(init!==null)host.children[init].click();}
+
+/* ---------- ptosis lab ---------- */
+const PTS={
+ "Ocular myasthenia":{base:{R:3.5,L:1.5},
+  upgaze:{t:{R:3.2,L:0},msg:"The left lid falls steadily during sustained upgaze: fatigable ptosis. A drop of about 1.5 mm or more supports myasthenia."},
+  ice:{t:{R:3.6,L:3.9},msg:"The left lid rises by more than 2 mm after ice: a positive ice test. Cooling slows acetylcholinesterase; resting also helps."},
+  rest:{t:{R:3.6,L:3.4},msg:"Ptosis improves after a few minutes of eye closure (rest or sleep test), then fatigues again."},
+  twitch:{msg:"After 10 to 15 seconds of downgaze, the left lid overshoots then settles when the eyes return to primary: Cogan lid twitch."},
+  lift:{t:{R:2.0,L:3.5},msg:"Lifting the left lid makes the right lid drop (Hering law): enhanced ptosis. It reveals bilateral involvement and warns that one-sided ptosis surgery may unmask the other side."}},
+ "Aponeurotic ptosis":{base:{R:3.6,L:1.6},
+  upgaze:{t:{R:3.6,L:1.5},msg:"No meaningful change with sustained upgaze: not fatigable."},
+  ice:{t:{R:3.6,L:1.8},msg:"Less than 2 mm change after ice: negative."},
+  rest:{t:{R:3.6,L:1.6},msg:"No change with rest."},
+  twitch:{msg:"No lid twitch."},
+  lift:{t:{R:3.3,L:3.5},msg:"Mild enhancement can occur with any unilateral ptosis, so interpret enhancement together with the other tests."}}
+};
+let pkey="Ocular myasthenia", mrd={R:3.5,L:1.5}, anim, lifted=false;
+function lidCtrl(m){const L=60-m*4.5; return 2*(L-30);} // quadratic control so the lid apex sits MRD1 above the light reflex
+function draw(){
+  const eye=(cx,m,hand)=>{const Y=lidCtrl(m), apex=60-m*4.5;
+   return `<clipPath id="c${cx}"><ellipse cx="${cx}" cy="60" rx="54" ry="28"/></clipPath>
+   <ellipse cx="${cx}" cy="60" rx="54" ry="28" fill="#FBF8F3" stroke="var(--stemline)" stroke-width="1.5"/>
+   <g clip-path="url(#c${cx})"><circle cx="${cx}" cy="60" r="20" fill="#5E7F94"/><circle cx="${cx}" cy="60" r="7" fill="#0A0F14"/><circle cx="${cx+3}" cy="57" r="2" fill="#fff"/>
+   <path d="M${cx-60},0 L${cx-60},60 L${cx-56},60 Q${cx},${Y} ${cx+56},60 L${cx+60},60 L${cx+60},0 Z" fill="#E8D3C2"/></g>
+   <path d="M${cx-56},60 Q${cx},${Y} ${cx+56},60" stroke="#8C6E5A" stroke-width="2.4" fill="none"/>
+   ${hand?`<path d="M${cx-18},${apex-7} q18,-12 36,0" stroke="var(--hot)" stroke-width="5" fill="none" stroke-linecap="round"/><text x="${cx}" y="${apex-20}" class="lvl" text-anchor="middle">lifted</text>`:""}`;};
+  document.getElementById("face").innerHTML=eye(80,mrd.R,false)+eye(220,mrd.L,lifted)+`<text x="80" y="112" class="lvl" text-anchor="middle">Right eye</text><text x="220" y="112" class="lvl" text-anchor="middle">Left eye</text>`;
+  document.getElementById("mR").textContent=mrd.R.toFixed(1); document.getElementById("mL").textContent=mrd.L.toFixed(1);
+}
+function animateTo(t,dur){cancelAnimationFrame(anim);const f={...mrd},t0=performance.now();dur=matchMedia("(prefers-reduced-motion: reduce)").matches?1:dur;
+  const st=now=>{const k=Math.min(1,(now-t0)/dur),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;mrd.R=f.R+(t.R-f.R)*e;mrd.L=f.L+(t.L-f.L)*e;draw();if(k<1)anim=requestAnimationFrame(st)};anim=requestAnimationFrame(st);}
+function reset(){lifted=false;mrd={...PTS[pkey].base};draw();document.getElementById("labCard").innerHTML="<p>Run a test to see the result and how to interpret it.</p>";}
+chips(document.getElementById("pt"),Object.keys(PTS),i=>{pkey=Object.keys(PTS)[i];reset();});
+document.querySelectorAll(".acts button").forEach(b=>b.addEventListener("click",()=>{
+  const a=b.dataset.act,P=PTS[pkey];
+  if(a==="reset"){reset();return;}
+  lifted=(a==="lift");
+  mrd={...P.base};
+  if(a==="twitch"){
+    if(pkey==="Ocular myasthenia"){const seq=[[{R:2.0,L:0.8},500],[{R:3.6,L:3.4},180],[{R:3.5,L:1.5},700]];let i=0;const nx=()=>{if(i<seq.length){animateTo(seq[i][0],seq[i][1]);setTimeout(nx,seq[i][1]+40);i++;}};nx();}
+    else animateTo({R:2.0,L:0.8},500),setTimeout(()=>animateTo(P.base,500),600);
+  } else animateTo(P[a].t, a==="upgaze"?3500:1600);
+  const pos=(a==="ice"&&pkey==="Ocular myasthenia");
+  document.getElementById("labCard").innerHTML=`<h3 style="margin-top:0">${b.textContent}</h3><p>${P[a].msg}</p>${pos?'<dl class="miss"><dt>Remember</dt><dd>A positive bedside test supports, but does not prove, myasthenia. Confirm with antibodies (AChR, then MuSK and LRP4) or single-fiber EMG, and image the chest for thymoma.</dd></dl>':""}`;
+}));
+
+/* ---------- NMJ ---------- */
+const NMJ=[
+ {n:"Ocular myasthenia",f:"Variable, fatigable ptosis and diplopia that don't fit one nerve; pupils always spared; may mimic any motility pattern including INO.",w:"AChR antibodies (positive in only about half of purely ocular cases), MuSK and LRP4 if negative, single-fiber EMG (most sensitive), chest CT for thymoma, thyroid function (TED coexists).",p:"Many ocular patients generalize, usually within the first 2 years; ask about speech, swallowing, chewing, breathing and limb fatigue at every visit."},
+ {n:"Generalized myasthenia",f:"Ocular signs plus bulbar (dysarthria, dysphagia, nasal speech), neck, limb or respiratory weakness, worse at day's end.",w:"Antibodies, repetitive nerve stimulation, single-fiber EMG, chest CT, pulmonary function.",p:"Thymectomy improved outcomes in generalized nonthymomatous AChR-positive MG (MGTX). Newer complement and FcRn inhibitors are options for refractory disease."},
+ {n:"Myasthenic crisis",f:"Respiratory or bulbar failure: breathlessness, weak cough, inability to handle secretions, counting breathlessly.",w:"Serial forced vital capacity and negative inspiratory force; a common rule of thumb flags FVC under 20 mL/kg or NIF weaker than -30 cm H2O for ICU and possible intubation.",p:"Emergency: admit to ICU; IVIG or plasma exchange; look for triggers (infection, surgery, medications)."},
+ {n:"Drugs that worsen MG",f:"Can unmask or worsen weakness.",w:"Fluoroquinolones, aminoglycosides, macrolides, IV magnesium, beta-blockers, botulinum toxin, D-penicillamine, and immune checkpoint inhibitors (which can cause MG with myositis and myocarditis).",p:"Check the medication list in every MG patient with worsening symptoms."},
+ {n:"Lambert-Eaton syndrome",f:"Proximal leg weakness, autonomic symptoms (dry mouth), reduced reflexes that improve after brief exercise; mild ptosis, rarely prominent eye signs.",w:"P/Q-type voltage-gated calcium channel antibodies; repetitive stimulation shows increment after exercise; search for small cell lung cancer.",p:"Strength briefly improving with effort is the opposite of myasthenic fatigue."},
+ {n:"Botulism",f:"Descending paralysis starting with ptosis, ophthalmoplegia and bulbar weakness; dilated, poorly reactive pupils; accommodation loss.",w:"Clinical diagnosis; notify public health; serum, stool or wound testing.",p:"Pupil involvement separates botulism from myasthenia. Give antitoxin early; watch breathing."}
+];
+chips(document.getElementById("nmjChips"),NMJ.map(x=>x.n),i=>{const x=NMJ[i];document.getElementById("nmjCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Features</dt><dd>${x.f}</dd><dt>Workup</dt><dd>${x.w}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- neurodegenerative ---------- */
+const ND=[
+ {n:"Parkinson disease",f:"Convergence insufficiency, hypometric saccades, reduced blink and dry eye, reduced contrast and color vision, visual hallucinations (often medication-related).",p:"Reading diplopia from convergence insufficiency responds to base-in prisms or separate reading glasses."},
+ {n:"Progressive supranuclear palsy",f:"Slow vertical saccades (downgaze first), square-wave jerks, lid opening apraxia, reduced blink; doll's head exceeds voluntary range.",p:"Falls backward plus vertical saccade slowing early in the disease."},
+ {n:"Multiple system atrophy",f:"Square-wave jerks, gaze-evoked and downbeat nystagmus, saccadic pursuit; vertical range relatively preserved.",p:"Cerebellar eye signs plus autonomic failure and parkinsonism."},
+ {n:"Dementia with Lewy bodies",f:"Early, well-formed visual hallucinations, fluctuating attention, visuospatial impairment.",p:"Severe sensitivity to antipsychotics; recognize it before they're prescribed."},
+ {n:"Alzheimer disease and posterior cortical atrophy",f:"Visuospatial and reading problems, simultanagnosia; posterior cortical atrophy presents to eye clinics with normal acuity and eyes (Module 6).",p:"Repeated glasses changes without improvement: think cortical."},
+ {n:"Vascular dementia",f:"Homonymous field loss and cortical visual deficits depending on stroke location.",p:"Formal fields in patients with cognitive decline and vascular risk."},
+ {n:"ALS",f:"Eye movements relatively spared until late; supranuclear gaze abnormalities may appear with advanced disease or long-term ventilation.",p:"Preserved eye movements make eye-tracking communication devices invaluable; protect them (lubrication, exposure care)."}
+];
+chips(document.getElementById("ndChips"),ND.map(x=>x.n),i=>{const x=ND[i];document.getElementById("ndCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Eye and visual findings</dt><dd>${x.f}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- myopathies ---------- */
+const MYO=[
+ {n:"CPEO and Kearns-Sayre",f:"Slowly progressive bilateral ptosis and symmetric ophthalmoplegia, usually without diplopia; pupils spared. Kearns-Sayre adds pigmentary retinopathy and heart block, with onset before age 20.",w:"Mitochondrial DNA testing (deletions), muscle biopsy (ragged red fibers), ECG.",p:"Every CPEO patient needs an ECG; pacemakers can be lifesaving."},
+ {n:"Myotonic dystrophy",f:"Ptosis, mild ophthalmoparesis, 'Christmas tree' polychromatic cataract, low intraocular pressure, pigmentary retinal changes; facial weakness and grip myotonia.",w:"DMPK CTG repeat testing (type 1); ECG for conduction disease.",p:"Iridescent cataract in a young adult: shake hands and see if they can let go."},
+ {n:"Oculopharyngeal muscular dystrophy",f:"Late-onset bilateral ptosis and dysphagia, mild ophthalmoparesis; often French-Canadian or Bukharan Jewish ancestry.",w:"PABPN1 repeat expansion testing.",p:"Ptosis plus trouble swallowing in an older adult: think OPMD before aponeurotic ptosis alone."},
+ {n:"Facioscapulohumeral and other dystrophies",f:"FSHD: facial weakness with incomplete eyelid closure; peripheral retinal telangiectasia (Coats-like) in some.",w:"Genetic testing; retinal exam in FSHD.",p:"Check corneal protection and retinal periphery."}
+];
+chips(document.getElementById("myoChips"),MYO.map(x=>x.n),i=>{const x=MYO[i];document.getElementById("myoCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Features</dt><dd>${x.f}</dd><dt>Workup</dt><dd>${x.w}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- ICP and epilepsy ---------- */
+const ICP=[
+ {n:"High intracranial pressure",f:"Papilledema, transient visual obscurations, CN VI palsy, pulsatile tinnitus (Module 5).",p:"Always image with venography."},
+ {n:"Low intracranial pressure",f:"Orthostatic headache that improves lying down; CN VI (sometimes III or IV) palsy; MRI with diffuse pachymeningeal enhancement and brain sagging.",p:"Spontaneous intracranial hypotension or after lumbar puncture; epidural blood patch often helps."},
+ {n:"Occipital seizures",f:"Brief, colored, circular or multicolored visual phenomena, often stereotyped and lasting seconds to a few minutes; may be followed by headache.",p:"Migraine aura is usually black-and-white, zigzag and spreads over 5 to 60 minutes; seizure phenomena are colored, round and brief."},
+ {n:"Ictal eye signs",f:"Forced gaze deviation away from a seizure focus, ictal nystagmus, eyelid myoclonia.",p:"After the seizure, the gaze may deviate toward the lesion."},
+ {n:"Vigabatrin toxicity",f:"Irreversible bilateral concentric or nasal field constriction.",p:"Baseline and regular visual field and OCT monitoring while on vigabatrin."}
+];
+chips(document.getElementById("icpChips"),ICP.map(x=>x.n),i=>{const x=ICP[i];document.getElementById("icpCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Features</dt><dd>${x.f}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: Worse by evening",stem:"A 34-year-old woman has 2 months of left ptosis and intermittent vertical diplopia, both worse at night. Pupils normal. The left lid drops during sustained upgaze and rises 3 mm after ice.",
+  steps:[
+   {q:"Most likely diagnosis?",a:"Ocular myasthenia gravis."},
+   {q:"AChR antibodies are negative. Next steps?",a:"MuSK and LRP4 antibodies and single-fiber EMG (most sensitive for ocular disease); chest CT for thymoma; thyroid testing."},
+   {q:"What do you counsel about the future?",a:"Ocular MG can generalize, usually in the first 2 years; report trouble swallowing, speaking, chewing or breathing immediately."}
+  ]},
+ {t:"Case 2: After the antibiotic",stem:"A 62-year-old man with generalized myasthenia started ciprofloxacin for a urinary infection. Two days later he has nasal speech, choking on liquids and shortness of breath when lying flat.",
+  steps:[
+   {q:"What's happening?",a:"Impending myasthenic crisis, likely triggered by infection and a fluoroquinolone."},
+   {q:"How do you assess breathing?",a:"Serial forced vital capacity and negative inspiratory force; a common rule of thumb flags FVC under 20 mL/kg or NIF weaker than -30 cm H2O. Don't rely on oxygen saturation, which drops late."},
+   {q:"Management?",a:"ICU admission, stop the offending drug, IVIG or plasma exchange, and treat the infection."}
+  ]},
+ {t:"Case 3: Big pupils and droopy lids",stem:"A 38-year-old man who injects drugs has 2 days of bilateral ptosis, double vision, slurred speech and difficulty swallowing. Pupils are 6 mm and sluggish. An abscess is present on his forearm.",
+  steps:[
+   {q:"Why is this not myasthenia?",a:"Pupil involvement. Myasthenia never affects the pupils."},
+   {q:"Diagnosis?",a:"Wound botulism."},
+   {q:"Next steps?",a:"Notify public health, give botulinum antitoxin early, monitor respiratory function closely, and treat the wound."}
+  ]},
+ {t:"Case 4: Droopy lids, no double vision",stem:"A 17-year-old has slowly worsening bilateral ptosis and limited eye movements in all directions for years, but no diplopia. Fundus shows salt-and-pepper pigmentary retinopathy.",
+  steps:[
+   {q:"Syndrome?",a:"Kearns-Sayre syndrome: CPEO, pigmentary retinopathy and onset before age 20."},
+   {q:"What must be checked urgently?",a:"An ECG for heart block; sudden cardiac death can be prevented with a pacemaker."},
+   {q:"Why no diplopia?",a:"The ophthalmoplegia is slow and symmetric, so the eyes stay aligned."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{const d=document.createElement("div");d.className="card";d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map(s=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");caseList.appendChild(d);});
+caseList.addEventListener("click",e=>{if(!e.target.classList.contains("reveal"))return;const a=e.target.nextElementSibling,on=!a.classList.contains("on");a.classList.toggle("on",on);e.target.setAttribute("aria-expanded",String(on));e.target.textContent=on?"Hide answer":"Reveal answer";});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "Myasthenia never involves the pupil; pupil involvement points to CN III, botulism or something else.",
+ "Myasthenia can mimic any pupil-sparing motility pattern, including INO and isolated nerve palsies.",
+ "Antibodies are negative in about half of purely ocular myasthenia; single-fiber EMG is more sensitive.",
+ "Image the chest for thymoma in every new myasthenia diagnosis.",
+ "Ask about bulbar and breathing symptoms at every visit; oxygen saturation falls late in crisis.",
+ "Review medications in any worsening myasthenia patient: fluoroquinolones, aminoglycosides, magnesium, beta-blockers and checkpoint inhibitors.",
+ "Lambert-Eaton strength improves briefly with effort; look for small cell lung cancer.",
+ "Slow symmetric ophthalmoplegia without diplopia suggests CPEO; get an ECG.",
+ "Convergence insufficiency causes reading diplopia in Parkinson disease and is treatable.",
+ "Orthostatic headache with a CN VI palsy and pachymeningeal enhancement means low CSF pressure."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"A positive ice test for myasthenic ptosis is usually defined as improvement of at least:",o:["0.5 mm","1 mm","2 mm","5 mm"],a:2,e:"2 mm of lid elevation (MRD1 or fissure) after about 2 minutes of ice."},
+ {q:"Lifting the ptotic lid causes the other lid to fall. This is:",o:["Cogan lid twitch","Enhanced ptosis (Hering law)","Lid lag","Pseudo-Graefe sign"],a:1,e:"Equal innervation to both levators: reducing effort on one side drops the other."},
+ {q:"Which feature excludes myasthenia?",o:["Variable diplopia","Ptosis","Dilated, poorly reactive pupils","INO-like pattern"],a:2,e:"Myasthenia spares the pupils; think botulism or CN III."},
+ {q:"The most sensitive test for ocular myasthenia is:",o:["AChR antibody","Single-fiber EMG","Repetitive nerve stimulation","Chest CT"],a:1,e:"Single-fiber EMG; antibodies are often negative in ocular MG."},
+ {q:"MGTX showed thymectomy benefits patients with:",o:["Purely ocular MG","Generalized nonthymomatous AChR-positive MG","MuSK-positive MG","Lambert-Eaton syndrome"],a:1,e:"Ages 18 to 65, generalized, nonthymomatous, AChR-positive."},
+ {q:"Which antibiotic class is most notorious for worsening myasthenia?",o:["Penicillins","Fluoroquinolones","Cephalosporins","Tetracyclines"],a:1,e:"Fluoroquinolones carry a warning for myasthenia exacerbation; aminoglycosides and macrolides also worsen it."},
+ {q:"Strength that improves briefly after exercise suggests:",o:["Myasthenia gravis","Lambert-Eaton syndrome","Botulism","CPEO"],a:1,e:"Post-exercise facilitation; look for small cell lung cancer."},
+ {q:"Kearns-Sayre syndrome requires urgent evaluation for:",o:["Stroke","Heart block","Thyroid disease","Glaucoma"],a:1,e:"Cardiac conduction defects can be fatal; pacemaker if needed."},
+ {q:"A polychromatic 'Christmas tree' cataract suggests:",o:["OPMD","Myotonic dystrophy","Parkinson disease","MSA"],a:1,e:"Classic for myotonic dystrophy."},
+ {q:"Colored, round, brief visual phenomena favor:",o:["Migraine aura","Occipital seizures","Retinal detachment","Charles Bonnet"],a:1,e:"Migraine aura tends to be black-and-white, zigzag and spreading over 5 to 60 minutes."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>

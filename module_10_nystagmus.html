@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 10: Nystagmus</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.cmp{display:grid;gap:6px}
+.cmprow{background:var(--panel);border-radius:12px;padding:8px 10px}
+.cmprow h4{margin:0 0 6px;font-size:.84rem;color:var(--muted);font-weight:600}
+.cmpcells{display:grid;gap:8px}
+.cmpcells div{font-size:.88rem;border-left:3px solid var(--stem);padding-left:7px}
+.cmpcells b{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.fundus{background:#000;border-radius:14px;padding:8px;display:flex;justify-content:center}
+.fundus svg{max-width:300px}
+
+.slider{width:100%;accent-color:var(--hot);margin:10px 0 2px}
+.gl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.ladder li{margin:8px 0}
+
+.vfwrap{background:var(--panel);border-radius:14px;padding:10px}
+.prog{font-size:.85rem;color:var(--muted);margin:4px 0 0}
+.next{font:inherit;margin-top:10px;padding:9px 14px;border-radius:10px;border:none;background:var(--ink);color:var(--bg);cursor:pointer}
+.brain svg .rg{cursor:pointer}
+.brain svg .rg:focus-visible{outline:none;stroke:var(--inter);stroke-width:3}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.read{display:flex;justify-content:space-around;font-size:.9rem;margin-top:4px}
+.read b{font-family:Charter,Georgia,serif;font-size:1.05rem}
+.toggle{display:flex;align-items:center;gap:8px;font-size:.9rem;margin:6px 0}
+.toggle input{width:20px;height:20px;accent-color:var(--inter)}
+ol.algo li{margin:8px 0}
+
+.nine{background:var(--panel);border-radius:14px;padding:8px}
+.step3{margin:8px 0}
+.step3 p{margin:4px 0;font-weight:600;font-size:.9rem}
+.result{font-family:Charter,Georgia,serif;font-size:1.3rem;font-weight:600;margin:4px 0}
+
+.osc{background:var(--panel);border-radius:14px;padding:10px}
+.ctrl2{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.ctrl2 button{font:inherit;font-size:.86rem;padding:8px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl2 button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tracelab{font-size:8.5px;fill:var(--muted)}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 10 of 22</p>
+  <h1>Nystagmus</h1>
+  <p class="sub">Classification, waveforms, localization, saccadic intrusions and oscillations, and treatment. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="wave" aria-selected="true">Waveform viewer</button>
+    <button role="tab" data-tab="pc" aria-selected="false">Peripheral vs central</button>
+    <button role="tab" data-tab="tx" aria-selected="false">Treatment</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and sources</button>
+  </nav>
+
+  <section class="tab on" id="tab-wave">
+    <h2>Watch the eyes, read the trace</h2>
+    <p class="sub">Pick a type. The eyes move as you face the patient; the trace below plots eye position over time, the way an eye-movement recording would. Up on the trace means rightward (or upward, or clockwise for torsion, as labeled).</p>
+    <div class="chips" id="types"></div>
+    <div class="osc">
+      <svg id="eyes" viewBox="0 0 300 110" role="img" aria-label="Animated eyes"></svg>
+      <svg id="trace" viewBox="0 0 300 90" role="img" aria-label="Eye position trace"></svg>
+      <div class="ctrl2"><button id="pause" aria-pressed="false">Pause</button><button id="slow" aria-pressed="false">Slow motion</button><button id="cover" aria-pressed="false" style="display:none">Cover left eye</button></div>
+    </div>
+    <div class="card accent" id="typeCard"></div>
+  </section>
+
+  <section class="tab" id="tab-pc">
+    <h2>Peripheral or central?</h2>
+    <table>
+      <tr><th>Feature</th><th>Peripheral vestibular</th><th>Central</th></tr>
+      <tr><td>Direction</td><td>Unidirectional, mixed horizontal-torsional, beats away from the lesion</td><td>Can be purely vertical or purely torsional, or change direction with gaze</td></tr>
+      <tr><td>Fixation</td><td>Suppressed by fixation (worse with Frenzel lenses or penlight-cover test)</td><td>Little or no suppression</td></tr>
+      <tr><td>Alexander law</td><td>Stronger when looking toward the fast phase</td><td>Variable</td></tr>
+      <tr><td>Head impulse</td><td>Abnormal (corrective saccade)</td><td>Usually normal</td></tr>
+      <tr><td>Skew</td><td>Absent or small</td><td>Often present</td></tr>
+      <tr><td>Other signs</td><td>Hearing loss or tinnitus may be present (also consider AICA stroke)</td><td>Ataxia, dysarthria, other brainstem or cerebellar signs</td></tr>
+    </table>
+    <div class="card accent"><p><b>HINTS:</b> in acute continuous vertigo with nystagmus, a normal head impulse, direction-changing nystagmus or a skew points to stroke. In high-risk patients, any one dangerous sign was 100% sensitive and 96% specific for stroke, outperforming early MRI (Kattah 2009). Add new hearing loss ("HINTS plus") because AICA strokes can mimic peripheral disease.</p></div>
+  </section>
+
+  <section class="tab" id="tab-tx">
+    <h2>Treatment by type</h2>
+    <div class="chips" id="txChips"></div>
+    <div class="card accent" id="txCard"></div>
+    <div class="card"><p><b>Evidence note:</b> few randomized trials exist, and most drug use for nystagmus is off-label. The trials that do exist are cited in the sources tab.</p></div>
+  </section>
+
+  <section class="tab" id="tab-cases"><h2>Case vignettes</h2><p class="sub">Work each question before revealing the answer.</p><div id="caseList"></div></section>
+  <section class="tab" id="tab-pearls"><h2>Clinical pearls</h2><div id="pearlList"></div></section>
+  <section class="tab" id="tab-quiz"><h2>Self-quiz</h2><p class="sub">Ten questions. Tap an answer to see the explanation.</p><div id="quizList"></div><p class="score" id="score" aria-live="polite"></p><button class="reveal" id="resetQuiz">Reset quiz</button></section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Identify the nystagmus waveform</label>
+      <label><input type="checkbox"> Distinguish peripheral from central</label>
+      <label><input type="checkbox"> Initiate appropriate workup</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="src">
+      <li><b>Memantine and gabapentin improved visual acuity, nystagmus intensity and foveation in congenital (infantile) nystagmus in a randomized, double-masked, placebo-controlled trial (48 patients, 56 days):</b> McLean R, Proudlock F, Thomas S, Degg C, Gottlob I. Congenital nystagmus: randomized, controlled, double-masked trial of memantine/gabapentin. <i>Ann Neurol.</i> 2007;61(2):130-138. doi:10.1002/ana.21065.</li>
+      <li><b>Gabapentin and memantine for acquired nystagmus:</b> Thurtell MJ, Joshi AC, Leone AC, et al. Crossover trial of gabapentin and memantine as treatment for acquired nystagmus. <i>Ann Neurol.</i> 2010;67(5):676-680. Starck M, Albrecht H, Pollmann W, Dieterich M, Straube A. Acquired pendular nystagmus in multiple sclerosis: an examiner-blind cross-over treatment study of memantine and gabapentin. <i>J Neurol.</i> 2010;257(3):322-327.</li>
+      <li><b>Aminopyridines for downbeat nystagmus:</b> Strupp M, Schüler O, Krafczyk S, et al. Treatment of downbeat nystagmus with 3,4-diaminopyridine: a placebo-controlled study. <i>Neurology.</i> 2003;61(2):165-170.</li>
+      <li><b>HINTS performance in acute vestibular syndrome:</b> Kattah JC, Talkad AV, Wang DZ, Hsieh YH, Newman-Toker DE. <i>Stroke.</i> 2009;40(11):3504-3510.</li>
+      <li>Waveforms are schematic and time is compressed for periodic alternating nystagmus. Other content reflects standard teaching in the core texts.</li>
+    </ul></div>
+    <h3>Core reading (from the program curriculum)</h3>
+    <div class="card"><ul class="refs">
+      <li>Gurnani B, Kaur K, Chaudhary S, et al. Nystagmus in clinical practice: from diagnosis to treatment, a comprehensive review. <i>Clin Ophthalmol.</i> 2025;19:1617-1657. doi:10.2147/OPTH.S523224.</li>
+      <li>Micieli JA. <i>Case-Based Neuro-Ophthalmology</i>, chapter 25: Nystagmus. Pressbooks.</li>
+      <li>Gold D. Nystagmus. In: <i>Neuro-Ophthalmology and Neuro-Otology: A Case-Based Guide.</i> Springer Nature; 2022: chapter 5.</li>
+    </ul></div>
+  </section>
+
+  <p class="foot">Schematic animations for teaching. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick,init=0){host.innerHTML="";items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});if(init!==null)host.children[init].click();}
+
+/* ---------- waveforms ---------- */
+const fr=x=>x-Math.floor(x);
+// sawtooth with slow phase drifting opposite to beat direction; dir=+1 beats right/up
+function saw(t,f,A,dir,slowFrac=0.88){const p=fr(t*f);let v=p<slowFrac? 1-2*(p/slowFrac) : -1+2*((p-slowFrac)/(1-slowFrac));return dir*v*A;}
+function expo(t,f,A,dir,k,inc){const p=fr(t*f),sf=0.85;let v;
+  if(p<sf){const q=p/sf; v= inc ? (Math.exp(k*q)-1)/(Math.exp(k)-1) : 1-Math.exp(-k*q)/1; v = inc? v : (1-Math.exp(-k*q))/(1-Math.exp(-k));}
+  else v=1-(p-sf)/(1-sf);
+  return -dir*A*v;}
+const T={
+ "Peripheral vestibular":{axis:"h",lab:"horizontal (up = right)",f:t=>{const x=saw(t,2.2,.35,-1);return {R:[x,0,x*.4],L:[x,0,x*.4]}},
+  d:"Jerk nystagmus with a linear (constant-velocity) slow phase, beating left here: mixed horizontal-torsional and suppressed by fixation.",
+  loc:"Right peripheral vestibular loss (labyrinth or vestibular nerve): beats away from the lesion.",
+  c:"Vestibular neuritis, labyrinthitis, Meniere attack. BPPV causes brief positional torsional-upbeating nystagmus.",
+  t:"Short course of vestibular suppressants only acutely; vestibular rehabilitation. Repositioning maneuvers for BPPV."},
+ "Gaze-evoked":{axis:"h",lab:"horizontal (up = right)",f:t=>{const x=.55+expo(t,1.6,.3,1,3,false);return {R:[x,0,0],L:[x,0,0]}},
+  d:"In right gaze the eyes drift back toward center with a decelerating (decreasing-velocity) slow phase, then a corrective fast phase to the right.",
+  loc:"Leaky neural integrator: cerebellum (flocculus, paraflocculus) or brainstem (medial vestibular nucleus, nucleus prepositus hypoglossi, INC for vertical).",
+  c:"Medications and alcohol (antiseizure drugs, sedatives) are the most common cause; cerebellar disease. A few beats at the extreme of gaze can be normal (endpoint nystagmus).",
+  t:"Review drugs and levels; treat the underlying cause."},
+ "Infantile":{axis:"h",lab:"horizontal (up = right)",f:t=>{const x=expo(t,3,.3,1,3.2,true);return {R:[x,0,0],L:[x,0,0]}},
+  d:"Horizontal jerk or pendular nystagmus with an increasing-velocity slow phase, brief foveation periods, a null zone and dampening with convergence. Stays horizontal in upgaze and downgaze.",
+  loc:"Developmental. Look for an afferent cause: albinism, achromatopsia, Leber congenital amaurosis, aniridia, optic nerve hypoplasia, foveal hypoplasia.",
+  c:"Idiopathic forms (some FRMD7-related) or sensory forms.",
+  t:"Correct refractive error (contact lenses help), base-out prisms to use convergence, null-zone prisms or surgery for head turns, and memantine or gabapentin in selected patients (McLean 2007)."},
+ "Acquired pendular":{axis:"h",lab:"horizontal (up = right)",f:t=>{const x=.22*Math.sin(2*Math.PI*3.5*t),y=.14*Math.sin(2*Math.PI*3.5*t+1.2);return {R:[x,y,0],L:[x*.7,-y*.6,0]}},
+  d:"Sinusoidal oscillation without a fast phase, often elliptical and different between the eyes; causes oscillopsia.",
+  loc:"Central myelin disease (brainstem or cerebellar pathways) or oculopalatal tremor (Guillain-Mollaret triangle) after brainstem stroke.",
+  c:"Multiple sclerosis; oculopalatal tremor months after a pontine or medullary lesion (look for palatal movements).",
+  t:"Gabapentin or memantine (Thurtell 2010; Starck 2010)."},
+ "Downbeat":{axis:"v",lab:"vertical (up = up)",f:t=>{const y=saw(t,2.2,.3,-1);return {R:[0,y,0],L:[0,y,0]}},
+  d:"Vertical jerk nystagmus with the fast phase down, usually worse in lateral and downgaze.",
+  loc:"Cervicomedullary junction or cerebellum (flocculus).",
+  c:"Chiari malformation, cerebellar degeneration, lithium, antiseizure drugs, magnesium or B12 deficiency, Wernicke encephalopathy, alcohol.",
+  t:"Treat the cause; aminopyridines (4-aminopyridine or 3,4-diaminopyridine) can reduce downbeat nystagmus (Strupp 2003); base-out prisms if it dampens with convergence."},
+ "Upbeat":{axis:"v",lab:"vertical (up = up)",f:t=>{const y=saw(t,2.2,.3,1);return {R:[0,y,0],L:[0,y,0]}},
+  d:"Vertical jerk nystagmus with the fast phase up, often worse in upgaze.",
+  loc:"Medulla (perihypoglossal region) or pontomesencephalic junction; anterior vermis.",
+  c:"Stroke, demyelination, tumor, Wernicke encephalopathy, drugs.",
+  t:"Treat the cause; give thiamine if Wernicke is possible."},
+ "Torsional":{axis:"t",lab:"torsion (up = top pole toward patient's right)",f:t=>{const r=saw(t,2,.5,1);return {R:[0,0,r],L:[0,0,r]}},
+  d:"Rotary jerk nystagmus around the line of sight. Pure torsional nystagmus is central.",
+  loc:"Medulla (lateral medullary syndrome, syrinx) or midbrain (INC).",
+  c:"Wallenberg syndrome, syringobulbia, demyelination.",
+  t:"Treat the cause."},
+ "Periodic alternating":{axis:"h",lab:"horizontal; time compressed (real cycle about 2 to 4 minutes)",f:t=>{const dir=Math.floor(t/5)%2?1:-1, env=Math.abs(Math.sin(Math.PI*t/5));const x=saw(t,2,.3*env,dir);return {R:[x,0,0],L:[x,0,0]}},
+  d:"Horizontal jerk nystagmus that beats one way for roughly 90 to 120 seconds, pauses briefly, then reverses. Watch at least 2 to 3 minutes.",
+  loc:"Cerebellar nodulus and uvula.",
+  c:"Acquired: Chiari malformation, cerebellar degeneration, MS, antiseizure drugs, profound vision loss. Congenital forms occur with albinism.",
+  t:"Baclofen often abolishes acquired periodic alternating nystagmus."},
+ "See-saw":{axis:"v",lab:"vertical, right eye (up = up)",f:t=>{const s=Math.sin(2*Math.PI*1.4*t);return {R:[0,.25*s,-.4*s],L:[0,-.25*s,.4*s]}},
+  d:"One eye rises and intorts while the other falls and extorts, then they switch.",
+  loc:"Parasellar region (chiasm) or midbrain near the INC.",
+  c:"Large parasellar tumors with bitemporal loss; congenital forms; septo-optic dysplasia.",
+  t:"Image the sellar region; treat the cause. Gabapentin or memantine may help."},
+ "Latent (fusion maldevelopment)":{axis:"h",lab:"horizontal (up = right)",cover:true,f:(t,cov)=>{const x=cov?saw(t,2,.3,1):0.02*Math.sin(2*Math.PI*.6*t);return {R:[x,0,0],L:[x,0,0]}},
+  d:"Little or no nystagmus with both eyes open; covering one eye brings out jerk nystagmus beating toward the uncovered (fixing) eye. Tap 'Cover left eye'.",
+  loc:"Developmental, from early disruption of binocular vision.",
+  c:"Infantile esotropia, dissociated vertical deviation, amblyopia.",
+  t:"Test acuity with fogging (plus lens) rather than an occluder; occlusion worsens the nystagmus and underestimates vision."},
+ "Square-wave jerks":{axis:"h",lab:"horizontal (up = right)",f:t=>{const p=fr(t*.9);const x=(p>.3&&p<.52)?.22:0;return {R:[x,0,0],L:[x,0,0]}},
+  d:"Small saccades away from the target and back after a brief pause (about 200 ms): a saccadic intrusion, not true nystagmus.",
+  loc:"Occasional ones are normal, especially in older adults; frequent ones suggest cerebellar or basal ganglia disease.",
+  c:"Progressive supranuclear palsy, cerebellar disease, Parkinson disease.",
+  t:"Look for the underlying disorder."},
+ "Opsoclonus":{axis:"h",lab:"horizontal (up = right)",f:t=>{const p=fr(t*.7),on=p<.45?1:0;const x=on*.22*Math.sin(2*Math.PI*11*t),y=on*.16*Math.sin(2*Math.PI*9*t+.8);return {R:[x,y,0],L:[x,y,0]}},
+  d:"Bursts of chaotic, multidirectional back-to-back saccades without an intersaccadic interval. Ocular flutter is the purely horizontal version.",
+  loc:"Brainstem omnipause neurons and cerebellar control.",
+  c:"Children: neuroblastoma (opsoclonus-myoclonus-ataxia). Adults: paraneoplastic (lung, breast), post-infectious, toxic.",
+  t:"Search for and treat a tumor; immunotherapy (corticosteroids or ACTH, IVIG, rituximab)."},
+ "Convergence-retraction":{axis:"h",lab:"horizontal, right eye (up = right)",f:t=>{const p=fr(t*1.2);const c=p<.2? (p/.2)*.3 : .3*Math.max(0,1-(p-.2)/.3);return {R:[-c,.35,0],L:[c,.35,0]}},
+  d:"On attempted upgaze, the eyes jerk inward together and retract into the orbits.",
+  loc:"Dorsal midbrain (posterior commissure): part of Parinaud syndrome.",
+  c:"Pineal tumor, hydrocephalus or shunt failure, midbrain stroke.",
+  t:"Image urgently; treat the cause. Test with a downward-moving OKN drum to elicit it."}
+};
+const names=Object.keys(T);
+let cur=names[0], paused=false, slow=false, covered=false, t0=performance.now(), tAcc=0, last=performance.now(), buf=[];
+function eyeSVG(cx,pos,cov){
+  const ix=cx-pos[0]*28, iy=55-pos[1]*18, rot=pos[2]*40;
+  return `<clipPath id="e${cx}"><ellipse cx="${cx}" cy="55" rx="52" ry="27"/></clipPath>
+  <ellipse cx="${cx}" cy="55" rx="52" ry="27" fill="#FBF8F3" stroke="var(--stemline)" stroke-width="1.5"/>
+  <g clip-path="url(#e${cx})"><g transform="rotate(${-rot} ${ix} ${iy})"><circle cx="${ix}" cy="${iy}" r="20" fill="#5E7F94"/><circle cx="${ix}" cy="${iy}" r="7" fill="#0A0F14"/><line x1="${ix}" y1="${iy-20}" x2="${ix}" y2="${iy-12}" stroke="#E6EEF2" stroke-width="2.5"/></g></g>
+  ${cov?`<rect x="${cx-58}" y="24" width="116" height="62" rx="20" fill="var(--stemline)"/><text x="${cx}" y="60" text-anchor="middle" class="lvl">covered</text>`:""}`;
+}
+function frame(now){
+  const dt=(now-last)/1000; last=now;
+  if(!paused) tAcc+=dt*(slow?0.25:1);
+  const D=T[cur], o=D.f(tAcc,covered);
+  document.getElementById("eyes").innerHTML=eyeSVG(80,o.R,false)+eyeSVG(220,o.L,covered)+`<text x="80" y="104" class="lvl" text-anchor="middle">Right eye</text><text x="220" y="104" class="lvl" text-anchor="middle">Left eye</text>`;
+  if(!paused){const v=D.axis==="h"?o.R[0]:D.axis==="v"?o.R[1]:o.R[2]; buf.push(v); if(buf.length>260) buf.shift();}
+  const pts=buf.map((v,i)=>`${20+i},${45-v*80}`).join(" ");
+  document.getElementById("trace").innerHTML=`<line x1="20" y1="45" x2="290" y2="45" stroke="var(--stemline)" stroke-dasharray="3 3"/><polyline points="${pts}" fill="none" stroke="var(--hot)" stroke-width="1.8"/><text x="20" y="86" class="tracelab" font-size="9" fill="var(--muted)">newest on the right; ${D.lab}</text>`;
+  requestAnimationFrame(frame);
+}
+chips(document.getElementById("types"),names,i=>{cur=names[i];buf=[];tAcc=0;covered=false;
+  const D=T[cur],cb=document.getElementById("cover");cb.style.display=D.cover?"":"none";cb.setAttribute("aria-pressed","false");cb.textContent="Cover left eye";
+  document.getElementById("typeCard").innerHTML=`<h3 style="margin-top:0">${cur}</h3><dl><dt>What you see</dt><dd>${D.d}</dd><dt>Localization</dt><dd>${D.loc}</dd><dt>Causes</dt><dd>${D.c}</dd></dl><dl class="miss"><dt>Management</dt><dd>${D.t}</dd></dl>`;});
+document.getElementById("pause").addEventListener("click",e=>{paused=!paused;e.target.setAttribute("aria-pressed",String(paused));e.target.textContent=paused?"Play":"Pause";});
+document.getElementById("slow").addEventListener("click",e=>{slow=!slow;e.target.setAttribute("aria-pressed",String(slow));});
+document.getElementById("cover").addEventListener("click",e=>{covered=!covered;e.target.setAttribute("aria-pressed",String(covered));e.target.textContent=covered?"Uncover":"Cover left eye";});
+if(matchMedia("(prefers-reduced-motion: reduce)").matches){slow=true;document.getElementById("slow").setAttribute("aria-pressed","true");}
+requestAnimationFrame(frame);
+
+/* ---------- treatment ---------- */
+const TX=[
+ {n:"Infantile nystagmus",t:"Optimize vision (refraction, contact lenses); base-out prisms if convergence dampens; null-zone prisms; Anderson-Kestenbaum surgery for head turns; memantine or gabapentin in selected patients.",e:"McLean 2007 randomized trial: both drugs improved acuity, intensity and foveation compared with placebo, with side effects such as fatigue and dizziness."},
+ {n:"Acquired pendular",t:"Gabapentin or memantine.",e:"Crossover trials in acquired nystagmus and in MS-related pendular nystagmus (Thurtell 2010; Starck 2010)."},
+ {n:"Downbeat",t:"Treat the cause; 4-aminopyridine or 3,4-diaminopyridine; base-out prisms.",e:"Placebo-controlled study of 3,4-diaminopyridine (Strupp 2003)."},
+ {n:"Periodic alternating",t:"Baclofen for acquired forms; look for cerebellar disease and drugs.",e:"Long-standing clinical evidence from case series; not tested in large trials."},
+ {n:"Opsoclonus",t:"Tumor search (neuroblastoma in children; lung or breast in adults) and immunotherapy.",e:"Treatment based on case series and expert consensus."},
+ {n:"Peripheral vestibular",t:"Brief vestibular suppressants acutely, then vestibular rehabilitation; repositioning maneuvers for BPPV.",e:"Long-term suppressants delay central compensation."}
+];
+chips(document.getElementById("txChips"),TX.map(x=>x.n),i=>{const x=TX[i];document.getElementById("txCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>Options</dt><dd>${x.t}</dd><dt>Evidence</dt><dd>${x.e}</dd></dl>`;});
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: The spinning room",stem:"A 45-year-old woman has 2 days of continuous vertigo and vomiting after a cold. Left-beating horizontal-torsional nystagmus that's stronger looking left and increases when you block fixation. Right head impulse shows a corrective saccade. No skew, normal hearing.",
+  steps:[
+   {q:"Peripheral or central?",a:"Peripheral: unidirectional mixed nystagmus beating away from the right, enhanced by removing fixation, abnormal right head impulse and no skew."},
+   {q:"Most likely diagnosis?",a:"Right vestibular neuritis."},
+   {q:"What would change your mind?",a:"A normal head impulse, direction-changing nystagmus, a skew, new hearing loss, or other neurologic signs: treat as stroke."}
+  ]},
+ {t:"Case 2: The world keeps wobbling",stem:"A 38-year-old woman with multiple sclerosis complains that the world oscillates constantly. Both eyes show fast, small, elliptical pendular oscillations, larger in the left eye.",
+  steps:[
+   {q:"What type of nystagmus?",a:"Acquired pendular nystagmus."},
+   {q:"What should you look for in a patient with a prior brainstem stroke and similar findings?",a:"Rhythmic palatal movements: oculopalatal tremor, which develops months after a lesion in the Guillain-Mollaret triangle."},
+   {q:"Treatment?",a:"Gabapentin or memantine, which reduced acquired nystagmus in crossover trials."}
+  ]},
+ {t:"Case 3: Looking down makes it worse",stem:"A 59-year-old man on lithium for bipolar disorder has oscillopsia and unsteadiness. Downbeat nystagmus, worse looking down and to the sides.",
+  steps:[
+   {q:"Localization?",a:"Cervicomedullary junction or cerebellar flocculus."},
+   {q:"Workup?",a:"Lithium level, magnesium, B12 and thiamine status, and MRI with sagittal views of the craniocervical junction for Chiari malformation or cerebellar degeneration."},
+   {q:"Symptomatic treatment?",a:"Aminopyridines (4-aminopyridine or 3,4-diaminopyridine) and base-out prisms if convergence dampens it."}
+  ]},
+ {t:"Case 4: Dancing eyes in a toddler",stem:"An 18-month-old became irritable and unsteady over 3 weeks, with jerky limbs and chaotic, multidirectional eye movements in bursts.",
+  steps:[
+   {q:"What's the eye movement disorder?",a:"Opsoclonus, here as part of opsoclonus-myoclonus-ataxia syndrome."},
+   {q:"What must you look for?",a:"Neuroblastoma: chest and abdominal imaging and urine catecholamine metabolites with pediatric oncology."},
+   {q:"Treatment approach?",a:"Remove or treat the tumor and give immunotherapy (corticosteroids or ACTH, IVIG, rituximab); long-term developmental follow-up."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{const d=document.createElement("div");d.className="card";d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map(s=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");caseList.appendChild(d);});
+caseList.addEventListener("click",e=>{if(!e.target.classList.contains("reveal"))return;const a=e.target.nextElementSibling,on=!a.classList.contains("on");a.classList.toggle("on",on);e.target.setAttribute("aria-expanded",String(on));e.target.textContent=on?"Hide answer":"Reveal answer";});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "Name jerk nystagmus by its fast phase, but localize by its slow phase: the slow phase is the abnormal drift.",
+ "Slow-phase shape tells the mechanism: linear (vestibular imbalance), decreasing velocity (leaky integrator, gaze-evoked), increasing velocity (infantile).",
+ "Pure vertical or pure torsional nystagmus is central.",
+ "Peripheral vestibular nystagmus is suppressed by fixation; block fixation (Frenzel lenses or penlight-cover test) to see it.",
+ "Infantile nystagmus stays horizontal in vertical gaze and dampens with convergence; look for an afferent cause.",
+ "Watch suspected periodic alternating nystagmus for at least 2 to 3 minutes before calling it a simple jerk nystagmus.",
+ "Downbeat nystagmus: think Chiari, cerebellar degeneration, lithium, antiseizure drugs, magnesium and B12 deficiency, and Wernicke.",
+ "See-saw nystagmus with bitemporal loss means a parasellar mass until proven otherwise.",
+ "Opsoclonus in a child is neuroblastoma until proven otherwise.",
+ "Head nodding, torticollis and small asymmetric nystagmus in an infant (spasmus nutans) still needs imaging to exclude an optic pathway glioma."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"An increasing-velocity slow phase is characteristic of:",o:["Peripheral vestibular nystagmus","Gaze-evoked nystagmus","Infantile nystagmus","Downbeat nystagmus"],a:2,e:"Infantile nystagmus has an exponentially increasing slow phase."},
+ {q:"A decreasing-velocity slow phase in eccentric gaze reflects:",o:["Vestibular imbalance","A leaky neural integrator","Fusion maldevelopment","Omnipause neuron failure"],a:1,e:"The eyes can't hold an eccentric position and drift back with decreasing velocity."},
+ {q:"Which feature favors a peripheral vestibular cause?",o:["Pure vertical nystagmus","Direction-changing with gaze","Suppression by fixation","Skew deviation"],a:2,e:"Peripheral nystagmus is suppressed by fixation."},
+ {q:"Downbeat nystagmus most often localizes to:",o:["Midbrain","Cervicomedullary junction or flocculus","Frontal eye fields","Optic chiasm"],a:1,e:"Classic causes include Chiari malformation and cerebellar degeneration."},
+ {q:"Periodic alternating nystagmus responds best to:",o:["Baclofen","Gabapentin","Acetazolamide","Steroids"],a:0,e:"Baclofen often abolishes acquired periodic alternating nystagmus."},
+ {q:"See-saw nystagmus is classically associated with:",o:["Cerebellar degeneration","Parasellar mass","Vestibular neuritis","Albinism only"],a:1,e:"Parasellar tumors with chiasmal involvement."},
+ {q:"Back-to-back multidirectional saccades without an intersaccadic interval are:",o:["Square-wave jerks","Opsoclonus","Pendular nystagmus","Latent nystagmus"],a:1,e:"Opsoclonus; ocular flutter is the purely horizontal version."},
+ {q:"Latent nystagmus beats toward:",o:["The covered eye","The uncovered (fixing) eye","Upward","Downward"],a:1,e:"Fast phase toward the fixing eye; test acuity with fogging, not occlusion."},
+ {q:"In McLean 2007, memantine and gabapentin in infantile nystagmus:",o:["Had no effect","Improved acuity, intensity and foveation vs placebo","Worsened acuity","Only improved head posture"],a:1,e:"Both improved acuity, nystagmus intensity and foveation compared with placebo."},
+ {q:"Convergence-retraction nystagmus localizes to:",o:["Medulla","Dorsal midbrain","Cerebellar nodulus","Labyrinth"],a:1,e:"Part of Parinaud (dorsal midbrain) syndrome."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 6: Visual field defects</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.cmp{display:grid;gap:6px}
+.cmprow{background:var(--panel);border-radius:12px;padding:8px 10px}
+.cmprow h4{margin:0 0 6px;font-size:.84rem;color:var(--muted);font-weight:600}
+.cmpcells{display:grid;gap:8px}
+.cmpcells div{font-size:.88rem;border-left:3px solid var(--stem);padding-left:7px}
+.cmpcells b{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.fundus{background:#000;border-radius:14px;padding:8px;display:flex;justify-content:center}
+.fundus svg{max-width:300px}
+
+.slider{width:100%;accent-color:var(--hot);margin:10px 0 2px}
+.gl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.verdict{font-weight:600;padding:10px 12px;border-radius:10px;margin-top:10px;background:color-mix(in srgb,var(--inter) 14%,transparent)}
+.verdict.no{background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.ladder li{margin:8px 0}
+
+.vfwrap{background:var(--panel);border-radius:14px;padding:10px}
+.prog{font-size:.85rem;color:var(--muted);margin:4px 0 0}
+.next{font:inherit;margin-top:10px;padding:9px 14px;border-radius:10px;border:none;background:var(--ink);color:var(--bg);cursor:pointer}
+.brain svg .rg{cursor:pointer}
+.brain svg .rg:focus-visible{outline:none;stroke:var(--inter);stroke-width:3}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 6 of 22</p>
+  <h1>Visual field defects</h1>
+  <p class="sub">Reading fields, sellar masses, stroke, cortical blindness, higher visual disorders and non-organic loss. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="train" aria-selected="true">Field trainer</button>
+    <button role="tab" data-tab="higher" aria-selected="false">Higher vision</button>
+    <button role="tab" data-tab="nonorg" aria-selected="false">Non-organic</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and sources</button>
+  </nav>
+
+  <section class="tab on" id="tab-train">
+    <h2>Read the field</h2>
+    <p class="sub">Each pair is drawn as the patient sees it: left eye on the left. Pick the best localization or cause.</p>
+    <div class="vfwrap">
+      <svg id="vf" viewBox="0 0 240 128" role="img" aria-label="Visual field pair"></svg>
+      <p class="prog" id="prog"></p>
+    </div>
+    <div class="card" id="trainCard"></div>
+  </section>
+
+  <section class="tab" id="tab-higher">
+    <h2>Beyond V1: the two streams</h2>
+    <p class="sub">Tap a region on this schematic left hemisphere (front to the left). Ventral stream areas actually sit on the underside of the occipital and temporal lobes. The ventral stream answers "what"; the dorsal stream answers "where" and "how."</p>
+    <div class="brain card"><svg id="brain" viewBox="0 0 320 210" role="img" aria-label="Lateral brain with visual association areas"></svg></div>
+    <div class="card accent" id="brainCard"><p>Tap a colored region.</p></div>
+  </section>
+
+  <section class="tab" id="tab-nonorg">
+    <h2>Testing for non-organic loss</h2>
+    <p class="sub">Non-organic loss is a diagnosis supported by positive evidence of normal function, not by a normal MRI. Organic disease and non-organic overlay often coexist.</p>
+    <div class="chips" id="noChips"></div>
+    <div class="card accent" id="noCard"></div>
+  </section>
+
+  <section class="tab" id="tab-cases"><h2>Case vignettes</h2><p class="sub">Work each question before revealing the answer.</p><div id="caseList"></div></section>
+  <section class="tab" id="tab-pearls"><h2>Clinical pearls</h2><div id="pearlList"></div></section>
+  <section class="tab" id="tab-quiz"><h2>Self-quiz</h2><p class="sub">Ten questions. Tap an answer to see the explanation.</p><div id="quizList"></div><p class="score" id="score" aria-live="polite"></p><button class="reveal" id="resetQuiz">Reset quiz</button></section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Localize a lesion from the visual field</label>
+      <label><input type="checkbox"> Identify non-organic patterns</label>
+      <label><input type="checkbox"> Recommend neuroimaging appropriately</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="src">
+      <li><b>Causes of 904 homonymous hemianopias: stroke 69.6%, trauma 13.6%, tumor 11.3%; lesions most often occipital (45%) and optic radiations (32.2%); every type of homonymous defect except temporal crescent loss and sectoranopia occurred at all retrochiasmal locations:</b> Zhang X, Kedar S, Lynn MJ, Newman NJ, Biousse V. Homonymous hemianopias: clinical-anatomic correlations in 904 cases. <i>Neurology.</i> 2006;66(6):906-910. doi:10.1212/01.wnl.0000203913.12088.93.</li>
+      <li><b>Spontaneous recovery in 38.4% of 263 homonymous hemianopias, less likely the longer the time from injury:</b> Zhang X, Kedar S, Lynn MJ, Newman NJ, Biousse V. Natural history of homonymous hemianopia. <i>Neurology.</i> 2006;66(6):901-905.</li>
+      <li><b>Congruency and localization:</b> Kedar S, Zhang X, Lynn MJ, Newman NJ, Biousse V. Congruency in homonymous hemianopia. <i>Am J Ophthalmol.</i> 2007. doi:10.1016/j.ajo.2007.01.048.</li>
+      <li>Other content reflects standard teaching in the core texts; verify specifics against them.</li>
+    </ul></div>
+    <h3>Core reading (from the program curriculum)</h3>
+    <div class="card"><ul class="refs">
+      <li>Fadzli F, Ramli N, Ramli NM. MRI of optic tract lesions: review and correlation with visual field defects. <i>Clin Radiol.</i> 2013;68(10):e538-e551.</li>
+      <li>Patel SC, Smith SM, Kessler AT, Bhatt AA. Imaging of the primary visual pathway based on visual deficits. <i>J Clin Imaging Sci.</i> 2021;11:19.</li>
+      <li>Swienton DJ, Thomas AG. The visual pathway: functional anatomy and pathology. <i>Semin Ultrasound CT MR.</i> 2014;35(5):487-503.</li>
+      <li>American Academy of Ophthalmology. <i>Basic and Clinical Science Course, Section 5: Neuro-Ophthalmology.</i> AAO; 2025.</li>
+    </ul></div>
+  </section>
+
+  <p class="foot">Schematic fields and diagrams for teaching. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick){host.innerHTML="";items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});host.querySelector("button").click();}
+
+/* ---------- field drawing ---------- */
+const NS="http://www.w3.org/2000/svg";
+const el=(n,a)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e};
+const R=46, C=[[60,62],[180,62]];
+function wedge(cx,cy,r,a,b){const p=t=>[cx+r*Math.cos(t*Math.PI/180),cy-r*Math.sin(t*Math.PI/180)];
+  if(b-a>=360) return `M${cx-r},${cy} a${r},${r} 0 1,0 ${2*r},0 a${r},${r} 0 1,0 ${-2*r},0`;
+  const [x1,y1]=p(a),[x2,y2]=p(b); return `M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${b-a>180?1:0},0 ${x2},${y2} Z`;}
+// spec per eye: shade [[a,b,rfrac]], spare [rfrac], spots [[dx,dy,r]] in R units
+function drawVF(spec){
+  const vf=document.getElementById("vf"); vf.innerHTML="";
+  ["Left eye","Right eye"].forEach((t,i)=>{const [cx,cy]=C[i], s=spec[i]||{};
+    vf.appendChild(el("circle",{cx,cy,r:R,fill:"var(--panel)",stroke:"var(--stemline)"}));
+    (s.shade||[]).forEach(w=>vf.appendChild(el("path",{d:wedge(cx,cy,R*(w[2]||1),w[0],w[1]),fill:"var(--ink)",opacity:".82"})));
+    (s.spare||[]).forEach(rr=>vf.appendChild(el("circle",{cx,cy,r:R*rr,fill:"var(--panel)"})));
+    (s.spots||[]).forEach(([dx,dy,r,rx])=>vf.appendChild(el("ellipse",{cx:cx+dx*R,cy:cy-dy*R,rx:(rx||r)*R,ry:r*R,fill:"var(--ink)",opacity:".82"})));
+    vf.appendChild(el("line",{x1:cx-R,y1:cy,x2:cx+R,y2:cy,stroke:"var(--stemline)","stroke-width":.8}));
+    vf.appendChild(el("line",{x1:cx,y1:cy-R,x2:cx,y2:cy+R,stroke:"var(--stemline)","stroke-width":.8}));
+    vf.appendChild(el("circle",{cx,cy,r:R,fill:"none",stroke:"var(--stemline)"}));
+    const tx=el("text",{x:cx,y:cy+R+12,class:"lvl","text-anchor":"middle"});tx.textContent=t;vf.appendChild(tx);});
+}
+// left chart half = 90..270; right = -90..90. OS blind spot at left (temporal), OD blind spot at right.
+const ITEMS=[
+ {vf:[{shade:[[90,270]]},{shade:[[-90,90]]}],o:["Chiasm","Bilateral optic nerves","Bilateral occipital lobes","Optic tracts"],a:0,e:"Bitemporal hemianopia respecting the vertical meridian localizes to the chiasm."},
+ {vf:[{shade:[[90,180]]},{shade:[[0,90]]}],o:["Chiasm compressed from below (pituitary adenoma)","Chiasm compressed from above (craniopharyngioma)","Bilateral temporal lobes","Tilted discs"],a:0,e:"Superior bitemporal loss first suggests compression from below, typical of a pituitary adenoma. If the defect crossed the vertical meridian and improved with refraction, think tilted discs."},
+ {vf:[{shade:[[180,270]]},{shade:[[270,360]]}],o:["Pituitary adenoma","Craniopharyngioma or other suprasellar mass pressing from above","Bilateral parietal lobes","Bilateral NAION"],a:1,e:"Inferior bitemporal loss first suggests compression from above."},
+ {vf:[{shade:[[90,180]]},{shade:[[0,360,.3]]}],o:["Right optic nerve and left optic tract","Right junction (optic nerve meets chiasm)","Bilateral optic neuritis","Right occipital lobe"],a:1,e:"Junctional scotoma: right central scotoma plus left superotemporal loss."},
+ {vf:[{shade:[[90,270]]},{shade:[[125,245]]}],o:["Right optic tract","Right occipital lobe","Left optic tract","Chiasm"],a:0,e:"An incongruous left homonymous hemianopia is classic for a right optic tract lesion; look for a left RAPD and bow-tie atrophy. Congruity alone is a weak localizer, but tract lesions add pupil and disc signs."},
+ {vf:[{shade:[[90,180]]},{shade:[[90,180]]}],o:["Right parietal lobe","Right temporal lobe (Meyer loop)","Left temporal lobe","Right occipital pole"],a:1,e:"Left superior homonymous quadrantanopia: right Meyer loop in the temporal lobe."},
+ {vf:[{shade:[[180,270]]},{shade:[[180,270]]}],o:["Right temporal lobe","Right parietal lobe","Left parietal lobe","Chiasm"],a:1,e:"Left inferior homonymous quadrantanopia: right parietal radiations."},
+ {vf:[{shade:[[90,270]],spare:[.18]},{shade:[[90,270]],spare:[.18]}],o:["Right optic tract","Right occipital cortex","Right LGN","Right frontal lobe"],a:1,e:"Congruous left homonymous hemianopia with macular sparing: right occipital cortex, usually PCA stroke."},
+ {vf:[{shade:[[90,270,.3]]},{shade:[[90,270,.3]]}],o:["Right occipital pole","Bilateral optic neuropathy","Right parietal lobe","Macular degeneration"],a:0,e:"Homonymous paracentral scotomas respecting the vertical meridian: occipital pole. Easy to miss on a 24-2; use a 10-2."},
+ {vf:[{shade:[[0,360]],spare:[.2]},{shade:[[0,360]],spare:[.2]}],o:["Bilateral occipital infarcts with macular sparing, or a non-organic tunnel field","Chiasm","Bilateral optic tracts","Pituitary apoplexy"],a:0,e:"Bilateral homonymous hemianopia with macular sparing leaves a keyhole of central vision. A tunnel that doesn't expand with test distance suggests non-organic loss; advanced glaucoma and retinitis pigmentosa also constrict fields."},
+ {vf:[{shade:[[90,270]],spare:[.7]},{}],o:["Left optic nerve","Right anterior calcarine cortex","Right optic tract","Left retina only"],a:1,e:"A monocular temporal crescent defect is the one retrochiasmal lesion that affects only one eye: the anterior calcarine cortex on the opposite side."},
+ {vf:[{shade:[[8,75],[-60,-12]],spare:[.32]},{shade:[[105,172],[192,240]],spare:[.32]}],o:["Chiasm","Usually ocular or optic nerve disease (glaucoma, drusen, ischemia), rarely bilateral lateral chiasm compression","Bilateral occipital lobes","Bilateral temporal lobes"],a:1,e:"Binasal arcuate or step defects that don't respect the vertical meridian point to the optic nerves: glaucoma, drusen and ischemic optic neuropathy are far more common causes than chiasmal compression."},
+ {vf:[{},{shade:[[180,360]]}],o:["Right NAION or other optic neuropathy","Left occipital lobe","Chiasm","Right temporal lobe"],a:0,e:"A monocular inferior altitudinal defect respecting the horizontal meridian: optic nerve (classically NAION) or a branch retinal artery occlusion."},
+ {vf:[{spots:[[-.32,0,.2]]},{spots:[[.32,0,.2]]}],o:["Papilledema or other bilateral disc swelling","Bilateral occipital poles","Chiasm","Normal"],a:0,e:"Enlarged blind spots bilaterally are the classic early field change of papilledema. Peripapillary atrophy and drusen can do the same."},
+ {vf:[{spots:[[-.13,0,.22,.32]]},{spots:[[.13,0,.22,.32]]}],o:["Bilateral cecocentral scotomas: toxic, nutritional or hereditary optic neuropathy","Bilateral occipital poles","Chiasm","Bilateral NAION"],a:0,e:"Symmetric cecocentral scotomas involving fixation and the blind spot: check B12, folate, copper, medications and consider LHON or dominant optic atrophy."}
+];
+let order=[],idx=0,score=0,done=false;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function startTrainer(){order=shuffle([...ITEMS.keys()]);idx=0;score=0;showItem();}
+function showItem(){
+  const it=ITEMS[order[idx]]; done=false; drawVF(it.vf);
+  document.getElementById("prog").textContent=`Field ${idx+1} of ${ITEMS.length}. Score: ${score}`;
+  document.getElementById("trainCard").innerHTML=`<p class="q">Where is the problem?</p>${it.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p>`;
+}
+document.getElementById("trainCard").addEventListener("click",e=>{
+  const b=e.target.closest(".opt"); if(b&&!done){done=true;const it=ITEMS[order[idx]],j=+b.dataset.j;if(j===it.a)score++;
+    document.querySelectorAll("#trainCard .opt").forEach(o=>{const k=+o.dataset.j;if(k===it.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+    const ex=document.querySelector("#trainCard .expl");ex.textContent=(j===it.a?"Correct. ":"Not quite. ")+it.e;ex.classList.add("on");
+    document.getElementById("prog").textContent=`Field ${idx+1} of ${ITEMS.length}. Score: ${score}`;
+    const nb=document.createElement("button");nb.className="next";nb.textContent=idx<ITEMS.length-1?"Next field":"Start over";
+    nb.addEventListener("click",()=>{if(idx<ITEMS.length-1){idx++;showItem()}else startTrainer()});document.getElementById("trainCard").appendChild(nb);}
+});
+startTrainer();
+
+/* ---------- higher vision ---------- */
+const REG=[
+ {id:"v1",name:"Primary visual cortex (V1)",col:"var(--ink)",shape:`<path d="M262,96 C278,100 290,112 292,124 C282,130 268,128 258,120 Z"/>`,
+  d:"Bilateral damage causes cortical blindness: no vision, normal pupils, normal fundi.",
+  s:"Anton syndrome (denial of blindness with confabulation); Riddoch phenomenon (seeing motion but not static targets in a blind field); blindsight.",
+  p:"Normal pupils with severe bilateral vision loss points behind the LGN or to non-organic loss."},
+ {id:"ventralR",name:"Ventral stream: fusiform and lingual gyri",col:"var(--supra)",shape:`<path d="M168,150 C200,154 236,150 262,136 C258,146 236,164 200,168 C182,168 170,162 168,150 Z"/>`,
+  d:"Recognizing what you see: faces, colors, objects, words.",
+  s:"Achromatopsia (color, V4 region), often with a superior quadrantanopia; prosopagnosia (faces, usually right or bilateral fusiform); object agnosia; topographagnosia.",
+  p:"A patient with a superior homonymous defect who also says colors look washed out has an inferior occipitotemporal lesion."},
+ {id:"alexia",name:"Left occipital lobe plus splenium",col:"var(--pupil)",shape:`<path d="M214,118 C228,114 244,118 252,126 C244,134 228,136 216,132 Z"/>`,
+  d:"Visual word input from the intact right hemisphere can't cross to the left-hemisphere language areas.",
+  s:"Alexia without agraphia (pure alexia): can write but can't read what they wrote; usually with a right homonymous hemianopia.",
+  p:"Classic left PCA stroke syndrome; test by asking the patient to write a sentence and read it back."},
+ {id:"mt",name:"Motion area (V5/MT, lateral occipitotemporal)",col:"var(--inter)",shape:`<path d="M214,92 C228,86 246,88 256,96 C250,106 232,108 218,104 Z"/>`,
+  d:"Perceiving motion.",
+  s:"Akinetopsia: the world appears as a series of still frames; rare and usually bilateral.",
+  p:"Ask about trouble pouring liquids or judging moving traffic."},
+ {id:"dorsal",name:"Dorsal stream: parieto-occipital cortex",col:"var(--infra)",shape:`<path d="M196,50 C222,46 248,58 262,80 C246,86 222,84 204,76 C196,68 194,58 196,50 Z"/>`,
+  d:"Where things are and how to act on them: spatial attention, reaching, guiding gaze.",
+  s:"Balint syndrome (bilateral): simultanagnosia, optic ataxia, oculomotor apraxia. Right parietal damage: left hemispatial neglect.",
+  p:"Posterior cortical atrophy (visual variant of Alzheimer disease) often presents to eye clinics first with reading trouble, normal acuity and normal eyes."},
+ {id:"release",name:"Anywhere along the pathway",col:"var(--neighbor)",shape:`<circle cx="30" cy="30" r="14"/><text x="50" y="34" font-size="11" fill="var(--ink)" stroke="none">anywhere</text>`,
+  d:"Visual loss anywhere can release formed images in the blind area.",
+  s:"Charles Bonnet syndrome: vivid formed hallucinations with intact insight, common with macular degeneration and after occipital stroke. Palinopsia (persistent or recurring images) suggests occipitoparietal lesions, migraine or medications.",
+  p:"Ask directly; patients often fear the hallucinations mean dementia or psychosis."}
+];
+(function(){
+  const svg=document.getElementById("brain");
+  svg.innerHTML=`<path d="M40,120 C30,70 80,24 150,22 C220,20 284,52 296,104 C304,140 284,170 246,176 C220,180 200,176 186,184 C170,196 138,196 120,186 C92,190 60,170 48,150 Z" fill="var(--stem)" stroke="var(--stemline)" stroke-width="2"/>
+  <path d="M212,184 C232,196 268,190 284,172 C286,186 270,200 244,202 C224,202 212,196 212,184 Z" fill="var(--stem)" stroke="var(--stemline)"/>
+  <text x="60" y="110" class="lvl">front</text><text x="246" y="208" class="lvl" text-anchor="middle">cerebellum</text><text x="176" y="44" class="lvl" text-anchor="end">parietal</text><text x="150" y="146" class="lvl" text-anchor="middle">temporal</text>`;
+  REG.forEach(r=>{const g=el("g",{class:"rg",tabindex:0,role:"button","aria-label":r.name,fill:r.col,"fill-opacity":".55",stroke:r.col,"stroke-width":1.5});
+    g.innerHTML=r.shape;
+    const go=()=>{svg.querySelectorAll(".rg").forEach(x=>x.setAttribute("fill-opacity",".35"));g.setAttribute("fill-opacity",".85");
+      document.getElementById("brainCard").innerHTML=`<h3 style="margin-top:0">${r.name}</h3><dl><dt>What it does</dt><dd>${r.d}</dd><dt>Syndromes</dt><dd>${r.s}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${r.p}</dd></dl>`;};
+    g.addEventListener("click",go);g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}});svg.appendChild(g);});
+})();
+
+/* ---------- non-organic ---------- */
+const NO=[
+ {n:"Tunnel fields",h:"Test the tangent screen or confrontation field at 1 m and again at 2 m.",w:"Organic constriction expands with distance (a cone). A field that stays the same size at both distances (a tube) is non-physiologic.",p:"Glaucoma, retinitis pigmentosa and bilateral occipital infarcts constrict fields too, but they expand."},
+ {n:"Goldmann spiraling",h:"Kinetic perimetry testing the same isopter repeatedly.",w:"Isopters that shrink with each pass (spiraling) or cross each other suggest non-organic loss.",p:"Fatigue can cause mild spiraling; look for marked or bizarre patterns."},
+ {n:"Monocular loss: fogging and prisms",h:"Fog the good eye with plus lenses in a trial frame, or use a 4 prism diopter base-out prism over the 'bad' eye.",w:"Reading well with the 'bad' eye while the good eye is fogged, or a fusional movement to the prism, proves vision.",p:"Stereoacuity also helps: good stereopsis requires good acuity in both eyes."},
+ {n:"Severe bilateral loss",h:"Optokinetic drum, mirror test (move a large mirror; the eyes follow), signature or finger-to-finger test.",w:"OKN responses and tracking a moving mirror show vision is present.",p:"Truly blind patients can sign their name and touch their fingertips; inability suggests non-organic loss."},
+ {n:"Objective tests",h:"OCT, pupils, electrophysiology.",w:"Normal pupils, normal OCT and a normal pattern VEP support non-organic loss, though a normal VEP doesn't fully exclude cortical disease.",p:"Document carefully and reassure; avoid confrontation. Many patients improve with reassurance alone."}
+];
+chips(document.getElementById("noChips"),NO.map(x=>x.n),i=>{const x=NO[i];document.getElementById("noCard").innerHTML=`<h3 style="margin-top:0">${x.n}</h3><dl><dt>How</dt><dd>${x.h}</dd><dt>What it shows</dt><dd>${x.w}</dd></dl><dl class="miss"><dt>Pitfall</dt><dd>${x.p}</dd></dl>`;});
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: Fender benders on both sides",stem:"A 48-year-old man has had two minor car accidents in which he didn't see cars pulling alongside. He also reports reduced libido. Acuity 20/20 OU, no RAPD. Fields show superior bitemporal loss.",
+  steps:[
+   {q:"Localization and likely lesion?",a:"Chiasm, compressed from below: a pituitary macroadenoma. Low libido raises the question of prolactin or gonadotropin abnormality."},
+   {q:"Workup?",a:"MRI sella with and without contrast, and pituitary hormone panel including prolactin."},
+   {q:"Prolactin is very high and MRI shows a macroadenoma. First-line treatment?",a:"Dopamine agonist (cabergoline), which often shrinks prolactinomas and improves fields without surgery. Follow fields and OCT."}
+  ]},
+ {t:"Case 2: Can't see the right side of the page",stem:"A 70-year-old woman noticed sudden trouble seeing things to her right 2 days ago. She can write normally but can't read what she wrote.",
+  steps:[
+   {q:"What's the reading syndrome?",a:"Alexia without agraphia (pure alexia)."},
+   {q:"Where's the lesion?",a:"Left occipital lobe plus the splenium of the corpus callosum, typically a left PCA infarct, with a right homonymous hemianopia."},
+   {q:"What should happen today, and what about recovery?",a:"Same-day stroke evaluation. In one large series, about 38% of homonymous hemianopias showed spontaneous improvement, with lower odds the longer after injury (Zhang 2006)."}
+  ]},
+ {t:"Case 3: Reading falls apart, eyes look perfect",stem:"A 63-year-old woman has 2 years of worsening reading, trouble finding objects on a cluttered table and misjudging distances when reaching. Acuity 20/25 OU, normal eye exam, multiple new glasses prescriptions.",
+  steps:[
+   {q:"What syndrome do her symptoms suggest?",a:"Features of Balint syndrome: simultanagnosia (can't see the whole scene), optic ataxia (misreaching) and possibly oculomotor apraxia."},
+   {q:"Most likely diagnosis?",a:"Posterior cortical atrophy, the visual variant of Alzheimer disease."},
+   {q:"Next step?",a:"MRI brain (parieto-occipital atrophy), formal fields, and referral to cognitive neurology. Don't keep changing glasses."}
+  ]},
+ {t:"Case 4: A tube, not a cone",stem:"A 32-year-old man claims bilateral constricted vision after a workplace injury. Pupils, discs, OCT and MRI are normal. Tangent screen field is 10 degrees wide at 1 m and still 10 degrees wide at 2 m.",
+  steps:[
+   {q:"What does the tangent screen show?",a:"A non-expanding (tubular) field, which is non-physiologic."},
+   {q:"What else can support the diagnosis?",a:"Ambulation around obstacles, OKN responses, good stereoacuity, and a normal pattern VEP."},
+   {q:"How should you approach the patient?",a:"Without confrontation. Document objective findings carefully, reassure, and stay alert for organic disease with overlay."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{const d=document.createElement("div");d.className="card";d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map(s=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");caseList.appendChild(d);});
+caseList.addEventListener("click",e=>{if(!e.target.classList.contains("reveal"))return;const a=e.target.nextElementSibling,on=!a.classList.contains("on");a.classList.toggle("on",on);e.target.setAttribute("aria-expanded",String(on));e.target.textContent=on?"Hide answer":"Reveal answer";});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "Stroke causes about 70% of homonymous hemianopias; trauma and tumors account for most of the rest (Zhang 2006).",
+ "Congruity is a weak localizer: in large series, nearly every type of homonymous defect occurred at every retrochiasmal location. Use pupils, discs and imaging, not congruity alone.",
+ "A homonymous hemianopia plus an RAPD localizes to the optic tract; cortical lesions never cause an RAPD.",
+ "Respecting the vertical meridian means chiasm or behind; respecting the horizontal meridian means nerve fiber layer, optic nerve or retina (or a calcarine lesion above or below).",
+ "Use a 10-2 for unexplained central vision loss; small homonymous scotomas hide between 24-2 points.",
+ "Bitemporal defects that cross the vertical meridian and improve with refraction are tilted discs, not chiasmal.",
+ "Prolactinomas are treated medically first with dopamine agonists, even with field loss.",
+ "Normal acuity and eyes with reading difficulty and misreaching suggests posterior cortical atrophy; refer for cognitive evaluation.",
+ "Ask about formed hallucinations in anyone with vision loss; Charles Bonnet syndrome is common and frightening if unexplained.",
+ "Non-organic loss is a positive diagnosis: prove function (tubular fields, fogging, OKN, stereo), don't just find a normal MRI."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"The most common cause of homonymous hemianopia in Zhang 2006 was:",o:["Tumor","Stroke","Trauma","Demyelination"],a:1,e:"Stroke caused 69.6%; trauma 13.6%; tumor 11.3%."},
+ {q:"Which homonymous defect type was NOT found at all retrochiasmal locations?",o:["Quadrantanopia","Macular-sparing hemianopia","Sectoranopia","Complete hemianopia"],a:2,e:"Sectoranopia (LGN) and temporal crescent loss (anterior calcarine) were the location-specific exceptions."},
+ {q:"Alexia without agraphia localizes to:",o:["Left angular gyrus alone","Left occipital lobe plus splenium","Right parietal lobe","Bilateral frontal lobes"],a:1,e:"Visual input from the right hemisphere can't reach left-hemisphere language areas through the damaged splenium."},
+ {q:"Achromatopsia is most associated with which field defect?",o:["Inferior quadrantanopia","Superior quadrantanopia","Bitemporal hemianopia","Enlarged blind spot"],a:1,e:"The color area lies in the inferior occipitotemporal (fusiform/lingual) region, below the calcarine fissure, which represents the superior field."},
+ {q:"Simultanagnosia, optic ataxia and oculomotor apraxia make up:",o:["Anton syndrome","Balint syndrome","Gerstmann syndrome","Charles Bonnet syndrome"],a:1,e:"Balint syndrome, from bilateral parieto-occipital damage."},
+ {q:"Denial of blindness with confabulation is:",o:["Anton syndrome","Riddoch phenomenon","Blindsight","Palinopsia"],a:0,e:"Anton syndrome accompanies cortical blindness."},
+ {q:"A tangent screen field that's the same width at 1 m and 2 m is:",o:["Typical of glaucoma","Typical of retinitis pigmentosa","Non-physiologic","Typical of occipital stroke"],a:2,e:"Organic fields expand with distance; a tubular field is non-physiologic."},
+ {q:"Binasal field defects are most often due to:",o:["Chiasmal compression","Glaucoma, drusen or other optic nerve disease","Occipital stroke","Pituitary apoplexy"],a:1,e:"Binasal defects rarely localize to the chiasm."},
+ {q:"First-line treatment for a prolactin-secreting macroadenoma with field loss:",o:["Transsphenoidal surgery","Cabergoline","Radiation","Observation"],a:1,e:"Dopamine agonists usually shrink prolactinomas and improve fields."},
+ {q:"In Zhang's natural history study, spontaneous improvement of homonymous hemianopia occurred in about:",o:["5%","38%","75%","95%"],a:1,e:"38.4%, less likely the longer the time since injury."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>

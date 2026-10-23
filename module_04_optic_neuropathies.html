@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta name="author" content="Steven C. Quan, OD, FAAO">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
+<title>Module 4: Optic neuropathies</title>
+<style>
+:root{
+  --bg:#EDF1F4; --panel:#FFFFFF; --ink:#1B2836; --muted:#566676;
+  --stem:#D9E1E8; --stemline:#A9B7C4;
+  --supra:#6A4C9C; --inter:#0E8585; --infra:#B8740F; --pupil:#B83E78; --neighbor:#8A96A2;
+  --hot:#C2303B; --halo:#EDF1F4; --ok:#2E7D4F;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121A22; --panel:#1B2530; --ink:#E4EAF0; --muted:#9AA8B5;
+    --stem:#24313D; --stemline:#3D4D5C;
+    --supra:#A88BDB; --inter:#3CC2C2; --infra:#E3A445; --pupil:#E87AAE; --neighbor:#7E8B97;
+    --hot:#F0606A; --halo:#121A22; --ok:#5BC48A;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:600px;margin:0 auto;padding:16px 14px 48px}
+h1,h2,h3{font-family:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;font-weight:600}
+h1{font-size:1.6rem;line-height:1.2;margin:2px 0 6px}
+h2{font-size:1.25rem;margin:18px 0 6px}
+h3{font-size:1.02rem;margin:14px 0 6px}
+.kicker{color:var(--muted);font-size:.88rem;margin:0}
+.sub{color:var(--muted);margin:0 0 12px;font-size:.92rem}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:8px 0;margin:6px 0 4px;scrollbar-width:none}
+nav.tabs button{flex:0 0 auto;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,.hit:focus-visible,input:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+section.tab{display:none}
+section.tab.on{display:block}
+.card{background:var(--panel);border-radius:14px;padding:14px 16px;margin-top:10px}
+.card.accent{border-left:5px solid var(--hot)}
+.card p{margin:6px 0}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:6px 0}
+.check input{width:20px;height:20px;margin-top:2px;accent-color:var(--inter)}
+.refs li{margin:4px 0;font-size:.9rem}
+svg{width:100%;height:auto;display:block}
+.lbl{font-size:10.5px;fill:var(--ink);paint-order:stroke;stroke:var(--halo);stroke-width:3px}
+.lvl{font-size:11px;fill:var(--muted);font-style:italic}
+.hs circle.ring{fill:var(--panel);stroke:var(--hot);stroke-width:2}
+.hs text{font-size:10px;font-weight:700;fill:var(--hot);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.hs.sel circle.ring{fill:var(--hot)}
+.hs.sel text{fill:var(--panel)}
+.hit{fill:transparent;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.84rem;margin:6px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;display:inline-block;border-radius:2px}
+dl{margin:0}
+dt{font-weight:600;font-size:.86rem;margin-top:9px}
+dd{margin:2px 0 0}
+.miss{background:color-mix(in srgb,var(--hot) 12%,transparent);border-radius:8px;padding:8px 10px;margin-top:10px}
+.miss dt{margin-top:0;color:var(--hot)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chips button{font:inherit;font-size:.86rem;padding:7px 11px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.route{display:flex;gap:3px;margin:8px 0 2px}
+.route div{flex:1;height:8px;border-radius:4px;background:var(--stem)}
+.route div.on{background:var(--hot)}
+.step{border-top:1px solid var(--stem);padding-top:10px;margin-top:10px}
+.q{font-weight:600}
+.reveal{font:inherit;font-size:.86rem;margin-top:6px;padding:7px 12px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.ans{display:none;margin-top:6px;padding:8px 10px;border-radius:8px;background:color-mix(in srgb,var(--inter) 12%,transparent)}
+.ans.on{display:block}
+.pearl{display:grid;grid-template-columns:28px 1fr;gap:8px;align-items:start}
+.pearl b.n{font-family:Charter,Georgia,serif;color:var(--inter);font-size:1.1rem}
+.opt{display:block;width:100%;text-align:left;font:inherit;font-size:.92rem;margin:6px 0;padding:9px 12px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.opt.wrong{border-color:var(--hot);background:color-mix(in srgb,var(--hot) 12%,transparent)}
+.expl{display:none;font-size:.9rem;margin-top:4px}
+.expl.on{display:block}
+.score{font-weight:600;margin-top:12px}
+.foot{color:var(--muted);font-size:.82rem;margin-top:18px}
+
+.sim{background:var(--panel);border-radius:14px;padding:12px}
+.eyes{display:flex;justify-content:center;gap:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.ctrl button{font:inherit;font-size:.88rem;padding:9px;border-radius:10px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer}
+.ctrl button.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.obs{font-size:.9rem;margin-top:8px;min-height:3em}
+.tool{border-top:1px solid var(--stem);padding:8px 0}
+.tool:first-child{border-top:none}
+.tool b{display:block}
+.tool span{font-size:.9rem}
+.src li{margin:6px 0;font-size:.88rem}
+
+.pacs{background:#000;border-radius:14px;padding:8px}
+.pacs svg text{font-size:10px;fill:#CFD8DC}
+.cap{color:#9FB0BC;font-size:.8rem;margin:4px 6px 2px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:7px 9px;vertical-align:top;border-bottom:1px solid var(--stem)}
+th{font-weight:600}
+tr:last-child td{border-bottom:none}
+
+.cmp{display:grid;gap:6px}
+.cmprow{background:var(--panel);border-radius:12px;padding:8px 10px}
+.cmprow h4{margin:0 0 6px;font-size:.84rem;color:var(--muted);font-weight:600}
+.cmpcells{display:grid;gap:8px}
+.cmpcells div{font-size:.88rem;border-left:3px solid var(--stem);padding-left:7px}
+.cmpcells b{display:block;font-size:.78rem;color:var(--muted);font-weight:600}
+.fundus{background:#000;border-radius:14px;padding:8px;display:flex;justify-content:center}
+.fundus svg{max-width:300px}
+
+.credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
+.credit p{margin:4px 0}
+.credit a{color:var(--inter)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Neuro-ophthalmology curriculum, module 4 of 22</p>
+  <h1>Optic neuropathies</h1>
+  <p class="sub">Ischemic, inflammatory, compressive, toxic, hereditary and congenital disorders of the optic nerve. Built for second-year residents.</p>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" data-tab="cmp" aria-selected="true">Compare</button>
+    <button role="tab" data-tab="atlas" aria-selected="false">Disc atlas</button>
+    <button role="tab" data-tab="cases" aria-selected="false">Cases</button>
+    <button role="tab" data-tab="pearls" aria-selected="false">Pearls</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">Self-quiz</button>
+    <button role="tab" data-tab="goals" aria-selected="false">Goals and sources</button>
+  </nav>
+
+  <section class="tab on" id="tab-cmp">
+    <h2>Side by side</h2>
+    <p class="sub">Pick up to three optic neuropathies to compare. Tap a selected one again to remove it.</p>
+    <div class="chips" id="cmpChips"></div>
+    <div class="cmp" id="cmpOut"></div>
+  </section>
+
+  <section class="tab" id="tab-atlas">
+    <h2>Disc atlas</h2>
+    <p class="sub">Schematic discs, right eye, to train pattern recognition. Real photos vary; use these as a mental template.</p>
+    <div class="chips" id="discChips"></div>
+    <div class="fundus"><svg id="disc" viewBox="0 0 240 240" role="img" aria-label="Schematic optic disc"></svg></div>
+    <div class="card accent" id="discCard"></div>
+  </section>
+
+  <section class="tab" id="tab-cases"><h2>Case vignettes</h2><p class="sub">Work each question before revealing the answer.</p><div id="caseList"></div></section>
+  <section class="tab" id="tab-pearls"><h2>Clinical pearls</h2><div id="pearlList"></div></section>
+  <section class="tab" id="tab-quiz"><h2>Self-quiz</h2><p class="sub">Ten questions. Tap an answer to see the explanation.</p><div id="quizList"></div><p class="score" id="score" aria-live="polite"></p><button class="reveal" id="resetQuiz">Reset quiz</button></section>
+
+  <section class="tab" id="tab-goals">
+    <h2>Learning checkpoints</h2>
+    <div class="card check">
+      <label><input type="checkbox"> Differentiate NAION vs AAION vs optic neuritis</label>
+      <label><input type="checkbox"> Identify congenital optic nerve anomalies</label>
+      <label><input type="checkbox"> Initiate the appropriate workup</label>
+    </div>
+    <h3>Where the numbers come from</h3>
+    <div class="card"><ul class="src">
+      <li><b>15-year MS risk after optic neuritis: 50% overall; 25% with a normal baseline brain MRI vs 72% with one or more lesions; low risk without lesions in men, with disc swelling, or with atypical features:</b> Optic Neuritis Study Group. Multiple sclerosis risk after optic neuritis: final Optic Neuritis Treatment Trial follow-up. <i>Arch Neurol.</i> 2008;65(6):727-732. doi:10.1001/archneur.65.6.727.</li>
+      <li><b>IV methylprednisolone speeds recovery without changing final acuity; oral prednisone alone was associated with more recurrences:</b> Beck RW, Cleary PA, Anderson MM Jr, et al. A randomized, controlled trial of corticosteroids in the treatment of acute optic neuritis. <i>N Engl J Med.</i> 1992;326(9):581-588. doi:10.1056/NEJM199202273260901. (457 patients; relative risk of new episodes with oral prednisone alone 1.79.)</li>
+      <li><b>MOGAD criteria (core demyelinating event, positive MOG-IgG by cell-based assay, exclusion of better diagnoses; supporting features needed for low or untitered results):</b> Banwell B, Bennett JL, Marignier R, et al. Diagnosis of myelin oligodendrocyte glycoprotein antibody-associated disease: International MOGAD Panel proposed criteria. <i>Lancet Neurol.</i> 2023;22(3):268-282. doi:10.1016/S1474-4422(22)00431-8.</li>
+      <li><b>NMOSD criteria:</b> Wingerchuk DM, Banwell B, Bennett JL, et al. International consensus diagnostic criteria for neuromyelitis optica spectrum disorders. <i>Neurology.</i> 2015;85(2):177-189.</li>
+      <li><b>Tocilizumab in GCA: sustained glucocorticoid-free remission at 52 weeks in 56% (weekly) and 53% (every other week) vs 14% (placebo, 26-week taper) and 18% (placebo, 52-week taper):</b> Stone JH, Tuckwell K, Dimonaco S, et al. Trial of tocilizumab in giant-cell arteritis. <i>N Engl J Med.</i> 2017;377(4):317-328. doi:10.1056/NEJMoa1613849.</li>
+      <li><b>Semaglutide and NAION: EMA safety committee classed NAION as a very rare side effect (up to 1 in 10,000 users), with about a two-fold risk in type 2 diabetes in epidemiological studies; stop semaglutide if NAION is confirmed:</b> European Medicines Agency, PRAC conclusion, June 2025 (ema.europa.eu). See also the NANOS and AAO clinical statement on GLP-1 receptor agonists and NAION (aao.org, 2026), which recommends shared decision-making.</li>
+      <li><b>Optic nerve decompression is not effective for NAION and may be harmful:</b> Ischemic Optic Neuropathy Decompression Trial Research Group. Optic nerve decompression surgery for nonarteritic anterior ischemic optic neuropathy (NAION) is not effective and may be harmful. <i>JAMA.</i> 1995;273(8):625-632. doi:10.1001/jama.273.8.625.</li>
+      <li>Other content reflects standard teaching in the core texts; verify specifics against them.</li>
+    </ul></div>
+    <h3>Core reading (from the program curriculum)</h3>
+    <div class="card"><ul class="refs">
+      <li>American Academy of Ophthalmology. <i>Basic and Clinical Science Course, Section 5: Neuro-Ophthalmology.</i> AAO; 2025.</li>
+      <li>Vegunta S, ed. <i>Neuro-Ophthalmology.</i> Moran CORE, University of Utah.</li>
+      <li>Liu GT, Volpe NJ, Galetta SL. <i>Neuro-Ophthalmology: Diagnosis and Management.</i> 2nd ed. Saunders Elsevier; 2010.</li>
+    </ul></div>
+  </section>
+
+  <p class="foot">Schematic drawings for teaching, not clinical images. Checkboxes reset when the page is closed.</p>
+
+  <footer class="credit">
+    <p><a href="index.html">Back to all modules</a></p>
+    <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
+    <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
+    <p>Version 1.0, October 2026. © 2026 Steven C. Quan, OD, FAAO. All rights reserved. Free to view online for personal, non-commercial educational use. No part may be copied, redistributed, adapted or republished without the author's written permission.</p>
+  </footer>
+</main>
+<script>
+document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
+  window.scrollTo({top:0});
+}));
+function chips(host,items,onPick){host.innerHTML="";items.forEach((it,i)=>{const b=document.createElement("button");b.textContent=it;b.addEventListener("click",()=>{host.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-pressed",String(j===i)));onPick(i)});host.appendChild(b)});host.querySelector("button").click();}
+
+/* ---------- compare ---------- */
+const ROWS=[["who","Typical patient"],["onset","Onset and pain"],["disc","Disc acutely"],["field","Field and vision"],["tests","Key tests"],["tx","Treatment"],["prog","Course"],["miss","Don't miss"]];
+const DX={
+ "MS optic neuritis":{who:"Women 20 to 45",onset:"Subacute over days; pain with eye movement in most",disc:"Normal (retrobulbar) in about two-thirds; mild swelling otherwise",field:"Central or diffuse loss; color and contrast hit hard",tests:"MRI brain and orbits with contrast; brain lesions set MS risk",tx:"Observation or IV methylprednisolone to speed recovery; oral prednisone alone is not recommended",prog:"Most recover well over weeks to months",miss:"No improvement by about 4 weeks, severe loss, or bilateral involvement: think MOG, AQP4 or another diagnosis"},
+ "MOG optic neuritis":{who:"Children and adults; no strong sex bias",onset:"Often severe, painful; may be bilateral and simultaneous",disc:"Frequently marked disc swelling",field:"Often profound acute loss",tests:"MOG-IgG by cell-based assay; MRI: long-segment nerve, perineural sheath enhancement",tx:"High-dose steroids, often with a slow taper; relapses are common",prog:"Usually good recovery despite severe nadir",miss:"Low-titer MOG-IgG needs supporting clinical or MRI features before calling it MOGAD"},
+ "AQP4 (NMOSD) optic neuritis":{who:"Women, often older than MS; higher in people of African and Asian ancestry",onset:"Severe, sometimes bilateral; may be painful",disc:"Normal or swollen",field:"Often severe; may involve the chiasm",tests:"AQP4-IgG by cell-based assay; MRI: long-segment or posterior nerve and chiasm; cord LETM",tx:"Urgent steroids, early plasma exchange if poor response; long-term immunotherapy",prog:"Poorer recovery; each attack can leave permanent loss",miss:"Some MS drugs can worsen NMOSD; test AQP4 before starting MS therapy in atypical cases"},
+ "NAION":{who:"Over 50, vascular risk, small crowded disc ('disc at risk')",onset:"Sudden, painless, often noticed on waking",disc:"Sectoral or diffuse hyperemic swelling, splinter hemorrhages; small cup in the fellow eye",field:"Inferior altitudinal or arcuate defect",tests:"ESR and CRP to exclude GCA; sleep apnea screening; review medications",tx:"No proven treatment; manage risk factors",prog:"Usually stable; fellow eye risk over years",miss:"Always exclude GCA in anyone over 50. Discuss semaglutide and other implicated drugs"},
+ "Arteritic AION (GCA)":{who:"Over 50, especially over 70",onset:"Sudden, severe; often preceded by transient vision loss; headache, jaw claudication, scalp tenderness, PMR, weight loss",disc:"Chalky white (pallid) swelling; may have cotton wool spots or cilioretinal artery occlusion",field:"Profound, often count fingers or worse",tests:"ESR, CRP, platelets; temporal artery biopsy or vascular ultrasound",tx:"Steroids immediately, before biopsy; IV for vision loss; tocilizumab reduces relapses and steroid exposure",prog:"Lost vision rarely recovers; fellow eye at high risk without treatment",miss:"Do not wait for biopsy to treat. Biopsy stays informative for days to weeks after starting steroids"},
+ "Compressive":{who:"Any age",onset:"Slowly progressive, painless",disc:"Normal early, then pallor; optociliary shunt vessels with sheath meningioma",field:"Central, junctional or chiasmal patterns",tests:"MRI brain and orbits with contrast",tx:"Treat the lesion (surgery, radiation, medical)",prog:"Depends on duration; ganglion cell loss predicts poorer recovery",miss:"'Normal-tension glaucoma' with pallor beyond cupping, young age, or field respecting the vertical meridian needs imaging"},
+ "Toxic or nutritional":{who:"Medication exposure, alcohol, poor diet, bariatric surgery",onset:"Gradual, bilateral, symmetric, painless",disc:"Normal early, then temporal pallor",field:"Bilateral central or cecocentral scotomas; color loss early",tests:"B12, folate, copper; drug levels; consider methanol in acute cases",tx:"Stop the agent, replace deficiencies",prog:"Can recover if caught early",miss:"Ethambutol: baseline and regular visual monitoring; stop at first sign of toxicity"},
+ "LHON":{who:"Young men most often; maternal inheritance",onset:"Painless, subacute central loss in one eye, then the other within weeks to months",disc:"Hyperemic, peripapillary telangiectasia, pseudoedema without leakage",field:"Central or cecocentral scotoma",tests:"mtDNA testing: m.11778G>A, m.3460G>A, m.14484T>C",tx:"Idebenone (approved in the EU); avoid smoking and heavy alcohol; genetic counseling",prog:"Usually poor; m.14484T>C has the best chance of spontaneous improvement",miss:"Bilateral sequential painless loss in a young man is LHON until proven otherwise"},
+ "Neuroretinitis":{who:"Young adults; cat exposure",onset:"Subacute, mild or no pain",disc:"Disc edema with a macular star (may appear after 1 to 2 weeks)",field:"Central or cecocentral loss",tests:"Bartonella serology; syphilis testing (treponemal); Lyme if endemic",tx:"Treat the infection (Bartonella often self-limited)",prog:"Usually good",miss:"Disc edema with a star is not demyelinating; MS risk is not increased. Always test for syphilis"}
+};
+let sel=["MS optic neuritis","NAION","Arteritic AION (GCA)"];
+function renderCmp(){
+  const host=document.getElementById("cmpChips");
+  host.innerHTML="";
+  Object.keys(DX).forEach(k=>{const b=document.createElement("button");b.textContent=k;b.setAttribute("aria-pressed",String(sel.includes(k)));
+    b.addEventListener("click",()=>{if(sel.includes(k)){if(sel.length>1)sel=sel.filter(x=>x!==k)}else{if(sel.length>=3)sel.shift();sel.push(k)}renderCmp()});host.appendChild(b)});
+  document.getElementById("cmpOut").innerHTML=ROWS.map(([key,label])=>`<div class="cmprow"><h4>${label}</h4><div class="cmpcells">${sel.map(s=>`<div><b>${s}</b>${DX[s][key]}</div>`).join("")}</div></div>`).join("");
+}
+renderCmp();
+
+/* ---------- disc atlas ---------- */
+const FUND="#B5532B", DISC="#E9A97A", CUP="#F6D8B8", VES="#7A1C14";
+function vessels(cx,cy,opts={}){
+  const v=[[-50,-80],[-20,-95],[30,-90],[60,-70],[-50,80],[-20,95],[30,90],[60,72]];
+  return v.map(([dx,dy],i)=>`<path d="M${cx},${cy} Q${cx+dx*.35},${cy+dy*.5} ${cx+dx},${cy+dy}" stroke="${VES}" stroke-width="${i%2?2.4:3.2}" fill="none" opacity="${opts.op??1}" stroke-linecap="round"/>`).join("");
+}
+const base=(inner)=>`<circle cx="120" cy="120" r="116" fill="${FUND}"/><circle cx="20" cy="120" r="10" fill="#8E3A1C" opacity=".6"/>${inner}`;
+const DISCS={
+ "Normal":{d:()=>base(`<circle cx="120" cy="120" r="26" fill="${DISC}"/><circle cx="123" cy="118" r="10" fill="${CUP}"/>${vessels(120,120)}`),
+  f:"Sharp margins, pink rim, central cup, vessels crossing the margin clearly.",c:"Baseline for comparison. Fovea is to the left of the disc in this right-eye view.",p:"Compare cup size between eyes; a small or absent cup is the 'disc at risk' for NAION."},
+ "NAION":{d:()=>base(`<circle cx="120" cy="120" r="24" fill="${DISC}"/><path d="M96,114 A26,26 0 0,1 144,114 L140,122 L100,122 Z" fill="#F3C9A6" opacity=".95"/><ellipse cx="120" cy="108" rx="34" ry="18" fill="#F6D6BA" opacity=".55"/>${vessels(120,120,{op:.85})}<path d="M100,92 l-10,-12" stroke="#9E1610" stroke-width="4" stroke-linecap="round"/><path d="M141,94 l8,-11" stroke="#9E1610" stroke-width="3" stroke-linecap="round"/>`),
+  f:"Superior sectoral hyperemic swelling with splinter hemorrhages; no cup.",c:"Inferior altitudinal field loss matches superior disc swelling.",p:"Look at the fellow eye: a small crowded disc supports NAION."},
+ "Arteritic AION":{d:()=>base(`<circle cx="120" cy="120" r="36" fill="#F4EEE2" opacity=".6"/><circle cx="120" cy="120" r="28" fill="#F7F1E6"/>${vessels(120,120,{op:.6})}<ellipse cx="84" cy="96" rx="9" ry="6" fill="#F3EDE4" opacity=".9"/>`),
+  f:"Chalky white (pallid) swelling; may have a cotton wool spot nearby.",c:"ESR, CRP and platelets now; start steroids before biopsy.",p:"Pallid edema in a patient over 50 is GCA until proven otherwise."},
+ "Disc edema (papillitis or MOG)":{d:()=>base(`<circle cx="120" cy="120" r="40" fill="#F0B992" opacity=".55"/><circle cx="120" cy="120" r="30" fill="#F2BE98"/>${vessels(120,120,{op:.55})}`),
+  f:"Diffuse swelling with blurred margins and partly obscured vessels.",c:"Painful vision loss plus RAPD: optic neuritis; marked or bilateral swelling raises suspicion for MOGAD. Bilateral swelling with normal function: think papilledema.",p:"Disc swelling alone doesn't tell you the cause; function and pupils do."},
+ "LHON (acute)":{d:()=>base(`<circle cx="120" cy="120" r="27" fill="#E2785A"/>${vessels(120,120)}${[...Array(10)].map((_,i)=>{const a=i/10*6.28;return `<path d="M${120+30*Math.cos(a)},${120+30*Math.sin(a)} q4,-3 7,1 t7,0" stroke="#8C1E16" stroke-width="1.4" fill="none"/>`}).join("")}`),
+  f:"Hyperemic disc with tortuous peripapillary telangiectatic vessels; pseudoedema that doesn't leak on angiography.",c:"mtDNA testing for the three primary mutations.",p:"The fellow eye may look like this before it loses vision."},
+ "Optic atrophy":{d:()=>base(`<circle cx="120" cy="120" r="26" fill="#F5E7D6"/><circle cx="123" cy="118" r="11" fill="#FBF3EA"/>${vessels(120,120,{op:.8})}`),
+  f:"Pale disc with sharp margins and attenuated vessels.",c:"Pallor appears about 4 to 6 weeks after an optic nerve injury.",p:"Pallor out of proportion to cupping suggests a non-glaucomatous optic neuropathy."},
+ "Optic nerve hypoplasia":{d:()=>base(`<circle cx="120" cy="120" r="24" fill="#E2B48C" opacity=".8"/><circle cx="120" cy="120" r="14" fill="${DISC}"/>${vessels(120,120)}<circle cx="120" cy="120" r="24" fill="none" stroke="#F3D9BC" stroke-width="2.5"/>`),
+  f:"Small disc surrounded by a pale peripapillary ring (double ring sign).",c:"MRI brain for septo-optic dysplasia; endocrine evaluation for pituitary hormone deficiency.",p:"Bilateral hypoplasia with nystagmus in a child: check growth and cortisol, which can be life-threatening if deficient."},
+ "Tilted disc":{d:()=>base(`<ellipse cx="120" cy="120" rx="16" ry="27" transform="rotate(25 120 120)" fill="${DISC}"/><path d="M128,140 A26,30 0 0,0 136,104 L130,108 A20,24 0 0,1 124,136 Z" fill="#F3DCC4"/>${vessels(118,118)}`),
+  f:"Oval, obliquely oriented disc with an inferonasal crescent and situs inversus of vessels.",c:"Superotemporal field defects that cross the vertical meridian and improve with myopic correction.",p:"Tilted-disc field loss can mimic bitemporal hemianopia but doesn't respect the vertical meridian."},
+ "Coloboma":{d:()=>base(`<circle cx="120" cy="112" r="28" fill="${DISC}"/><ellipse cx="120" cy="132" rx="26" ry="30" fill="#FAF4EC"/>${vessels(120,108)}`),
+  f:"Enlarged disc with a sharply demarcated, glistening white inferior excavation.",c:"Look for iris and chorioretinal coloboma; consider systemic associations (CHARGE).",p:"Inferior location reflects incomplete closure of the embryonic fissure."},
+ "Morning glory":{d:()=>base(`<circle cx="120" cy="120" r="44" fill="#E9B08A"/><circle cx="120" cy="120" r="34" fill="#F1C7A3"/><circle cx="120" cy="120" r="10" fill="#FFFFFF" opacity=".9"/>${[...Array(14)].map((_,i)=>{const a=i/14*6.28;return `<line x1="${120+20*Math.cos(a)}" y1="${120+20*Math.sin(a)}" x2="${120+92*Math.cos(a)}" y2="${120+92*Math.sin(a)}" stroke="${VES}" stroke-width="2"/>`}).join("")}<circle cx="120" cy="120" r="46" fill="none" stroke="#C48A5C" stroke-width="5" opacity=".7"/>`),
+  f:"Large funnel-shaped excavation, central white glial tuft, pigmented rim, and many straight vessels radiating like spokes.",c:"MRI with MRA for basal encephalocele and moyamoya.",p:"Risk of serous retinal detachment; associated with PHACE syndrome."},
+ "Optic disc pit":{d:()=>base(`<circle cx="120" cy="120" r="26" fill="${DISC}"/><circle cx="123" cy="118" r="9" fill="${CUP}"/><ellipse cx="100" cy="126" rx="5" ry="7" fill="#6E6A66"/>${vessels(120,120)}`),
+  f:"Small gray-green oval depression, usually at the temporal disc edge.",c:"OCT the macula for schisis or serous detachment.",p:"Pit maculopathy can cause unexplained central vision loss in young adults."},
+ "Myelinated nerve fibers":{d:()=>base(`<circle cx="120" cy="120" r="26" fill="${DISC}"/>${vessels(120,120)}<path d="M100,98 C88,80 92,64 104,58 C112,70 118,82 116,96 Z" fill="#FFFFFF" opacity=".92"/><path d="M140,140 C156,154 156,170 146,180 C136,168 130,154 132,142 Z" fill="#FFFFFF" opacity=".92"/><path d="M104,58 l-4,-8 M110,62 l2,-9 M146,180 l4,8 M140,176 l-3,8" stroke="#FFFFFF" stroke-width="2"/>`),
+  f:"White, feathery patches with frayed edges that follow the nerve fiber layer and obscure vessels.",c:"Clinical diagnosis; may cause a corresponding scotoma.",p:"Extensive unilateral myelination can come with high myopia and amblyopia."},
+ "Optic disc drusen":{d:()=>base(`<circle cx="120" cy="120" r="28" fill="#EDB98C"/>${vessels(120,120,{op:.9})}${[[108,106],[129,102],[139,120],[111,136],[127,133],[101,121],[120,118]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="6.5" fill="#F8E8AE" stroke="#E2BC5C" stroke-width="1.2"/>`).join("")}`),
+  f:"Lumpy, scalloped disc margin with refractile yellow nodules; no cup; vessels not obscured.",c:"EDI-OCT best detects buried drusen; autofluorescence and B-scan help with superficial or calcified ones.",p:"Drusen can cause field loss and NAION, but don't let them explain away true papilledema."}
+};
+chips(document.getElementById("discChips"),Object.keys(DISCS),i=>{const k=Object.keys(DISCS)[i],D=DISCS[k];
+  document.getElementById("disc").innerHTML=D.d();
+  document.getElementById("discCard").innerHTML=`<h3 style="margin-top:0">${k}</h3><dl><dt>What you see</dt><dd>${D.f}</dd><dt>Next step</dt><dd>${D.c}</dd></dl><dl class="miss"><dt>Pearl</dt><dd>${D.p}</dd></dl>`;});
+
+/* ---------- cases ---------- */
+const CASES=[
+ {t:"Case 1: Pain behind the eye",stem:"A 26-year-old woman has 5 days of left eye pain on movement and blurred vision. Acuity 20/60 OS, left RAPD, red desaturation, normal disc.",
+  steps:[
+   {q:"Most likely diagnosis and the key test?",a:"Typical (retrobulbar) optic neuritis. MRI brain and orbits with and without contrast, mainly to stratify MS risk."},
+   {q:"MRI shows two ovoid periventricular lesions. What's her 15-year MS risk based on the ONTT?",a:"In the ONTT, 72% of patients with one or more lesions developed MS within 15 years, vs 25% with a normal MRI. Refer to neurology to discuss disease-modifying therapy."},
+   {q:"She asks whether steroids will give her better final vision.",a:"No. In the ONTT, IV methylprednisolone sped recovery but didn't change final acuity, and oral prednisone alone was linked to more recurrences."}
+  ]},
+ {t:"Case 2: Jaw pain while eating",stem:"A 78-year-old woman had two brief episodes of right eye graying, then woke with count-fingers vision OD. She mentions jaw pain when chewing and scalp tenderness. The right disc is chalky white and swollen.",
+  steps:[
+   {q:"What's the diagnosis, and what do you do in the next hour?",a:"Arteritic AION from giant cell arteritis. Draw ESR, CRP and platelets and start high-dose steroids immediately; IV methylprednisolone is typical with vision loss."},
+   {q:"Should you wait for the biopsy?",a:"No. The biopsy remains informative for days to weeks after steroids start; delaying treatment risks the fellow eye."},
+   {q:"What reduces relapse and steroid exposure long term?",a:"Tocilizumab. In GiACTA, sustained glucocorticoid-free remission at 52 weeks was 56% with weekly tocilizumab vs 14% with placebo and a 26-week taper."}
+  ]},
+ {t:"Case 3: Waking with a dark lower field",stem:"A 61-year-old man with diabetes, hypertension and snoring woke with an inferior shadow in his right eye. No pain. Right disc has superior sectoral swelling with splinter hemorrhages; left disc is small with no cup. ESR and CRP are normal.",
+  steps:[
+   {q:"Diagnosis?",a:"NAION. The fellow 'disc at risk', painless onset on waking and normal inflammatory markers fit."},
+   {q:"What history and risk factors do you address?",a:"Sleep apnea screening, vascular risk factors, and medications. He started semaglutide 4 months ago: the EMA classed NAION as a very rare side effect, and the NANOS and AAO statement advises shared decision-making about continuing it."},
+   {q:"Is there a surgical option?",a:"No. Optic nerve decompression was not effective and may be harmful in the IONDT."}
+  ]},
+ {t:"Case 4: Second eye goes too",stem:"A 22-year-old man lost central vision in his right eye over 2 weeks, painlessly. Six weeks later the left eye followed. Both discs look hyperemic with peripapillary telangiectasia. His maternal uncle had similar vision loss.",
+  steps:[
+   {q:"Most likely diagnosis?",a:"Leber hereditary optic neuropathy, given painless bilateral sequential loss, telangiectatic pseudoedema and maternal family history."},
+   {q:"What test confirms it?",a:"Mitochondrial DNA testing for m.11778G>A, m.3460G>A and m.14484T>C."},
+   {q:"What advice and treatment do you discuss?",a:"Stop smoking and limit alcohol; discuss idebenone (approved in the EU); genetic counseling for maternal relatives. m.14484T>C carries the best chance of spontaneous improvement."}
+  ]}
+];
+const caseList=document.getElementById("caseList");
+CASES.forEach(c=>{const d=document.createElement("div");d.className="card";d.innerHTML=`<h3 style="margin-top:0">${c.t}</h3><p>${c.stem}</p>`+c.steps.map(s=>`<div class="step"><p class="q">${s.q}</p><button class="reveal" aria-expanded="false">Reveal answer</button><div class="ans">${s.a}</div></div>`).join("");caseList.appendChild(d);});
+caseList.addEventListener("click",e=>{if(!e.target.classList.contains("reveal"))return;const a=e.target.nextElementSibling,on=!a.classList.contains("on");a.classList.toggle("on",on);e.target.setAttribute("aria-expanded",String(on));e.target.textContent=on?"Hide answer":"Reveal answer";});
+
+/* ---------- pearls ---------- */
+const PEARLS=[
+ "In anyone over 50 with an ischemic optic neuropathy, exclude giant cell arteritis first.",
+ "Treat suspected GCA with steroids before the biopsy; don't let scheduling delay protect the biopsy at the cost of the fellow eye.",
+ "Typical optic neuritis should start improving within about 4 weeks. If not, rethink the diagnosis.",
+ "Red flags for atypical optic neuritis: no pain, severe or bilateral loss, marked disc swelling, hemorrhages or exudates, poor recovery, or age over 50.",
+ "Order MOG-IgG and AQP4-IgG by cell-based assay in atypical optic neuritis; don't screen every typical MS patient for MOG.",
+ "Avoid oral prednisone alone for optic neuritis; the ONTT linked it to more recurrences.",
+ "A small cup-to-disc ratio in the fellow eye supports NAION.",
+ "Disc edema with a macular star means neuroretinitis: test for Bartonella and syphilis.",
+ "Bilateral symmetric central scotomas: think toxic, nutritional or hereditary, and check B12, copper and medications.",
+ "Optociliary shunt vessels with progressive vision loss suggest optic nerve sheath meningioma."
+];
+document.getElementById("pearlList").innerHTML=PEARLS.map((p,i)=>`<div class="card pearl"><b class="n">${i+1}</b><span>${p}</span></div>`).join("");
+
+/* ---------- quiz ---------- */
+const QUIZ=[
+ {q:"In the ONTT 15-year follow-up, MS risk with a normal baseline brain MRI was about:",o:["5%","25%","50%","72%"],a:1,e:"25% with no lesions vs 72% with one or more lesions; 50% overall."},
+ {q:"Which ONTT treatment arm was associated with more optic neuritis recurrences?",o:["IV methylprednisolone","Oral prednisone alone","Placebo","None"],a:1,e:"Standard-dose oral prednisone alone was associated with a higher recurrence rate."},
+ {q:"A 75-year-old with pallid disc swelling and jaw claudication. First step?",o:["Schedule temporal artery biopsy, then treat","Start high-dose steroids now","MRI brain first","Observe"],a:1,e:"Treat GCA immediately; the biopsy stays informative for days to weeks."},
+ {q:"In GiACTA, sustained remission at 52 weeks with weekly tocilizumab was about:",o:["14%","25%","56%","90%"],a:2,e:"56% weekly and 53% every other week vs 14% and 18% in the placebo arms."},
+ {q:"Which feature most supports NAION over optic neuritis?",o:["Pain on eye movement","Age 28","Small cup in the fellow eye","Normal disc acutely"],a:2,e:"A crowded 'disc at risk' in the fellow eye supports NAION."},
+ {q:"MRI feature that favors MOGAD optic neuritis:",o:["Short-segment enhancement","Perineural sheath enhancement and long-segment involvement","Periventricular ovoid lesions","Normal orbit MRI"],a:1,e:"Long-segment and perineural (optic sheath) enhancement are typical of MOGAD."},
+ {q:"Disc edema with a macular star most suggests:",o:["MS-related optic neuritis","Neuroretinitis","NAION","LHON"],a:1,e:"Neuroretinitis, classically Bartonella; MS risk is not increased."},
+ {q:"Which LHON mutation has the best spontaneous recovery rate?",o:["m.11778G>A","m.3460G>A","m.14484T>C","m.8344A>G"],a:2,e:"m.14484T>C has the most favorable prognosis; m.8344A>G is a MERRF mutation."},
+ {q:"The 'double ring sign' describes:",o:["Morning glory disc","Optic nerve hypoplasia","Tilted disc","Drusen"],a:1,e:"A small disc within a pale peripapillary ring; evaluate for septo-optic dysplasia and pituitary deficiency."},
+ {q:"The EMA safety committee classified NAION with semaglutide as:",o:["Common","Uncommon","Rare","Very rare (up to 1 in 10,000)"],a:3,e:"In June 2025, PRAC classed it as very rare and advised stopping semaglutide if NAION is confirmed."}
+];
+const quizList=document.getElementById("quizList");let answered={};
+function renderQuiz(){answered={};quizList.innerHTML=QUIZ.map((x,i)=>`<div class="card" data-q="${i}"><p class="q">${i+1}. ${x.q}</p>${x.o.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}<p class="expl"></p></div>`).join("");document.getElementById("score").textContent="";}
+quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)return;const card=b.closest(".card"),i=+card.dataset.q;if(answered[i]!==undefined)return;const j=+b.dataset.j,x=QUIZ[i];answered[i]=(j===x.a);
+  card.querySelectorAll(".opt").forEach(o=>{const k=+o.dataset.j;if(k===x.a)o.classList.add("right");else if(k===j)o.classList.add("wrong");o.disabled=true;});
+  const ex=card.querySelector(".expl");ex.textContent=(j===x.a?"Correct. ":"Not quite. ")+x.e;ex.classList.add("on");
+  const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
+document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
+</script>
+</body>
+</html>
