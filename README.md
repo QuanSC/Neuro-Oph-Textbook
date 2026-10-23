@@ -11,7 +11,7 @@ Twenty-two interactive study modules covering the core of neuro-ophthalmology, f
 
 Each module includes an interactive tool (simulators, lesion maps, calculators or decision pathways), case vignettes, clinical pearls, a self-quiz and a "where the numbers come from" section that traces figures to their sources.
 
-**Start here:** open `index.html` (or the GitHub Pages address for this repository).
+**Start here:** https://quansc.github.io/Neuro-Oph-Textbook/
 
 ## Modules
 
@@ -56,7 +56,7 @@ Content was drafted with AI assistance (Claude, Anthropic) and curated by the au
 
 ## How to cite
 
-Quan SC. *Neuro-Ophthalmology: An Interactive Textbook.* Version 1.0. 2026. Available at: [GitHub Pages address].
+Quan SC. *Neuro-Ophthalmology: An Interactive Textbook.* Version 1.0. 2026. Available at: https://quansc.github.io/Neuro-Oph-Textbook/
 
 ## Copyright
 
