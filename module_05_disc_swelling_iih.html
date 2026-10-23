@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Module 5: Optic disc swelling and IIH">
+<meta property="og:description" content="Interactive neuro-ophthalmology study module with simulations, cases, pearls and a self-quiz.">
+<meta property="og:url" content="https://quansc.github.io/Neuro-Oph-Textbook/module_05_disc_swelling_iih.html">
+<meta property="og:site_name" content="Neuro-Ophthalmology: An Interactive Textbook">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://quansc.github.io/Neuro-Oph-Textbook/module_05_disc_swelling_iih.html">
 <meta name="author" content="Steven C. Quan, OD, FAAO">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
 <title>Module 5: Optic disc swelling and IIH</title>
@@ -120,15 +127,24 @@ tr:last-child td{border-bottom:none}
 .credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
 .credit p{margin:4px 0}
 .credit a{color:var(--inter)}
+
+.homelink{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:.88rem;padding:8px 12px;border-radius:999px;border:1.5px solid var(--inter);background:var(--panel);color:var(--inter);text-decoration:none;font-weight:600}
+.homelink:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+.modnav{display:flex;justify-content:space-between;gap:8px;margin:0 0 10px;font-size:.84rem}
+.modnav a{color:var(--inter);text-decoration:none;max-width:48%}
+.modnav a:hover{text-decoration:underline}
+.modnav .mn-next{text-align:right;margin-left:auto}
 </style>
 </head>
 <body>
 <main>
+  <nav class="modnav" aria-label="Module navigation"><a class="mn-prev" href="module_04_optic_neuropathies.html">‹ Optic neuropathies</a><a class="mn-next" href="module_06_visual_fields.html">Visual field defects ›</a></nav>
   <p class="kicker">Neuro-ophthalmology curriculum, module 5 of 22</p>
   <h1>Optic disc swelling and IIH</h1>
   <p class="sub">Papilledema, pseudopapilledema, idiopathic intracranial hypertension and its secondary mimics. Built for second-year residents.</p>
 
   <nav class="tabs" role="tablist" aria-label="Sections">
+    <a class="homelink" href="index.html">&#9776; All modules</a>
     <button role="tab" data-tab="frisen" aria-selected="true">Frisén grading</button>
     <button role="tab" data-tab="true" aria-selected="false">True or pseudo</button>
     <button role="tab" data-tab="crit" aria-selected="false">IIH criteria</button>
@@ -224,6 +240,7 @@ tr:last-child td{border-bottom:none}
   <p class="foot">Schematic drawings for teaching, not clinical images. Checkboxes reset when the page is closed.</p>
 
   <footer class="credit">
+    <nav class="modnav" aria-label="Module navigation"><a class="mn-prev" href="module_04_optic_neuropathies.html">‹ Optic neuropathies</a><a class="mn-next" href="module_06_visual_fields.html">Visual field defects ›</a></nav>
     <p><a href="index.html">Back to all modules</a></p>
     <p><b>Steven C. Quan, OD, FAAO</b> · Assistant Professor of Ophthalmology and Visual Science, University of Chicago. This is an independent educational work by the author; it is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.</p>
     <p>For educational purposes only; not medical advice. Clinical decisions should follow current guidelines and institutional protocols. Cases are fictional teaching composites.</p>
@@ -358,5 +375,6 @@ quizList.addEventListener("click",e=>{const b=e.target.closest(".opt");if(!b)ret
   const n=Object.keys(answered).length,c=Object.values(answered).filter(Boolean).length;document.getElementById("score").textContent=`Score: ${c} of ${n} answered correctly`+(n===QUIZ.length?" (complete)":"");});
 document.getElementById("resetQuiz").addEventListener("click",renderQuiz);renderQuiz();
 </script>
+<script src="site.js"></script>
 </body>
 </html>

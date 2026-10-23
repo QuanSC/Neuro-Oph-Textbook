@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Interactive neuro-ophthalmology textbook: 22 modules with simulations, cases, pearls and self-quizzes.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Neuro-ophthalmology: an interactive textbook">
+<meta property="og:description" content="Interactive neuro-ophthalmology textbook: 22 modules with simulations, cases, pearls and self-quizzes.">
+<meta property="og:url" content="https://quansc.github.io/Neuro-Oph-Textbook/">
+<meta property="og:site_name" content="Neuro-Ophthalmology: An Interactive Textbook">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://quansc.github.io/Neuro-Oph-Textbook/">
 <meta name="author" content="Steven C. Quan, OD, FAAO">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cellipse cx=%2716%27 cy=%2716%27 rx=%2714%27 ry=%279%27 fill=%27%23FBF8F3%27 stroke=%27%231B2836%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%230E8585%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%272.5%27 fill=%27%231B2836%27/%3E%3C/svg%3E">
 <title>Neuro-ophthalmology: an interactive textbook</title>
@@ -146,6 +153,8 @@ ol.algo li{margin:8px 0}
 .credit{margin-top:22px;padding-top:12px;border-top:1px solid var(--stemline);font-size:.8rem;color:var(--muted);line-height:1.5}
 .credit p{margin:4px 0}
 .credit a{color:var(--inter)}
+.grph{font-size:1.05rem;margin:18px 0 4px;color:var(--muted)}
+.mins{font-size:.78rem!important;margin-top:4px!important}
 </style>
 </head>
 <body>
@@ -162,28 +171,41 @@ ol.algo li{margin:8px 0}
 
   <section class="tab on" id="tab-mods">
     <input class="search" id="q" type="search" placeholder="Search modules (for example, pupil, IIH, trials)" aria-label="Search modules">
-    <div id="list"><a class="mod" href="module_01_foundations.html" data-k="foundations: anatomy and physiology visual pathway lesion map with live field defects; cn ii, iii, iv, vi and sympathetic routes"><span class="num">01</span><span><h3>Foundations: anatomy and physiology</h3><p>Visual pathway lesion map with live field defects; CN II, III, IV, VI and sympathetic routes</p></span></a>
-<a class="mod" href="module_02_evaluation.html" data-k="ocular and neurologic evaluation swinging flashlight simulator; exam toolkit; history decoders"><span class="num">02</span><span><h3>Ocular and neurologic evaluation</h3><p>Swinging flashlight simulator; exam toolkit; history decoders</p></span></a>
-<a class="mod" href="module_03_neuroimaging.html" data-k="neuroimaging mri and ct sequence explorer with lesions; what to order"><span class="num">03</span><span><h3>Neuroimaging</h3><p>MRI and CT sequence explorer with lesions; what to order</p></span></a>
-<a class="mod" href="module_04_optic_neuropathies.html" data-k="optic neuropathies side-by-side comparison of 9 optic neuropathies; disc atlas"><span class="num">04</span><span><h3>Optic neuropathies</h3><p>Side-by-side comparison of 9 optic neuropathies; disc atlas</p></span></a>
-<a class="mod" href="module_05_disc_swelling_iih.html" data-k="optic disc swelling and iih frisén grade slider; iih criteria checker; treatment ladder"><span class="num">05</span><span><h3>Optic disc swelling and IIH</h3><p>Frisén grade slider; IIH criteria checker; treatment ladder</p></span></a>
-<a class="mod" href="module_06_visual_fields.html" data-k="visual field defects 15-field reading trainer; higher visual streams; non-organic testing"><span class="num">06</span><span><h3>Visual field defects</h3><p>15-field reading trainer; higher visual streams; non-organic testing</p></span></a>
-<a class="mod" href="module_07_anisocoria.html" data-k="anisocoria pupil lab with lighting, drops and mystery patients"><span class="num">07</span><span><h3>Anisocoria</h3><p>Pupil lab with lighting, drops and mystery patients</p></span></a>
-<a class="mod" href="module_08_motility.html" data-k="motility disorders nine-gaze diagrams; parks 3-step solver; lid disorders"><span class="num">08</span><span><h3>Motility disorders</h3><p>Nine-gaze diagrams; Parks 3-step solver; lid disorders</p></span></a>
-<a class="mod" href="module_09_supranuclear.html" data-k="supranuclear and internuclear disorders brainstem map with syndromes; gaze deviation decoder; facial nerve"><span class="num">09</span><span><h3>Supranuclear and internuclear disorders</h3><p>Brainstem map with syndromes; gaze deviation decoder; facial nerve</p></span></a>
-<a class="mod" href="module_10_nystagmus.html" data-k="nystagmus animated waveform viewer with live traces for 13 types"><span class="num">10</span><span><h3>Nystagmus</h3><p>Animated waveform viewer with live traces for 13 types</p></span></a>
-<a class="mod" href="module_11_inflammation_orbit.html" data-k="inflammation and orbital disease coronal orbit sorter; clinical activity score calculator"><span class="num">11</span><span><h3>Inflammation and orbital disease</h3><p>Coronal orbit sorter; Clinical Activity Score calculator</p></span></a>
-<a class="mod" href="module_12_neurological.html" data-k="neurological disorders ptosis lab (upgaze, ice, rest, cogan twitch, enhancement)"><span class="num">12</span><span><h3>Neurological disorders</h3><p>Ptosis lab (upgaze, ice, rest, Cogan twitch, enhancement)</p></span></a>
-<a class="mod" href="module_13_vascular.html" data-k="vascular disorders eye stroke decision pathway with 2025 to 2026 trials; vascular map"><span class="num">13</span><span><h3>Vascular disorders</h3><p>Eye stroke decision pathway with 2025 to 2026 trials; vascular map</p></span></a>
-<a class="mod" href="module_14_developmental_genetic.html" data-k="developmental and genetic disorders nf1 criteria checker; inheritance pedigrees; neurocutaneous syndromes"><span class="num">14</span><span><h3>Developmental and genetic disorders</h3><p>NF1 criteria checker; inheritance pedigrees; neurocutaneous syndromes</p></span></a>
-<a class="mod" href="module_15_infectious.html" data-k="infectious disease csf decoder; chandler staging; zoster and arn"><span class="num">15</span><span><h3>Infectious disease</h3><p>CSF decoder; Chandler staging; zoster and ARN</p></span></a>
-<a class="mod" href="module_16_trauma.html" data-k="trauma trauma triage pathway; ton evidence; orbital trauma and concussion"><span class="num">16</span><span><h3>Trauma</h3><p>Trauma triage pathway; TON evidence; orbital trauma and concussion</p></span></a>
-<a class="mod" href="module_17_systemic.html" data-k="other systemic conditions hydroxychloroquine dose and screening calculator; drug toxicities"><span class="num">17</span><span><h3>Other systemic conditions</h3><p>Hydroxychloroquine dose and screening calculator; drug toxicities</p></span></a>
-<a class="mod" href="module_18_headache.html" data-k="headaches and pain red flag checker; aura checker; tac duration timeline"><span class="num">18</span><span><h3>Headaches and pain</h3><p>Red flag checker; aura checker; TAC duration timeline</p></span></a>
-<a class="mod" href="module_19_major_studies.html" data-k="major studies searchable explorer of 19 trials; critical appraisal examples"><span class="num">19</span><span><h3>Major studies</h3><p>Searchable explorer of 19 trials; critical appraisal examples</p></span></a>
-<a class="mod" href="module_20_procedures.html" data-k="procedures temporal artery biopsy stepper; guide to 14 procedures"><span class="num">20</span><span><h3>Procedures</h3><p>Temporal artery biopsy stepper; guide to 14 procedures</p></span></a>
-<a class="mod" href="module_21_vestibular.html" data-k="vestibular disorders timing and triggers; dix-hallpike and epley stepper"><span class="num">21</span><span><h3>Vestibular disorders</h3><p>Timing and triggers; Dix-Hallpike and Epley stepper</p></span></a>
-<a class="mod" href="module_22_pediatric.html" data-k="pediatric neuro-ophthalmology benign-or-worrying sorting game; pediatric topics"><span class="num">22</span><span><h3>Pediatric neuro-ophthalmology</h3><p>Benign-or-worrying sorting game; pediatric topics</p></span></a></div>
+    <div id="list">
+<div class="grp"><h2 class="grph">Foundations</h2>
+<a class="mod" href="module_01_foundations.html" data-k="foundations: anatomy and physiology visual pathway lesion map with live field defects; cn ii, iii, iv, vi and sympathetic routes foundations"><span class="num">01</span><span><h3>Foundations: anatomy and physiology</h3><p>Visual pathway lesion map with live field defects; CN II, III, IV, VI and sympathetic routes</p><p class="mins">About 45 minutes</p></span></a>
+<a class="mod" href="module_02_evaluation.html" data-k="ocular and neurologic evaluation swinging flashlight simulator; exam toolkit; history decoders foundations"><span class="num">02</span><span><h3>Ocular and neurologic evaluation</h3><p>Swinging flashlight simulator; exam toolkit; history decoders</p><p class="mins">About 35 minutes</p></span></a>
+<a class="mod" href="module_03_neuroimaging.html" data-k="neuroimaging mri and ct sequence explorer with lesions; what to order foundations"><span class="num">03</span><span><h3>Neuroimaging</h3><p>MRI and CT sequence explorer with lesions; what to order</p><p class="mins">About 35 minutes</p></span></a>
+</div>
+<div class="grp"><h2 class="grph">Afferent visual system</h2>
+<a class="mod" href="module_04_optic_neuropathies.html" data-k="optic neuropathies side-by-side comparison of 9 optic neuropathies; disc atlas afferent visual system"><span class="num">04</span><span><h3>Optic neuropathies</h3><p>Side-by-side comparison of 9 optic neuropathies; disc atlas</p><p class="mins">About 45 minutes</p></span></a>
+<a class="mod" href="module_05_disc_swelling_iih.html" data-k="optic disc swelling and iih frisén grade slider; iih criteria checker; treatment ladder afferent visual system"><span class="num">05</span><span><h3>Optic disc swelling and IIH</h3><p>Frisén grade slider; IIH criteria checker; treatment ladder</p><p class="mins">About 35 minutes</p></span></a>
+<a class="mod" href="module_06_visual_fields.html" data-k="visual field defects 15-field reading trainer; higher visual streams; non-organic testing afferent visual system"><span class="num">06</span><span><h3>Visual field defects</h3><p>15-field reading trainer; higher visual streams; non-organic testing</p><p class="mins">About 40 minutes</p></span></a>
+</div>
+<div class="grp"><h2 class="grph">Pupils, motility and eye movements</h2>
+<a class="mod" href="module_07_anisocoria.html" data-k="anisocoria pupil lab with lighting, drops and mystery patients pupils, motility and eye movements"><span class="num">07</span><span><h3>Anisocoria</h3><p>Pupil lab with lighting, drops and mystery patients</p><p class="mins">About 35 minutes</p></span></a>
+<a class="mod" href="module_08_motility.html" data-k="motility disorders nine-gaze diagrams; parks 3-step solver; lid disorders pupils, motility and eye movements"><span class="num">08</span><span><h3>Motility disorders</h3><p>Nine-gaze diagrams; Parks 3-step solver; lid disorders</p><p class="mins">About 40 minutes</p></span></a>
+<a class="mod" href="module_09_supranuclear.html" data-k="supranuclear and internuclear disorders brainstem map with syndromes; gaze deviation decoder; facial nerve pupils, motility and eye movements"><span class="num">09</span><span><h3>Supranuclear and internuclear disorders</h3><p>Brainstem map with syndromes; gaze deviation decoder; facial nerve</p><p class="mins">About 40 minutes</p></span></a>
+<a class="mod" href="module_10_nystagmus.html" data-k="nystagmus animated waveform viewer with live traces for 13 types pupils, motility and eye movements"><span class="num">10</span><span><h3>Nystagmus</h3><p>Animated waveform viewer with live traces for 13 types</p><p class="mins">About 35 minutes</p></span></a>
+</div>
+<div class="grp"><h2 class="grph">Systemic and neurologic disease</h2>
+<a class="mod" href="module_11_inflammation_orbit.html" data-k="inflammation and orbital disease coronal orbit sorter; clinical activity score calculator systemic and neurologic disease"><span class="num">11</span><span><h3>Inflammation and orbital disease</h3><p>Coronal orbit sorter; Clinical Activity Score calculator</p><p class="mins">About 40 minutes</p></span></a>
+<a class="mod" href="module_12_neurological.html" data-k="neurological disorders ptosis lab (upgaze, ice, rest, cogan twitch, enhancement) systemic and neurologic disease"><span class="num">12</span><span><h3>Neurological disorders</h3><p>Ptosis lab (upgaze, ice, rest, Cogan twitch, enhancement)</p><p class="mins">About 35 minutes</p></span></a>
+<a class="mod" href="module_13_vascular.html" data-k="vascular disorders eye stroke decision pathway with 2025 to 2026 trials; vascular map systemic and neurologic disease"><span class="num">13</span><span><h3>Vascular disorders</h3><p>Eye stroke decision pathway with 2025 to 2026 trials; vascular map</p><p class="mins">About 40 minutes</p></span></a>
+<a class="mod" href="module_14_developmental_genetic.html" data-k="developmental and genetic disorders nf1 criteria checker; inheritance pedigrees; neurocutaneous syndromes systemic and neurologic disease"><span class="num">14</span><span><h3>Developmental and genetic disorders</h3><p>NF1 criteria checker; inheritance pedigrees; neurocutaneous syndromes</p><p class="mins">About 35 minutes</p></span></a>
+<a class="mod" href="module_15_infectious.html" data-k="infectious disease csf decoder; chandler staging; zoster and arn systemic and neurologic disease"><span class="num">15</span><span><h3>Infectious disease</h3><p>CSF decoder; Chandler staging; zoster and ARN</p><p class="mins">About 35 minutes</p></span></a>
+<a class="mod" href="module_16_trauma.html" data-k="trauma trauma triage pathway; ton evidence; orbital trauma and concussion systemic and neurologic disease"><span class="num">16</span><span><h3>Trauma</h3><p>Trauma triage pathway; TON evidence; orbital trauma and concussion</p><p class="mins">About 30 minutes</p></span></a>
+<a class="mod" href="module_17_systemic.html" data-k="other systemic conditions hydroxychloroquine dose and screening calculator; drug toxicities systemic and neurologic disease"><span class="num">17</span><span><h3>Other systemic conditions</h3><p>Hydroxychloroquine dose and screening calculator; drug toxicities</p><p class="mins">About 35 minutes</p></span></a>
+</div>
+<div class="grp"><h2 class="grph">Special topics</h2>
+<a class="mod" href="module_18_headache.html" data-k="headaches and pain red flag checker; aura checker; tac duration timeline special topics"><span class="num">18</span><span><h3>Headaches and pain</h3><p>Red flag checker; aura checker; TAC duration timeline</p><p class="mins">About 35 minutes</p></span></a>
+<a class="mod" href="module_19_major_studies.html" data-k="major studies searchable explorer of 19 trials; critical appraisal examples special topics"><span class="num">19</span><span><h3>Major studies</h3><p>Searchable explorer of 19 trials; critical appraisal examples</p><p class="mins">About 30 minutes</p></span></a>
+<a class="mod" href="module_20_procedures.html" data-k="procedures temporal artery biopsy stepper; guide to 14 procedures special topics"><span class="num">20</span><span><h3>Procedures</h3><p>Temporal artery biopsy stepper; guide to 14 procedures</p><p class="mins">About 30 minutes</p></span></a>
+<a class="mod" href="module_21_vestibular.html" data-k="vestibular disorders timing and triggers; dix-hallpike and epley stepper special topics"><span class="num">21</span><span><h3>Vestibular disorders</h3><p>Timing and triggers; Dix-Hallpike and Epley stepper</p><p class="mins">About 35 minutes</p></span></a>
+<a class="mod" href="module_22_pediatric.html" data-k="pediatric neuro-ophthalmology benign-or-worrying sorting game; pediatric topics special topics"><span class="num">22</span><span><h3>Pediatric neuro-ophthalmology</h3><p>Benign-or-worrying sorting game; pediatric topics</p><p class="mins">About 30 minutes</p></span></a>
+</div>
+</div>
+    <p class="sub" style="margin-top:14px">Progress is saved only in this browser on this device. <button type="button" id="resetProgress" style="font:inherit;font-size:.85rem;padding:4px 10px;border-radius:8px;border:1.5px solid var(--stemline);background:var(--panel);color:var(--ink);cursor:pointer">Reset my progress</button></p>
   </section>
 
   <section class="tab" id="tab-tools">
@@ -199,7 +221,9 @@ ol.algo li{margin:8px 0}
       <dt>Suggested flow per module</dt><dd>Start with the interactive tool, work the cases before revealing answers, review the pearls, then take the self-quiz. Use the goals tab checklist to track progress.</dd>
       <dt>For faculty</dt><dd>Each module's sources tab lists where every number came from, so content can be updated as evidence changes.</dd>
       <dt>How to cite</dt><dd>Quan SC. <i>Neuro-Ophthalmology: An Interactive Textbook.</i> Version 1.0. 2026. Available at: <a href="https://quansc.github.io/Neuro-Oph-Textbook/">https://quansc.github.io/Neuro-Oph-Textbook/</a>.</dd>
-      <dt>Device support</dt><dd>Built for phones and desktops, with light and dark mode.</dd>
+      <dt>Device support</dt><dd>Built for phones and desktops, with light and dark mode. Use the Text buttons to resize and Print or PDF for a handout.</dd>
+      <dt>Sharing a section</dt><dd>Each tab has its own link. Open a module, tap a tab, then copy the address (for example, a module's Self-quiz) to send residents straight there.</dd>
+      <dt>Progress</dt><dd>Quiz scores and goal checklists are saved in your browser only; nothing is sent anywhere. Clearing browser data or switching devices resets them.</dd>
     </dl></div>
       <h3>Evidence that's changing</h3>
     <div class="card"><ul class="vl">
@@ -224,7 +248,9 @@ document.querySelectorAll("nav.tabs button").forEach(b=>b.addEventListener("clic
   document.querySelectorAll("section.tab").forEach(s=>s.classList.toggle("on",s.id==="tab-"+b.dataset.tab));
 }));
 document.getElementById("q").addEventListener("input",e=>{const q=e.target.value.toLowerCase();
-  document.querySelectorAll("#list .mod").forEach(a=>a.style.display=a.dataset.k.includes(q)?"":"none");});
+  document.querySelectorAll("#list .mod").forEach(a=>a.style.display=a.dataset.k.includes(q)?"":"none");
+  document.querySelectorAll("#list .grp").forEach(g=>g.style.display=[...g.querySelectorAll(".mod")].some(a=>a.style.display!=="none")?"":"none");});
 </script>
+<script src="site.js"></script>
 </body>
 </html>
