@@ -5,6 +5,18 @@ Assistant Professor of Ophthalmology and Visual Science, University of Chicago
 
 This is an independent educational work by the author. It is not an official publication of, or endorsed by, the University of Chicago. Views are the author's own.
 
+## About the author
+
+<img src="author.jpg" alt="Steven C. Quan, OD, FAAO" width="140">
+
+**Steven C. Quan, OD, FAAO**, is Assistant Professor of Ophthalmology and Visual Science at the University of Chicago, where he specializes in hospital-based eye care, neuro-ophthalmology and systemic co-management of ocular disease. He studied neuroscience at UCLA, earned his Doctor of Optometry degree from the Illinois College of Optometry, and completed a residency in ocular disease at Bascom Palmer Eye Institute.
+
+Dr. Quan leads a neuro-ophthalmology consult service and a dedicated idiopathic intracranial hypertension clinic. He directs three optometry training programs: a student externship, a one-year residency in ocular disease, and a two-year neuro-ophthalmic disease residency in partnership with the Illinois College of Optometry. His teaching emphasizes structured curricula, competency-based assessment and interprofessional collaboration, and this textbook grew out of the neuro-ophthalmology curriculum he built for his residents.
+
+A Fellow of the American Academy of Optometry, he is active in its leadership on education and mentorship. His academic interests include optic neuropathies, ocular toxicity from cancer therapies, and the effects of social determinants of health on access and outcomes in eye care.
+
+Faculty profile: https://biologicalsciences.uchicago.edu/faculty/steven-quan-od
+
 ## About
 
 Twenty-two interactive study modules covering the core of neuro-ophthalmology, from anatomy and the clinical exam through optic neuropathies, motility, nystagmus, vascular and inflammatory disease, trauma, headache, vestibular disorders, landmark trials and pediatric neuro-ophthalmology.
