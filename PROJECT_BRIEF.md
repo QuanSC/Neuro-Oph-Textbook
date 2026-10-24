@@ -49,8 +49,11 @@ Header: "Neuro-ophthalmology curriculum, module N of 22". Sticky tab bar starts 
 ## Workflow
 - Before each edit session, pull the current files from GitHub (commits made directly on GitHub are newer than the Project copies) and edit those.
 
+## Source PDFs pending upload (Project storage full)
+- ACR/VF GCA guideline 2021 (Maz, Arthritis Rheumatol 2021;73(8):1349-1365), SELECT-GCA (Blockmans, NEJM 2025;392:2013-2024), Seibold 2010 (Am J Ophthalmol 150(6):807-814), Patel 2012 (Optom Vis Sci 89(5):E652-E666). Verified from publisher, PubMed and PMC text; add PDFs when space allows.
+
 ## Change log
-- October 2026 session: Module 4 GCA expansion (ACR/VF 2021, Dejaco 2024 treat-to-target, SELECT-GCA upadacitinib; Case 2 extended to monitoring); Module 2 OCT device comparison (Seibold 2010, Patel 2012); Module 8 heavy eye syndrome (Hennein and Robbins 2021; Pineles 2022 reading); curriculum readings added to Modules 10 and 21; hub "How to use" tab gains the 2026-27 block schedule and a GCA evidence-to-watch item.
+- October 2026 session: Module 4 GCA expansion (ACR/VF 2021, Dejaco 2024 treat-to-target, SELECT-GCA upadacitinib; Case 2 extended to monitoring); Module 2 OCT device comparison (Seibold 2010, Patel 2012); Module 8 heavy eye syndrome (Hennein and Robbins 2021; Pineles 2022 reading); curriculum readings added to Modules 10 and 21; hub "How to use" tab gains a GCA evidence-to-watch item. A month-to-module block schedule was trialed on the hub and removed: block pacing is decided by faculty, not fixed in the textbook.
 
 ## Module 3 imaging engine (for future edits)
 - Tissue contrast grid values (TS array) drive every image; edit there first.
