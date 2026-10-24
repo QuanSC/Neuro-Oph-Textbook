@@ -15,7 +15,20 @@
   .toolbar button:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
   .badge{display:inline-block;font-size:.74rem;font-weight:600;padding:2px 8px;border-radius:999px;margin-top:6px;background:color-mix(in srgb,var(--inter) 16%,transparent);color:var(--inter)}
   .badge.done{background:color-mix(in srgb,var(--ok,#2E7D4F) 18%,transparent);color:var(--ok,#2E7D4F)}
+  .tabwrap{position:sticky;top:0;z-index:5;background:var(--bg);margin:6px 0 4px}
+  .tabwrap nav.tabs{position:static;margin:0;scroll-behavior:smooth}
+  .tabwrap nav.tabs button:focus-visible,.tabwrap .homelink:focus-visible{outline:3px solid var(--inter);outline-offset:2px}
+  .tabfade{position:absolute;top:0;bottom:0;width:44px;display:flex;align-items:center;border:0;padding:0 4px;margin:0;font:inherit;font-size:1.35rem;line-height:1;color:var(--ink);cursor:pointer;opacity:0;pointer-events:none;transition:opacity .15s}
+  .tabfade.l{left:0;justify-content:flex-start;background:linear-gradient(to right,var(--bg) 50%,transparent)}
+  .tabfade.r{right:0;justify-content:flex-end;background:linear-gradient(to left,var(--bg) 50%,transparent)}
+  .tabwrap.can-l .tabfade.l,.tabwrap.can-r .tabfade.r{opacity:1;pointer-events:auto}
+  @media (min-width:700px){
+    .tabwrap nav.tabs{flex-wrap:wrap;overflow:visible}
+    .tabfade{display:none!important}
+  }
+  @media (prefers-reduced-motion:reduce){.tabwrap nav.tabs{scroll-behavior:auto}.tabfade{transition:none}}
   @media print{
+    .tabwrap{display:none!important}
     :root{--bg:#fff;--panel:#fff;--ink:#000;--muted:#333;--stem:#e5e5e5;--stemline:#999;--halo:#fff}
     body{background:#fff!important;color:#000!important}
     nav.tabs,.toolbar,.modnav,.homelink,.reveal,.next,.nav2,.ctrl,.ctrl2,.acts,.chips,.modes,input[type=search],#resetQuiz,.slider{display:none!important}
@@ -42,6 +55,41 @@
       if(b.dataset.p){window.print();return;}
       var s=b.dataset.s; scale = s==="+"?Math.min(1.4,scale+0.1): s==="-"?Math.max(0.85,scale-0.1):1;
       scale=Math.round(scale*100)/100; store.set("nok-scale",scale); applyScale();});
+  }
+
+  /* ---------- tab bar: wrap on wide screens, swipe with edge cues on narrow ---------- */
+  var tnav=document.querySelector("nav.tabs");
+  if(tnav){
+    var wrap=document.createElement("div"); wrap.className="tabwrap";
+    tnav.parentNode.insertBefore(wrap,tnav); wrap.appendChild(tnav);
+    wrap.insertAdjacentHTML("beforeend",'<button type="button" class="tabfade l" tabindex="-1" aria-hidden="true">‹</button><button type="button" class="tabfade r" tabindex="-1" aria-hidden="true">›</button>');
+    var tbtns=Array.from(tnav.querySelectorAll("button[role=tab]"));
+    function overflowing(){return tnav.scrollWidth>tnav.clientWidth+2;}
+    function edges(){var max=tnav.scrollWidth-tnav.clientWidth;
+      wrap.classList.toggle("can-l",overflowing()&&tnav.scrollLeft>2);
+      wrap.classList.toggle("can-r",overflowing()&&tnav.scrollLeft<max-2);}
+    function reveal(b){ if(!overflowing()) return;
+      var nr=tnav.getBoundingClientRect(), br=b.getBoundingClientRect();
+      if(br.left>=nr.left+30 && br.right<=nr.right-30) return; // already in view, clear of the edge cues
+      tnav.scrollLeft += (br.left-nr.left)-(nr.width-br.width)/2; }
+    function rove(){ tbtns.forEach(function(x){x.tabIndex=(x.getAttribute("aria-selected")==="true")?0:-1;}); }
+    tbtns.forEach(function(b){b.addEventListener("click",function(){rove(); reveal(b);});});
+    wrap.querySelector(".tabfade.l").addEventListener("click",function(){tnav.scrollLeft-=tnav.clientWidth*0.7;});
+    wrap.querySelector(".tabfade.r").addEventListener("click",function(){tnav.scrollLeft+=tnav.clientWidth*0.7;});
+    tnav.addEventListener("scroll",edges,{passive:true});
+    window.addEventListener("resize",edges);
+    // vertical mouse wheel scrolls the row sideways when it overflows; page scroll resumes at either end
+    tnav.addEventListener("wheel",function(e){ if(!overflowing()||Math.abs(e.deltaX)>=Math.abs(e.deltaY)) return;
+      var before=tnav.scrollLeft; tnav.style.scrollBehavior="auto"; tnav.scrollLeft+=e.deltaY; tnav.style.scrollBehavior="";
+      if(tnav.scrollLeft!==before) e.preventDefault(); },{passive:false});
+    // arrow keys move between tabs (ARIA tabs pattern)
+    tnav.addEventListener("keydown",function(e){ var i=tbtns.indexOf(e.target); if(i<0) return;
+      var n = e.key==="ArrowRight"?i+1 : e.key==="ArrowLeft"?i-1 : e.key==="Home"?0 : e.key==="End"?tbtns.length-1 : null;
+      if(n===null) return; e.preventDefault(); n=(n+tbtns.length)%tbtns.length; tbtns[n].focus(); tbtns[n].click(); });
+    rove();
+    var sel=tnav.querySelector('button[aria-selected="true"]');
+    if(sel){tnav.style.scrollBehavior="auto"; reveal(sel); tnav.style.scrollBehavior="";}
+    edges();
   }
 
   /* ---------- deep links to tabs ---------- */
