@@ -76,6 +76,15 @@ Quan SC. *Neuro-Ophthalmology: An Interactive Textbook.* Version 1.0. 2026. Avai
 
 This textbook is free to view online for personal, non-commercial educational use. No part of it may be copied, redistributed, adapted, translated or republished, in whole or in part, without the author's written permission. To request permission, open an issue in this repository.
 
+## Third-party material
+
+The synthetic MRI images in Module 3 use brain tissue maps derived from the ICBM 2009a Nonlinear Symmetric (MNI152) template (Fonov VS, et al. NeuroImage. 2011;54(1):313-327; NeuroImage. 2009;47(suppl 1):S102), embedded in `module_03_neuroimaging.html`. That material is used under its license:
+
+> Copyright (C) 1993-2009 Louis Collins, McConnell Brain Imaging Centre, Montreal Neurological Institute, McGill University.
+> Permission to use, copy, modify, and distribute this software and its documentation for any purpose and without fee is hereby granted, provided that the above copyright notice appear in all copies. The authors and McGill University make no representations about the suitability of this software for any purpose. It is provided "as is" without express or implied warranty.
+
+Sequence contrast, lesions, skull and orbital anatomy are original work by the author.
+
 ## Feedback and corrections
 
 Please open an issue in this repository to report errors, suggest updates or request permission to use material.
